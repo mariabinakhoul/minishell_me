@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:14:45 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/10 11:04:36 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:04:18 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ typedef enum s_token
 	TYPE_DQUOTE = 34,
 	TYPE_OUTDIR = '>',
 	TYPE_INDIR = '<',
-	TYPE_WORD = -42,
 	TYPE_SPACE = ' ',
 	TYPE_TAB = '\t',
 	TYPE_NP = '\0',
 	TYPE_NL = '\n',
+	TYPE_WORD,
 	APPEND,
 }	t_token;
 

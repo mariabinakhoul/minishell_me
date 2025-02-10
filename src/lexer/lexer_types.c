@@ -6,11 +6,11 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:35:09 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/10 11:10:44 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/10 13:07:50 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lexer.h"
+#include "../includes/lexer.h"
 
 int	return_space_type(char c)
 {
@@ -53,4 +53,7 @@ int	set_lexer_type(char c)
 		return (return_operators_type(c));
 	if (c == 39 || c == 34)
 		return (return_quotes(c));
+	else
+		return (TYPE_WORD);
+	return (0);
 }
