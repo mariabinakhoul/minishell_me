@@ -6,11 +6,11 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 22:35:09 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/10 13:07:50 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:06:57 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/lexer.h"
+#include "../includes/minishell.h"
 
 int	return_space_type(char c)
 {

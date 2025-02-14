@@ -8,7 +8,7 @@ CC = gcc
 
 CFLAGS = -Werror -Wall -Wextra -g -I $(HEADER)
 
-SRCS = lexer/lexer_types
+SRCS = lexer/lexer_types lexer/lexer_handler lexer/lexer_reader main utils/utils
 
 SRC = $(addprefix src/, $(addsuffix .c, $(SRCS)))
 
