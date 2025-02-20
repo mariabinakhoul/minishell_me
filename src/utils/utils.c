@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:26:56 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/11 11:29:25 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/20 12:03:17 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 char	*ft_strndup(const char *src, int n)
 {
-
 	int		i;
 	char	*smt;
 
@@ -29,4 +28,18 @@ char	*ft_strndup(const char *src, int n)
 	}
 	smt[i] = '\0';
 	return (smt);
+}
+
+int	count_args(t_chain *tokens)
+{
+	int	count;
+
+	count = 0;
+	while (tokens && tokens->type != TYPE_PIPE)
+	{
+		if (tokens->type == TYPE_WORD)
+			count++;
+		tokens = tokens->next;
+	}
+	return (count);
 }

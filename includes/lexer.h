@@ -5,14 +5,13 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/08 22:14:45 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/14 12:59:39 by mabi-nak         ###   ########.fr       */
+/*   Created: 2025/02/18 11:05:17 by mabi-nak          #+#    #+#             */
+/*   Updated: 2025/02/18 11:05:25 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
-
 
 typedef enum s_token
 {
