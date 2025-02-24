@@ -6,12 +6,13 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:54 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/14 16:22:21 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/22 08:49:59 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
+//creates new nodes/ token to add to the chain and will give them the given type ad value
 t_chain	*create_new_node(t_token type, char *value)
 {
 	t_chain	*new_node;
@@ -25,6 +26,10 @@ t_chain	*create_new_node(t_token type, char *value)
 	return (new_node);
 }
 
+//allocates everything by calling create new node
+//it identify the  heredoc and append and tokenize them together
+//returns the "chain" in the correct order 
+// also finds the type of each argument find them in enum or lexer_types.c
 t_chain	*current_node_helper(char *str, int *i,
 		t_chain **head, t_chain **current)
 {
@@ -69,6 +74,8 @@ t_chain	*current_node_helper(char *str, int *i,
 	return (*head);
 }
 
+//it checks for the type and call the helper function to tokenize and 
+// allocate perfectly anything written
 t_chain	*lexer_filler(char *str)
 {
 	int		i;

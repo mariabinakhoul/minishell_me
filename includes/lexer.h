@@ -6,14 +6,14 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 11:05:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/18 11:05:25 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/24 14:46:52 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LEXER_H
 # define LEXER_H
 
-typedef enum s_token
+typedef enum e_token
 {
 	TYPE_PIPE = '|',
 	TYPE_QUOTE = 39,
@@ -36,6 +36,15 @@ typedef struct s_chain
 	char			*value;
 	struct s_chain	*next;
 }	t_chain;
+
+typedef struct s_token_b
+{
+	char			*value;
+	int				type;
+	struct s_token	*next;
+	int				id;
+	int				extend;
+}	t_token_b;
 
 int		return_space_type(char c);
 int		return_operators_type(char c);

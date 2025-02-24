@@ -1,45 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   parser_lexer.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/11 09:26:56 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/24 12:58:35 by mabi-nak         ###   ########.fr       */
+/*   Created: 2025/02/22 08:48:50 by mabi-nak          #+#    #+#             */
+/*   Updated: 2025/02/24 18:36:02 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*ft_strndup(const char *src, int n)
+t_ast	*parser_build_cmd(t_ast_utils *lexer)
 {
-	int		i;
-	char	*smt;
+	t_ast	*node;
+	char	*param;
 
-	i = 0;
-	smt = (char *)malloc(sizeof(char) * (n + 1));
-	if (smt == NULL)
+	if (!lexer || !(param = lexer_filler(lexer)))
 		return (NULL);
-	while (i < n)
-	{
-		smt[i] = src[i];
-		i++;
-	}
-	smt[i] = '\0';
-	return (smt);
+	node = (t_ast *)ft_calloc(1, sizeof(t_ast));
+	if (!node)
+		returrn (NULL);
+	node->type = CMD;
+	node->params = NULL;
+	node->out_file = NULL;
+	node->append = 0;
+
 }
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	i;
-
-	i = 0;
-	while (s1[i] != '\0' && (s1[i] == s2[i]))
-		i++;
-	if (s1[i] == s2[i])
-		return (0);
-	else
-		return (s1[i] - s2[i]);
-}
-

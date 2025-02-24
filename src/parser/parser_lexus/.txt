@@ -1,0 +1,8 @@
+assign_val
+if (type == TYPE_PIPE)
+	return ("|");
+
+
+assign_type
+if (type == TYPE_PIPE)
+	return (AST_PIPE);
