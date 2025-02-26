@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/24 18:29:45 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/25 15:04:21 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,6 @@ typedef enum e_ast_type
 {
 	CMD,
 	PIPE,
-// 	REDIR_IN,
-// 	REDIR_OUT,
-// 	HEREDOC,
-
 }	t_ast_type;
 
 typedef struct s_ast
@@ -56,12 +52,20 @@ typedef struct s_l_engine
 	int		count;
 }	t_l_engine;
 
+typedef struct s_lexer
+{
+	t_token_b	*t_list;
+	int			count;
+}	t_lexer;
+
 int		count_args(t_chain *tokens);
 int		find_last_pipe(t_chain	*tokens);
 char	**get_args_from_the_tokens(t_chain *tokens);
 t_ast	*split_at_last_pipe(t_chain *tokens);
 t_ast	*parser_build_cmd(t_ast_utils *util);
 char	**realloc_params(char **params, int p_count, char *value);
-
+void	parse_heredoc(t_token_b *token, t_ast_utils **util);
+int		parse_input_redirection(t_ast_utils **util, t_token_b **tok);
+int		parse_output_redirection(t_ast_utils **util, t_token_b **tok);
 
 #endif

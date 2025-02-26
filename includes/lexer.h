@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 11:05:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/24 14:46:52 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/25 14:34:31 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 typedef enum e_token
 {
+	TOKEN = -42,
 	TYPE_PIPE = '|',
 	TYPE_QUOTE = 39,
 	TYPE_DQUOTE = 34,
@@ -28,6 +29,8 @@ typedef enum e_token
 	TYPE_APPEND,
 	TYPE_HEREDOC,
 	STATE_ANY,
+	TYPE_RSHIFT,
+	TYPE_LSHIFT,
 }	t_token;
 
 typedef struct s_chain
@@ -39,11 +42,11 @@ typedef struct s_chain
 
 typedef struct s_token_b
 {
-	char			*value;
-	int				type;
-	struct s_token	*next;
-	int				id;
-	int				extend;
+	char				*value;
+	int					type;
+	struct s_token_b	*next;
+	int					id;
+	int					extend;
 }	t_token_b;
 
 int		return_space_type(char c);

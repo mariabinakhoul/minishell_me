@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/22 08:48:27 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/25 10:17:54 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,7 @@ void print_list(t_chain *list) {
     }
 }
 
-t_ast *build_ast(t_chain *tokens)
-{
-    if (!tokens)
-        return NULL;
-    return split_at_last_pipe(tokens);
-}
+
 
 // Helper function to print the AST
 void print_ast(t_ast *ast, int depth)

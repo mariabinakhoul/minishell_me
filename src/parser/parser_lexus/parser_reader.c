@@ -6,58 +6,60 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:30:30 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/22 08:36:00 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/25 10:33:10 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
-// in this file we're working on the main parser that will help us to create the tree
-//ast as abstract syntax tree 
+#include "../../../includes/minishell.h"
 
-//it creates like a new node of the ast
-t_ast	*new_ast_node(t_ast_type type, char *value)
+void	parse_heredoc(t_token_b *token, t_ast_utils **util)
 {
-	t_ast	*node;
-
-	node = malloc (sizeof(t_ast));
-	if (!node)
-		return (NULL);
-	node->type = type;
-	node->value = value;
-	node->left = NULL;
-	node->right = NULL;
-	return (node);
+	if (token->type == TYPE_HEREDOC)
+	{
+		if (token->extend == -5)
+			(*util)->heredoc = 5;
+		else
+			(*util)->heredoc = 1;
+	}
 }
-// t_ast *create_command_node(t_chain *tokens)
-// {
-// 	t_ast *cmd_node;
-// 	char **args;
 
-// 	if (!tokens)
-// 		return (NULL);
-// 	args = get_args_from_the_tokens(tokens);
-// 	if (!args)
-// 		return (NULL);
-// 	cmd_node = new_ast_node(TYPE_WORD, args[0]);
-// 	return (cmd_node);
-// }
+//retrieves the current, next and next next from th lexer,
+//calls parse heredoc to handle here doc correctly
+//it the next token exists it assigns the value to util->in
+//in case there's another token, it will update it to two.
+//if there's no more tokens, it builds a cmd node using parser_build_cmd
+int	parser_in_heroc(t_ast_utils **util, t_lexer **lex, t_token_b **tok)
+{
+	t_token_b	*current;
+	t_token_b	*next;
+	t_token_b	*apres;
 
-// t_ast	*split_at_last_pipe(t_chain *tokens)
-// {
-// 	int	last_pipe;
-// 	t_chain *temp;
-// 	t_ast *root;
-
-// 	last_pipe = find_last_pipe(tokens);
-// 	if (!(last_pipe == -1))
-// 		return (create_command_node(tokens));
-// 	temp = tokens;
-// 	for ( int i = 0; i < last_pipe; i++)
-// 		temp = temp->next;
-// 	root = new_ast_node(TYPE_PIPE, "|");
-// 	root->left = split_at_last_pipe(tokens);
-// 	root->right = split_at_last_pipe(temp->next);
-// 	return (root);
-// }
-
+	current = (*lex)->t_list;
+	if (current)
+		next = current->next;
+	else
+		next = current;
+	if (next)
+		apres = next->next;
+	else
+		apres = NULL;
+	parse_heredoc(current, util);
+	if (next && next->type == TOKEN)
+	{
+		(*util)->in = ft_strdup(next->value);
+		// if (!(*util)->heredoc)
+			//redirect_to_in(util);
+	}
+	if (next && apres)
+	{
+		*tok = (*tok)->next->next;
+		(*lex)->t_list = apres;
+	}
+	else
+	{
+		(*util)->node = parser_build_cmd(*util);
+		return (1);
+	}
+	return (0);
+}
 

@@ -6,11 +6,11 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:51:33 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/24 18:36:12 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/25 10:33:02 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 //create a separator node (ast) assigning the type if it's a pipe else ma
 //ela aaze and assigning the right and the left
@@ -30,18 +30,22 @@ t_ast	*make_ast_separator(t_ast *left, t_ast *right, int type)
 	node->right = right;
 	if (type == TYPE_PIPE)
 	{
-		node->type = TYPE_PIPE;
-		node->params = ft_split(PIPE, ' ');
+		node->type = PIPE;
+		node->params = ft_split((char *)PIPE, ' ');
 	}
 	return (node);
 }
 
+//initializes a cmd ast node with values from a node.
+//*node is the node to be initialized and *util contains the values
+//it sets the type as CMD and assigns the inputs and outputs etc.
+//also left and right side must be NULL and if params exist they copyt it.
 void	make_cmd_ast(t_ast *node, t_ast *util)
 {
 	node->type = CMD;
 	node->in_file = util->in_file;
-	node->out_file = util->out_file;
 	node->exit = util->exit;
+	node->out_file = util->out_file;
 	node->heredoc = util->heredoc;
 	node->left = NULL;
 	node->right = NULL;
@@ -49,18 +53,14 @@ void	make_cmd_ast(t_ast *node, t_ast *util)
 		node->params = util->params;
 }
 
-void	parse_heredoc(t_token_b *token, t_ast_utils **util)
-{
-	if (token->type == TYPE_HEREDOC)
-	{
-		if (token->extend == -5)
-			(*util)->heredoc = 5;
-		else
-			(*util)->heredoc = 1;
-	}
-}
 
-t_ast	*generate_simple_cmd(t_ast_utils *util)
+
+//creates a simple cmd ast node
+//*util conataining command parameters and metdata
+//it allocates memory for the new ast node and it init depending on util
+//it manually constructs the arg array. Otherwise, it splits the params
+//it calls make_cmd_ast to set up the node
+t_ast	*generate_echo_cmd(t_ast_utils *util)
 {
 	t_ast	*node;
 	char	**args;
@@ -81,6 +81,6 @@ t_ast	*generate_simple_cmd(t_ast_utils *util)
 	else
 		args = ft_split(util->params, ' ');
 	node->params = args;
-	make_cmd_ast(&node, &util);
+	make_cmd_ast(node, (t_ast *)util);
 	return (node);
 }
