@@ -6,3 +6,5 @@ if (type == TYPE_PIPE)
 assign_type
 if (type == TYPE_PIPE)
 	return (AST_PIPE);
+
+pinit_vars: make_util_ast

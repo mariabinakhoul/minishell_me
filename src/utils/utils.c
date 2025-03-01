@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:26:56 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/24 12:58:35 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/01 05:38:26 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,3 +43,20 @@ int	ft_strcmp(char *s1, char *s2)
 		return (s1[i] - s2[i]);
 }
 
+char	*ft_strcat(char *dest, char *src)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	while (dest[i])
+		i++;
+	while (src[j])
+	{
+		dest[i + j] = src[j];
+		j++;
+	}
+	dest[i + j] = '\0';
+	return (dest);
+}

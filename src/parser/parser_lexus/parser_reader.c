@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:30:30 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/25 10:33:10 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/27 17:22:37 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ int	parser_in_heroc(t_ast_utils **util, t_lexer **lex, t_token_b **tok)
 	if (next && next->type == TOKEN)
 	{
 		(*util)->in = ft_strdup(next->value);
-		// if (!(*util)->heredoc)
-			//redirect_to_in(util);
+		if (!(*util)->heredoc)
+			redirect_to_in(util);
 	}
 	if (next && apres)
 	{

@@ -6,35 +6,13 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:51:33 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/25 10:33:02 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/01 06:00:43 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-//create a separator node (ast) assigning the type if it's a pipe else ma
-//ela aaze and assigning the right and the left
-//it allocates and initializ a new ast that represents the separato only
-//and splits them into arguments (it returns a pointer of
-//the new ast_node or NULL if it fails)
 
-
-t_ast	*make_ast_separator(t_ast *left, t_ast *right, int type)
-{
-	t_ast	*node;
-
-	node = ft_calloc(1, sizeof(t_ast));
-	if (!node)
-		return (NULL);
-	node->left = left;
-	node->right = right;
-	if (type == TYPE_PIPE)
-	{
-		node->type = PIPE;
-		node->params = ft_split((char *)PIPE, ' ');
-	}
-	return (node);
-}
 
 //initializes a cmd ast node with values from a node.
 //*node is the node to be initialized and *util contains the values
@@ -53,10 +31,20 @@ void	make_cmd_ast(t_ast *node, t_ast *util)
 		node->params = util->params;
 }
 
-
+t_ast_utils	*make_util_ast(t_ast_utils **util)
+{
+	(*util) = ft_calloc(1, sizeof(t_ast_utils));
+	(*util)->in = NULL;
+	(*util)->out = NULL;
+	(*util)->exit = 0;
+	(*util)->node = NULL;
+	(*util)->right = NULL;
+	(*util)->echo = 0;
+	return (*util);
+}
 
 //creates a simple cmd ast node
-//*util conataining command parameters and metdata
+//*util containing command parameters and metdata
 //it allocates memory for the new ast node and it init depending on util
 //it manually constructs the arg array. Otherwise, it splits the params
 //it calls make_cmd_ast to set up the node
@@ -83,4 +71,42 @@ t_ast	*generate_echo_cmd(t_ast_utils *util)
 	node->params = args;
 	make_cmd_ast(node, (t_ast *)util);
 	return (node);
+}
+
+static int	extra_addition(char *params, size_t len_params)
+{
+	if (params)
+	{
+		len_params = strlen(params);
+		return (2);
+	}
+	else
+	{
+		len_params = 0;
+		return (1);
+	}
+}
+
+char	*create_cmd_params(char *value, char *params)
+{
+	char	*new_param;
+	size_t	len_v;
+	size_t	len_params;
+	int		add;
+
+	len_v = strlen(value);
+	add = extra_addition(params, &len_params);
+	new_param = malloc(len_params + len_v + add);
+	if (!new_param)
+		return (NULL);
+	if (params)
+	{
+		ft_strcpy(new_param, params);
+		ft_strcat(new_param, " ");
+		ft_strcat(new_param, value);
+		free(params);
+	}
+	else
+		ft_strncpy(new_param, value);
+	return (new_param);
 }

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 11:05:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/25 14:34:31 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/02/28 22:11:05 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ typedef enum e_token
 	TYPE_APPEND,
 	TYPE_HEREDOC,
 	STATE_ANY,
-	TYPE_RSHIFT,
-	TYPE_LSHIFT,
 }	t_token;
 
 typedef struct s_chain

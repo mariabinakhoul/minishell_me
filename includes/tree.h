@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/25 15:04:21 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/01 05:51:20 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,10 +39,14 @@ typedef struct s_ast_utils
 	char	*params;
 	char	*out;
 	char	*in;
+	t_ast	*right;
 	int		append;
 	int		heredoc;
 	t_ast	*node;
 	int		echo;
+	int		exit;
+	bool	has_pipeline;
+	bool	has_redirection;
 }	t_ast_utils;
 
 typedef struct s_l_engine
@@ -58,14 +62,19 @@ typedef struct s_lexer
 	int			count;
 }	t_lexer;
 
-int		count_args(t_chain *tokens);
-int		find_last_pipe(t_chain	*tokens);
-char	**get_args_from_the_tokens(t_chain *tokens);
-t_ast	*split_at_last_pipe(t_chain *tokens);
-t_ast	*parser_build_cmd(t_ast_utils *util);
-char	**realloc_params(char **params, int p_count, char *value);
-void	parse_heredoc(t_token_b *token, t_ast_utils **util);
-int		parse_input_redirection(t_ast_utils **util, t_token_b **tok);
-int		parse_output_redirection(t_ast_utils **util, t_token_b **tok);
+void		parse_heredoc(t_token_b *token, t_ast_utils **util);
+int			parse_input_redirection(t_ast_utils **util, t_token_b **tok);
+int			parse_output_redirection(t_ast_utils **util, t_token_b **tok);
+t_ast		*generate_echo_cmd(t_ast_utils *util);
+t_ast		*make_ast_separator(t_ast *left, t_ast *right, int type);
+int			parse_pipeline(t_ast_utils **util, t_token_b **tok);
+int			parser_in_heroc(t_ast_utils **util, t_lexer **lex, t_token_b **tok);
+void		parsing_the_commands(t_ast_utils **util, t_token_b *tok);
+void		make_cmd_ast(t_ast *node, t_ast *util);
+void		redirect_to_in(t_ast_utils **util);
+void		redirect_to_out(t_ast_utils **filename);
+t_ast_utils	*make_util_ast(t_ast_utils **util);
+t_ast		*building_pipe(t_lexer **lex, t_token_b *tok);
+char		*create_cmd_params(char *value, char *params);
 
 #endif
