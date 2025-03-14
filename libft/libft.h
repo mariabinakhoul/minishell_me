@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:53:51 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/25 09:48:07 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/06 09:06:16 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,4 +57,5 @@ int				get_next_line(int fd, char **str);
 void			*ft_calloc(size_t nmemb, size_t size);
 void			ft_bzero(void *s, size_t n);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
+char			*ft_strcpy(char *s1, char *s2);
 #endif

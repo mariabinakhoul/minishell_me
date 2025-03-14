@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/24 10:51:33 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/01 06:00:43 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/10 21:28:13 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ t_ast_utils	*make_util_ast(t_ast_utils **util)
 	(*util)->node = NULL;
 	(*util)->right = NULL;
 	(*util)->echo = 0;
+	(*util)->params = NULL;
 	return (*util);
 }
 
@@ -55,16 +56,29 @@ t_ast	*generate_echo_cmd(t_ast_utils *util)
 
 	node = ft_calloc(1, sizeof(t_ast));
 	args = NULL;
-	if (!node || !util->params)
-		return (NULL);
-	if (ft_strcmp(util->params, "echo") == 0 && util->echo == 0)
+	printf("test1\n");
+	// if (!node || !util || !util->params)
+	// {
+	// 	printf("Error: Failed to allocae memory for echo cmd\n");
+	// 	return (NULL);
+	// }
+	printf("Generating echo cmd with params: %s\n", util->params);
+	if (util->params != NULL)
 	{
+		if (ft_strcmp(util->params, "echo") == 0 && util->echo == 0)
+	{
+		printf("kaakl\n");
 		args = malloc(3 * sizeof(char *));
 		if (!args)
+		{
+			printf("Error: Failed to split params\n");
+			free(node);
 			return (NULL);
+		}
 		args[0] = ft_strdup("echo");
 		args[1] = ft_substr(util->params, 5, ft_strlen(util->params));
 		args[2] = NULL;
+	}	
 	}
 	else
 		args = ft_split(util->params, ' ');
@@ -73,16 +87,16 @@ t_ast	*generate_echo_cmd(t_ast_utils *util)
 	return (node);
 }
 
-static int	extra_addition(char *params, size_t len_params)
+static int	extra_addition(char *params, size_t *len_params)
 {
 	if (params)
 	{
-		len_params = strlen(params);
+		*len_params = ft_strlen(params);
 		return (2);
 	}
 	else
 	{
-		len_params = 0;
+		*len_params = 0;
 		return (1);
 	}
 }
@@ -94,7 +108,7 @@ char	*create_cmd_params(char *value, char *params)
 	size_t	len_params;
 	int		add;
 
-	len_v = strlen(value);
+	len_v = ft_strlen(value);
 	add = extra_addition(params, &len_params);
 	new_param = malloc(len_params + len_v + add);
 	if (!new_param)
@@ -107,6 +121,6 @@ char	*create_cmd_params(char *value, char *params)
 		free(params);
 	}
 	else
-		ft_strncpy(new_param, value);
+		ft_strcpy(new_param, value);
 	return (new_param);
 }

@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parser_idk.c                                       :+:      :+:    :+:   */
+/*   parser_building_pipe.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/27 20:10:10 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/01 01:09:36 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:50:05 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 static void	process_token(t_lexer **lex, t_ast_utils **util, t_token_b **tok)
 {
@@ -18,11 +18,11 @@ static void	process_token(t_lexer **lex, t_ast_utils **util, t_token_b **tok)
 
 	token = (*lex)->t_list;
 	if (token->type == TOKEN)
-		parsing_the_commands(util, (*tok));
+		parsing_the_commands(util, lex, (*tok));
 	else if (parse_input_redirection(util, (t_token_b **)tok)
 		|| parse_output_redirection(util, (t_token_b **)tok))
 		(*util)->has_redirection = true;
-	else if (parse_pipeline(util, (t_token_b **)tok))
+	else if (parse_pipeline1(util, lex, (t_token_b **)tok))
 		(*util)->has_pipeline = true;
 }
 

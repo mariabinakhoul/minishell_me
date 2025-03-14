@@ -6,11 +6,11 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/01 05:49:48 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/01 05:51:02 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/08 01:48:51 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "../../../includes/minishell.h"
 
 //create a separator node (ast) assigning the type if it's a pipe else ma
 //ela aaze and assigning the right and the left
@@ -25,13 +25,22 @@ t_ast	*make_ast_separator(t_ast *left, t_ast *right, int type)
 
 	node = ft_calloc(1, sizeof(t_ast));
 	if (!node)
+	{
+		printf("Error: Failed to allocate memory for seperator node\n");
 		return (NULL);
+	}
 	node->left = left;
 	node->right = right;
 	if (type == TYPE_PIPE)
 	{
 		node->type = PIPE;
 		node->params = ft_split((char *)PIPE, ' ');
+		if (!node->params)
+		{
+			printf("Error: Failed to split pipe param\n");
+			free(node);
+			return (NULL);
+		}
 	}
 	return (node);
 }

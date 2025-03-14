@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:54 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/22 08:49:59 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/06 19:32:41 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,11 @@ t_chain	*lexer_filler(char *str)
 			|| set_lexer_type(str[i]) == TYPE_TAB)
 			i++;
 		if (str[i])
-			head = current_node_helper(str, &i, &head, &current);
+		{
+		head = current_node_helper(str, &i, &head, &current);
+		if (current)
+			printf("Token: Type = %d, Value = %s\n", current->type, current->value);
+		}
 	}
 	return (head);
 }

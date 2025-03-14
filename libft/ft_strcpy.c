@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/11 21:29:03 by mabi-nak         ###   ########.fr       */
+/*   Created: 2025/03/06 09:04:31 by mabi-nak          #+#    #+#             */
+/*   Updated: 2025/03/06 09:06:02 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include "../libft/libft.h"
-# include <unistd.h>
-# include <stdio.h>
-# include <stdbool.h>
-# include <stdlib.h>
-# include "lexer.h"
-# include "tree.h"
+char	*ft_strcpy(char *s1, char *s2)
+{
+	int i;
 
-char	*ft_strndup(const char *src, int n);
-int		ft_strcmp(char *s1, char *s2);
-char	*ft_strcat(char *dest, char *src);
-void	*ft_realloc(void *ptr, size_t old_size, size_t new_size);
-
-#endif
+	i = 0;
+	while (s2[i])
+	{
+		s1[i] = s2[i];
+		i++;
+	}
+	s1[i] = s2[i];
+	return (s1);
+}

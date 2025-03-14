@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:30:30 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/27 17:22:37 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/04 20:51:29 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	parser_in_heroc(t_ast_utils **util, t_lexer **lex, t_token_b **tok)
 	}
 	else
 	{
-		(*util)->node = parser_build_cmd(*util);
+		(*util)->node = generate_echo_cmd(*util);
 		return (1);
 	}
 	return (0);

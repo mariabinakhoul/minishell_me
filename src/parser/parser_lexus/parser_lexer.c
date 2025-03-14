@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/22 08:48:50 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/01 05:53:35 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/11 18:50:08 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,16 +60,49 @@ int	parse_output_redirection(t_ast_utils **util, t_token_b **tok)
 // a cmd node such as an echo cmd and then it builds the struct ast for 
 //the pipe (ig it should be freed need to ask) and we should what's on
 // the right to be further built since the let we're done with it ma ela aaze
-int		parse_pipeline(t_ast_utils **util, t_token_b **tok)
+int		parse_pipeline1(t_ast_utils **util, t_lexer **lex, t_token_b **tok)
 {
+	if (!tok || !*tok || !lex || !*lex || !util || !*util)
+	{
+		printf("Error: Invalid input in parse_pipeline \n");
+		return (0);
+	}
+
+	// printf ("Debug: Current token type = %d, vlue = %s\n", (*tok)->type, (*tok)->value);
+	printf("TESTING DE MERDE\n");
+
 	if ((*tok)->type == TYPE_PIPE)
 	{
+		printf("Found pipe operator\n");
 		(*util)->node = generate_echo_cmd((*util));
-		free((*util)->params);
-		(*util)->params = NULL;
-		(*util)->right = building_pipe(util, tok);
+		if (!(*util)->node)
+		{
+			printf("Error:Failed to generate echo command\n");
+			return (0);
+		}
+		if ((*util)->params)
+		{
+			printf("Error: Freeing params in parse_pipeline\n");
+			free((*util)->params);
+			(*util)->params = NULL;
+		}
+		if (*tok)
+		{
+			printf("Debug: Building pipe for right side\n");
+			(*util)->right = building_pipe(lex, *tok);
+			if ((*util)->right)
+			{
+				printf("Error: Failed to build right side of pipeline\n");
+				return (0);
+			}
+		}
 		(*util)->node = make_ast_separator((*util)->node,
 				(*util)->right, TYPE_PIPE);
+		if (!(*util)->node)
+		{
+			printf("Error: Failed to create pipeline node \n");
+			return (0);
+		}
 		return (1);
 	}
 	return (0);
@@ -79,7 +112,7 @@ int		parse_pipeline(t_ast_utils **util, t_token_b **tok)
 //iteration through the token list and processes different type of cmds
 //including in and out files redirect. pipelines  and token type,
 //it determines if -n flag is present
-void	parsing_the_commands(t_ast_utils **util, t_token_b *tok)
+void	parsing_the_commands(t_ast_utils **util, t_lexer **lex, t_token_b *tok)
 {
 	while (tok)
 	{
@@ -87,13 +120,14 @@ void	parsing_the_commands(t_ast_utils **util, t_token_b *tok)
 			continue ;
 		if (parse_output_redirection(util, &tok))
 			continue ;
-		if (parse_pipeline(util, &tok))
+		if (parse_pipeline1(util, lex, &tok))
 			break ;
 		if (tok->type == TOKEN || (tok->type == TYPE_WORD))
 		{
 			if (!strncmp(tok->value, "-n", 2))
 				(*util)->echo = 1;
-			create_cmd_params(tok->value, (*util)->params);
+			(*util)->params = create_cmd_params(tok->value, (*util)->params);
+			printf("Debug: Updated util->params = %s\n", (*util)->params);
 		}
 		tok = tok->next;
 	}
