@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/11 18:49:57 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/15 21:18:02 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,10 @@ t_ast		*building_pipe(t_lexer **lex, t_token_b *tok);
 char		*create_cmd_params(char *value, char *params);
 t_ast		*parser_build_tree(t_lexer **lex, t_token_b *tok);
 void		expand_tree(t_ast *node);
+t_ast		*parse_input(char *input);
+t_ast		*parse_pipeline(t_chain **tokens);
+t_ast		*parse_command(t_chain **tokens);
+void		parse_redirection(t_chain **tokens, t_ast *cmd);
+
 
 #endif
