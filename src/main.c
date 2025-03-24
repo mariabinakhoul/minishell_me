@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/24 22:07:30 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/24 22:27:47 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,74 +167,61 @@
 int main(int argc, char **argv, char **envp)
 {
     t_ast cmd;
-    char *envp_test[] = {
-        "HOME=/home/user",       // Set HOME variable
-        "OLDPWD=/home/user/old", // Set OLDPWD variable
-        NULL                     // Null-terminate the envp array
-    };
+    char **envp_copy = NULL;
+    int env_size = 0;
 
-    // Initialize cmd structure and set params
+    // Create a modifiable copy of the environment
+    while (envp[env_size]) env_size++;
+    envp_copy = malloc((env_size + 1) * sizeof(char *));
+    for (int i = 0; i < env_size; i++) {
+        envp_copy[i] = strdup(envp[i]);
+    }
+    envp_copy[env_size] = NULL;
+
+    // Initialize cmd structure
     memset(&cmd, 0, sizeof(cmd));
-
-    // Ensure the cmd.params array is properly allocated
-    if (argc > 1)  // If an argument is provided, we expect two params (cd and the directory)
-    {
-        cmd.params = malloc(3 * sizeof(char *));
-        if (cmd.params == NULL)
-        {
-            perror("malloc failed for cmd.params");
-            return 1;  // Exit if malloc fails
-        }
-        cmd.params[0] = strdup("cd");  // Command name
-        cmd.params[1] = strdup(argv[1]);  // Directory argument
-        cmd.params[2] = NULL;  // Null-terminate
-    }
-    else  // No arguments provided, so we just want to test cd with no parameters
-    {
-        cmd.params = malloc(2 * sizeof(char *));
-        if (cmd.params == NULL)
-        {
-            perror("malloc failed for cmd.params");
-            return 1;  // Exit if malloc fails
-        }
-        cmd.params[0] = strdup("cd");  // Command name
-        cmd.params[1] = NULL;  // No directory argument, so it should default to HOME or OLDPWD
+    cmd.params = malloc(3 * sizeof(char *));
+    cmd.params[0] = strdup("cd");
+    
+    if (argc > 1) {
+        cmd.params[1] = strdup(argv[1]);
+        cmd.params[2] = NULL;
+    } else {
+        cmd.params[1] = NULL;
     }
 
-    // Ensure strdup did not fail
-    if (!cmd.params[0] || (argc > 1 && !cmd.params[1]))
-    {
-        perror("strdup failed");
-        return 1;  // Exit if strdup fails
-    }
+    printf("Current directory before: %s\n", getcwd(NULL, 0));
 
-    // Set up environment for testing
-    if (envp_test[0] != NULL)
-        envp = envp_test;
+    // Test cases
+    printf("\nTest 1: No arguments (cd)\n");
+    ft_cd(&cmd, &envp_copy);
 
-    // Test the ft_cd function with different cases
-    printf("Test 1: No arguments (cd)\n");
-    ft_cd(&cmd, envp);
-
+    if (cmd.params[1]) free(cmd.params[1]);
     printf("\nTest 2: cd with - argument (cd -)\n");
-    cmd.params[1] = strdup("-");  // Simulate "cd -"
-    ft_cd(&cmd, envp);
+    cmd.params[1] = strdup("-");
+    ft_cd(&cmd, &envp_copy);
 
+    if (cmd.params[1]) free(cmd.params[1]);
     printf("\nTest 3: cd with an invalid directory (cd /nonexistent)\n");
-    cmd.params[1] = strdup("/nonexistent");  // Simulate "cd /nonexistent"
-    ft_cd(&cmd, envp);
+    cmd.params[1] = strdup("/nonexistent");
+    ft_cd(&cmd, &envp_copy);
 
+    if (cmd.params[1]) free(cmd.params[1]);
     printf("\nTest 4: cd with a valid directory (cd /tmp)\n");
-    cmd.params[1] = strdup("/tmp");  // Simulate "cd /tmp"
-    ft_cd(&cmd, envp);
+    cmd.params[1] = strdup("/tmp");
+    ft_cd(&cmd, &envp_copy);
 
-    // Clean up memory
-    if (cmd.params)
-    {
-        for (int i = 0; cmd.params[i]; i++)
-            free(cmd.params[i]);
-        free(cmd.params);
+    printf("Current directory after: %s\n", getcwd(NULL, 0));
+
+    // Clean up
+    free(cmd.params[0]);
+    if (cmd.params[1]) free(cmd.params[1]);
+    free(cmd.params);
+
+    for (int i = 0; envp_copy[i]; i++) {
+        free(envp_copy[i]);
     }
+    free(envp_copy);
 
     return 0;
 }
