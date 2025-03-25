@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:26:56 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/25 20:40:10 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/25 20:45:28 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char	*ft_strndup(const char *src, int n)
 	return (smt);
 }
 
-char	*ft_strnstr(const char *big, const char *little, size_t len)
+char	*ft_strnstr( char *big,char *little, size_t len)
 {
 	size_t	little_len;
 

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/25 20:37:19 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/25 20:48:04 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ void	findpath(char ***envp)
 	}
 }
 
-char	*findcommandpath(char **comand, char **envp)
+char	*findcommandpath(char *comand, char **envp)
 {
 	char	**all_path;
 	char	*finalpath;
@@ -226,7 +226,7 @@ char	*findcommandpath(char **comand, char **envp)
 	while (all_path[i])
 	{
 		finalpath = ft_strjoin(all_path[i], "/");
-		cmdpath = ft_strjoin(finalpath, *comand);
+		cmdpath = ft_strjoin(finalpath, comand);
 		free(finalpath);
 		if (access(cmdpath, X_OK) == 0)
 			return (cmdpath);
@@ -320,7 +320,7 @@ int execute_command(t_ast *cmd, char **envp) {
 		return (1);
 	}
     if (is_builtin(cmd->value))
-        return execute_builtin(cmd, &envp);
+        return execute_builtin(cmd, envp);
     else
         execute_external(cmd, envp);
     return 0;

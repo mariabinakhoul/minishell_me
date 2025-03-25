@@ -6,8 +6,7 @@ LIBFT = libft/libft.a
 
 CC = gcc
 
-CFLAGS =   -g -I $(HEADER)
-#-Werror -Wall -Wextra
+CFLAGS =   -Werror -Wall -Wextra -g -I $(HEADER)
 SRCS = lexer/lexer_types lexer/lexer_handler lexer/lexer_reader main utils/utils parser/parser_part2/parser_alpha execution/exec execution/builtins/cd
 
 SRC = $(addprefix src/, $(addsuffix .c, $(SRCS)))
