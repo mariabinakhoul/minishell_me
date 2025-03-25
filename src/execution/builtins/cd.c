@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/25 20:29:15 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/25 21:25:17 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char *retrieve_env_path(t_ast *cmd, char **envp, char *key, const char *e
 
     if (!cmd || !envp || !key)
         return NULL;
-
+    printf(" hello :  %s\n", envp[i]);
     while (envp[i])
     {
         if (ft_strncmp(envp[i], key, ft_strlen(key)) == 0 && envp[i][ft_strlen(key)] == '=')
@@ -64,6 +64,7 @@ static void update_environment(t_ast *cmd, char **envp_ptr, char *old_pwd)
 
     while (envp[i])
     {
+        printf("ici\n");
         if (ft_strncmp(envp[i], "OLDPWD", 6) == 0 && envp[i][6] == '=')
         {
             tmp = ft_strjoin("OLDPWD=", old_pwd);
@@ -161,7 +162,7 @@ void ft_cd(t_ast *cmd, char **envp_ptr) {
     char *path;
     char *old_pwd;
     char **envp = envp_ptr;
-
+    printf("TEST123  :  %s",*envp_ptr);
     printf("\n=== FT_CD ===\n");
     printf("Param`s: ");
     if (cmd->params) {
@@ -177,7 +178,7 @@ void ft_cd(t_ast *cmd, char **envp_ptr) {
     }
 
     // Get the target directory
-    
+    // printf("TEST  :  %s",*envp);
     path = get_home_or_oldpwd(cmd, envp);
     if (!path) {
         fprintf(stderr, "cd: could not determine target directory\n");
