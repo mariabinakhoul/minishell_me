@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/19 21:54:38 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/25 20:38:47 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*ft_strndup(const char *src, int n);
 int		ft_strcmp(char *s1, char *s2);
 char	*ft_strcat(char *dest, char *src);
 void	*ft_realloc(void *ptr, size_t new_size);
+void	findpath(char ***envp);
+char	*findcommandpath(char **comand, char **envp);
 void    free_ast(t_ast *node);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/24 21:34:04 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/25 20:37:19 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,39 @@ static bool is_builtin(char *cmd) {
     return false;
 }
 
-static int	execute_builtin(t_ast *cmd, char **envp)
+static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 {
-	if (!cmd || !cmd->value)
-		return (1);
+	printf("\n=== EXECUTE BUILTIN ===\n");
+    printf("Builtin: %s\n", cmd->value);
+    printf("Param count: ");
+    int count = 0;
+    while (cmd->params && cmd->params[count]) count++;
+    printf("%d\n", count);
+
+    if (!cmd || !cmd->value) {
+        printf("Error: Invalid command\n");
+        return 1;
+    }
+
+    if (ft_strcmp(cmd->value, "cd") == 0) {
+        printf("Executing cd with %d params\n", count);
+        if (count > 1) {
+            printf("Changing dir to: %s\n", cmd->params[1]);
+        } else {
+            printf("Changing to home directory\n");
+        }
+        ft_cd(cmd, envp_ptr);
+        return 0;
+    }
+	// if (!cmd || !cmd->value)
+	// 	return (1);
 	// if (ft_strcmp(cmd->value, "echo") == 0)
 	// 	return (ft_echo(cmd->params));
-	if (ft_strcmp(cmd->value, "cd") == 0)
-	{
-		ft_cd(cmd, envp);
-		return (0);
-	}
+	// if (ft_strcmp(cmd->value, "cd") == 0)
+	// {
+	// 	ft_cd(cmd, envp);
+	// 	return (0);
+	// }
 
 	// if (ft_strcmp(cmd->value, "pwd") == 0)
 		// return (ft_pwd(cmd->params));
@@ -86,7 +108,7 @@ static void execute_external(t_ast *cmd, char **envp) {
     if (!cmd->params[0]) return;
     path = (access(cmd->params[0], X_OK) == 0) 
            ?  cmd->params[0]
-           : find_command_path(cmd->params[0]);
+           : findcommandpath(cmd->params[0],envp);
     if (!path) {
         fprintf(stderr, "minishell: %s: command not found\n", cmd->params[0]);
         return;
@@ -181,20 +203,38 @@ static void execute_external(t_ast *cmd, char **envp) {
 //     return NULL;
 // }
 
-char *find_command_path(char *cmd) {
-    char *path_env = getenv("PATH");
-    char *path = malloc(1024);  // Allocate once
-    if (!path_env || !path) return NULL;
+void	findpath(char ***envp)
+{
+	while (**envp != NULL)
+	{
+		if (ft_strnstr(**envp, "PATH=", 5) != NULL)
+			return ;
+		(*envp)++;
+	}
+}
 
-    char *dir = strtok(path_env, ":");
-    while (dir) {
-        sprintf(path, "%s/%s", dir, cmd);
-        if (access(path, X_OK) == 0)
-            return path;
-        dir = strtok(NULL, ":");
-    }
-    free(path);  // Free if no path was found
-    return NULL;
+char	*findcommandpath(char **comand, char **envp)
+{
+	char	**all_path;
+	char	*finalpath;
+	char	*cmdpath;
+	int		i;
+
+	findpath(&envp);
+	all_path = ft_split(*envp + 5, ':');
+	i = 0;
+	while (all_path[i])
+	{
+		finalpath = ft_strjoin(all_path[i], "/");
+		cmdpath = ft_strjoin(finalpath, *comand);
+		free(finalpath);
+		if (access(cmdpath, X_OK) == 0)
+			return (cmdpath);
+		free(cmdpath);
+		i++;
+	}
+	freearray(all_path);
+	return (NULL);
 }
 
 void print_ast(t_ast *node, int depth)
@@ -242,8 +282,19 @@ void	execute(char *input, char **envp)
 
 
 int execute_command(t_ast *cmd, char **envp) {
-    if (!cmd) return 1;
-
+	printf("\n=== EXECUTE COMMAND ===\n");
+    printf("Command: %s\n", cmd->value ? cmd->value : "(null)");
+    printf("Params: ");
+    if (cmd->params) {
+        for (int i = 0; cmd->params[i]; i++) {
+            printf("[%s] ", cmd->params[i]);
+        }
+    }
+    printf("\n");
+    if (!cmd) {
+        printf("Error: Null command\n");
+        return 1;
+    }
     // Handle pipelines (e.g., cmd1 | cmd2)
     if (cmd->type == PIPE) {
         int pipefd[2];
@@ -269,7 +320,7 @@ int execute_command(t_ast *cmd, char **envp) {
 		return (1);
 	}
     if (is_builtin(cmd->value))
-        return execute_builtin(cmd, envp);
+        return execute_builtin(cmd, &envp);
     else
         execute_external(cmd, envp);
     return 0;

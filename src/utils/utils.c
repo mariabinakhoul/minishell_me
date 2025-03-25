@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:26:56 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/19 20:55:26 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/25 20:40:10 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,32 @@ char	*ft_strndup(const char *src, int n)
 	}
 	smt[i] = '\0';
 	return (smt);
+}
+
+char	*ft_strnstr(const char *big, const char *little, size_t len)
+{
+	size_t	little_len;
+
+	little_len = ft_strlen(little);
+	if (*little == '\0')
+		return ((char *)big);
+	while (*big && len-- >= little_len)
+	{
+		if (ft_strncmp(big, little, little_len) == 0)
+			return ((char *)big);
+		big++;
+	}
+	return (NULL);
+}
+
+void	freearray(char **array)
+{
+	int	i;
+
+	i = 0;
+	while (array[i])
+		free(array[i++]);
+	free(array);
 }
 
 int	ft_strcmp(char *s1, char *s2)
