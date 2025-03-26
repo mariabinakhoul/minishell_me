@@ -3,16 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/25 21:13:18 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/26 16:50:24 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
 #include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -115,20 +117,24 @@ void print_ast1(t_ast *node, int depth) {
     print_ast1(node->right, depth + 1);
 }
 
-int main(int argc, char **argv, char **envp) {
+int main(int argc, char **argv, char **envp)
+{
     (void)argc;
     (void)argv;
-    char input[1024];
+    char *input;
 
     while (1) {
-        printf("minishell> ");
-        if (!fgets(input, sizeof(input), stdin))
+        input = readline("minishell> ");
+        if (!input)
             break;
 
-        input[strcspn(input, "\n")] = '\0';
+        if (*input)
+            add_history(input);
 
-        if (strcmp(input, "exit") == 0)
+        if (strcmp(input, "exit") == 0) {
+            free(input);
             break;
+        }
 
         printf("\n=== INPUT: '%s' ===\n", input);
         
@@ -136,6 +142,7 @@ int main(int argc, char **argv, char **envp) {
         t_ast *ast = parse_input(input);
         if (!ast) {
             printf("Failed to parse input\n");
+            free(input);
             continue;
         }
 
@@ -147,9 +154,8 @@ int main(int argc, char **argv, char **envp) {
 
         // Free the AST properly
         free_ast(ast);
+        free(input);
     }
-
-    return 0;
 }
 
 
