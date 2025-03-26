@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/25 21:25:17 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/26 09:39:04 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,57 +51,23 @@ static char *get_home_or_oldpwd(t_ast *cmd, char **envp)
     return (char *)cmd->params[1];
 }
 
-static void update_environment(t_ast *cmd, char **envp_ptr, char *old_pwd)
-{
-    char *new_pwd;
-    int i = 0;
-    char *tmp;
-	char **envp = envp_ptr;
-	(void)cmd;
-
-    if (!envp || !old_pwd)
-        return;
-
-    while (envp[i])
-    {
-        printf("ici\n");
-        if (ft_strncmp(envp[i], "OLDPWD", 6) == 0 && envp[i][6] == '=')
-        {
-            tmp = ft_strjoin("OLDPWD=", old_pwd);
-            if (tmp)
-            {
-                free(envp[i]);  // Free the previous entry before updating
-                envp[i] = tmp;
-            }
-            break;
-        }
-        i++;
+void update_env(const char *new_path) {
+    char *oldpwd = getenv("PWD");
+    if (oldpwd) {
+        setenv("OLDPWD", oldpwd, 1);  // Update OLDPWD
     }
-
-    new_pwd = getcwd(NULL, 0);
-    if (!new_pwd)
-    {
-        perror("cd: getcwd");
-        return;
-    }
-    i = 0;
-    while (envp[i])
-    {
-        if (ft_strncmp(envp[i], "PWD", 3) == 0 && envp[i][3] == '=')
-        {
-            tmp = ft_strjoin("PWD=", new_pwd);
-            if (tmp)
-            {
-                free(envp[i]);  // Free the previous entry before updating
-                envp[i] = tmp;
-            }
-            break;
-        }
-        i++;
-    }
-    printf("%s\n", new_pwd);
-    free(new_pwd);
+    setenv("PWD", new_path, 1);       // Update PWD
 }
+
+int ft_setenv(const char *name,const char *path,int overwrite)
+{
+    if (overwrite != 0)
+    {
+
+    }
+    return (-1);
+}
+
 
 // void ft_cd(t_ast *cmd, char ***envp_ptr)
 // {
@@ -160,7 +126,7 @@ static void update_environment(t_ast *cmd, char **envp_ptr, char *old_pwd)
 
 void ft_cd(t_ast *cmd, char **envp_ptr) {
     char *path;
-    char *old_pwd;
+    const char *old_pwd;
     char **envp = envp_ptr;
     printf("TEST123  :  %s",*envp_ptr);
     printf("\n=== FT_CD ===\n");
@@ -200,9 +166,9 @@ void ft_cd(t_ast *cmd, char **envp_ptr) {
         free(old_pwd);
         return;
     }
-    printf("hello2\n");
-
+    // printf("hello2\n");
+    printf("%s\n",old_pwd);
     // Update environment variables
-    update_environment(cmd, envp_ptr, old_pwd);
+    update_env(old_pwd);
     free(old_pwd);
 }
