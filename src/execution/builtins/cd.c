@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/27 20:45:23 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/27 20:51:54 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void update_env(const char *new_path) {
 
 void ft_cd(t_ast *cmd, char **envp_ptr) {
     char *path;
-    const char *old_pwd;
+    char *old_pwd;
     char **envp = envp_ptr;
     printf("TEST123  :  %s",*envp_ptr);
     printf("\n=== FT_CD ===\n");
