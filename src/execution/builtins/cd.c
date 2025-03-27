@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/27 20:51:54 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/27 23:22:01 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,28 +50,34 @@ static char *get_home_or_oldpwd(t_ast *cmd, char **envp)
     return (char *)cmd->params[1];
 }
 
-void update_env(const char *new_path) {
-    char *oldpwd = getenv("PWD");
-    if (oldpwd) {
-        setenv("OLDPWD", oldpwd, 1);  // Update OLDPWD
-    }
-    setenv("PWD", new_path, 1);       // Update PWD
+void update_env(char **envp,t_ast *path)
+{
+    ft_setenv(envp, path);       // Update PWD
 }
 
-// int ft_setenv(const char *name, const char *value, int overwrite)
-// {
-//     char *old_value = getenv(name);
-//     if ()
-//     {
-    
-//     }
-//     return -1;
-// }
+void ft_setenv(char **envp,t_ast *cmd_path)
+{
+    int i = 0;
+    // char *new_dir = strcat("/", dir);
+    char *env = envp[i];
+    char *path;
+    path = getenv("PWD");
+    path = strcat(path,"/");
+    path = strcat(path,(cmd_path->params[1]));
+    envp[i] = path;
+    while (envp[i])
+    {
+        printf("%s\n", env);
+        i++;
+        env  = envp[i];
+    }
+}
 
-void ft_cd(t_ast *cmd, char **envp_ptr) {
+
+void ft_cd(t_ast *cmd, char **envp) {
     char *path;
     char *old_pwd;
-    char **envp = envp_ptr;
+    char **envp_ptr = envp;
     printf("TEST123  :  %s",*envp_ptr);
     printf("\n=== FT_CD ===\n");
     printf("Param`s: ");
@@ -90,7 +96,8 @@ void ft_cd(t_ast *cmd, char **envp_ptr) {
     // Get the target directory
     // printf("TEST  :  %s",*envp);
     path = get_home_or_oldpwd(cmd, envp);
-    if (!path) {
+    if (!path)
+    {
         fprintf(stderr, "cd: could not determine target directory\n");
         return;
     }
@@ -104,7 +111,8 @@ void ft_cd(t_ast *cmd, char **envp_ptr) {
 
     // Attempt to change directory
     printf("Attempting to change to: %s\n", path);
-    if (chdir(path) != 0) {
+    if (chdir(path) != 0)
+    {
         printf("hello1");
         perror("cd");
         free(old_pwd);
@@ -113,6 +121,6 @@ void ft_cd(t_ast *cmd, char **envp_ptr) {
     // printf("hello2\n");
     printf("%s\n",old_pwd);
     // Update environment variables
-    update_env(old_pwd);
+    update_env(envp,cmd);
     free(old_pwd);
 }

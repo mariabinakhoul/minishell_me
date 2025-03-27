@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/26 20:00:53 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/27 23:20:10 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,12 @@ int main(int argc, char **argv, char **envp)
 }
 
 
+// int main(int argc, char **argv, char **envp)
+// {
+//     (void)argc;
+//     (void)argv;
+//     ft_setenv(envp,"Libft");
+// }
 // #include <stdio.h>
 // #include <stdlib.h>
 // #include <string.h>
