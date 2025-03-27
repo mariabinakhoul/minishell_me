@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/25 21:10:34 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/26 17:20:42 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,36 +70,7 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 	return (-1);
 }
 
-// static void	execute_external(t_ast *cmd, char **envp)
-// {
-// 	pid_t	pid;
-// 	char	*path;
-// 	int fd_in;
-// 	int fd_out;
 
-// 	if (!cmd || !cmd->params || !cmd->params[0])
-// 		return ;
-// 	if (access(cmd->params[0], X_OK) == 0)
-// 		path = cmd->params[0];
-// 	else
-// 		path = find_command_path(cmd->params[0]);
-// 	if (!path)
-// 	{
-// 		fprintf(stderr, "%s: command not found\n", cmd->params[0]);
-// 		return ;
-// 	}
-// 	pid = fork();
-// 	if (pid == 0)
-// 	{
-// 		execve(path, cmd->params, envp);
-// 		perror("execve");
-// 		exit(1);
-// 	}
-// 	else if (pid > 0)
-// 		waitpid(pid, &status, 0);
-// 	else
-// 		perror("fork");
-// }
 
 static void execute_external(t_ast *cmd, char **envp) {
     pid_t pid;
@@ -149,60 +120,6 @@ static void execute_external(t_ast *cmd, char **envp) {
     free(path);
 }
 
-// int	execute_command(t_ast *cmd, char **envp)
-// {
-// 	int	status;
-
-// 	status = execute_builtin(cmd, envp);
-// 	if (status != -1)
-// 		return (status);
-// 	execute_external(cmd, envp);
-// 	return (0);
-// }
-
-// char *find_command_path(char *cmd)
-// {
-//     char *path_env = getenv("PATH"); 
-//     if (!path_env)
-//         return NULL;
-//     char *dir = ft_strchr(path_env, ':');
-//     char *path_copy = NULL;
-//     size_t path_len;
-//     if (dir)
-//         path_len = dir - path_env;
-//     else
-//         path_len = ft_strlen(path_env);
-//     while (dir)
-//     {
-//         path_copy = malloc(path_len + 1 + ft_strlen(cmd) + 1);
-//         if (!path_copy)
-//             return NULL;
-//         ft_strcpy(path_copy, path_env);
-//         path_copy[path_len] = '/';
-//         ft_strcpy(path_copy + path_len + 1, cmd);
-//         path_copy[path_len + ft_strlen(cmd) + 1] = '\0';
-//         if (access(path_copy, X_OK) == 0)
-//             return path_copy;
-//         free(path_copy);
-//         path_env = dir + 1;
-//         dir = ft_strchr(path_env, ':');
-//         if (dir)
-//             path_len = dir - path_env;
-//         else
-//             path_len = ft_strlen(path_env);
-//     }
-//     path_copy = malloc(path_len + 1 + ft_strlen(cmd) + 1);
-//     if (!path_copy)
-//         return NULL;
-//     ft_strcpy(path_copy, path_env);
-//     path_copy[path_len] = '/';
-//     ft_strcpy(path_copy + path_len + 1, cmd);
-//     path_copy[path_len + ft_strlen(cmd) + 1] = '\0';
-//     if (access(path_copy, X_OK) == 0)
-//         return path_copy;
-//     free(path_copy);
-//     return NULL;
-// }
 
 void	findpath(char ***envp)
 {

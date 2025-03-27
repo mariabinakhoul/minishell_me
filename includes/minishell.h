@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/26 16:50:12 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/26 19:18:52 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,6 @@ void	findpath(char ***envp);
 char	*ft_strnstr(char *big,char *little, size_t len);
 char	*findcommandpath(char *comand, char **envp);
 void    free_ast(t_ast *node);
+int ft_setenv();//const char *name,const char *path,int overwrite
 
 #endif

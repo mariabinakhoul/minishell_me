@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/26 09:39:04 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/27 20:45:23 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static char *retrieve_env_path(t_ast *cmd, char **envp, char *key, const char *e
         }
         i++;
     }
-
     if (error_msg)
         fprintf(stderr, "%s\n", error_msg);
     return NULL;
@@ -59,69 +58,14 @@ void update_env(const char *new_path) {
     setenv("PWD", new_path, 1);       // Update PWD
 }
 
-int ft_setenv(const char *name,const char *path,int overwrite)
-{
-    if (overwrite != 0)
-    {
-
-    }
-    return (-1);
-}
-
-
-// void ft_cd(t_ast *cmd, char ***envp_ptr)
+// int ft_setenv(const char *name, const char *value, int overwrite)
 // {
-//     char *path;
-//     char *old_pwd;
-//     char **envp = *envp_ptr;
-
-// 	printf("\n=== FT_CD ===\n");
-//     printf("Params: ");
-//     if (cmd->params) {
-//         for (int i = 0; cmd->params[i]; i++) {
-//             printf("[%s] ", cmd->params[i]);
-//         }
-//     }
-//     printf("\n");
-//     if (!cmd || !cmd->params)
-// 	{
-// 		printf("Error: Null command or params\n");
-//         return;
-// 	}
-// 	char *target = cmd->params[1] ? cmd->params[1] : getenv("HOME");
-//     if (!target) {
-//         printf("Error: No directory specified and HOME not set\n");
-//         return;
-//     }
-// 	printf("Attempting to change to: %s\n", target);
-//     if (chdir(target) != 0) {
-//         perror("cd");
-//     }
-//     if (cmd->params[1] && cmd->params[2])
+//     char *old_value = getenv(name);
+//     if ()
 //     {
-//         fprintf(stderr, "bash: cd: too many arguments\n");
-//         return;
+    
 //     }
-
-//     path = get_home_or_oldpwd(cmd, envp);
-//     if (!path)
-//         return;
-
-//     old_pwd = getcwd(NULL, 0);
-//     if (!old_pwd)
-//     {
-//         perror("cd: getcwd");
-//         return;
-//     }
-
-//     if (chdir(path) == -1)
-//     {
-//         perror("cd");
-//         free(old_pwd);
-//         return;
-//     }
-
-//     update_environment(cmd, envp_ptr, old_pwd);
+//     return -1;
 // }
 
 void ft_cd(t_ast *cmd, char **envp_ptr) {
