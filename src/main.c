@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/28 18:31:15 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/28 21:46:17 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,35 +123,25 @@ int main(int argc, char **argv, char **envp)
     (void)argv;
     char *input;
 
-    while (1) {
+    while (1)
+    {
         input = readline("minishell> ");
         if (!input)
-            break;
-
+            break ;
         if (*input)
             add_history(input);
-
-        if (strcmp(input, "exit") == 0) {
+        if (strcmp(input, "exit") == 0)
+        {
             free(input);
             break;
         }
-
-        printf("\n=== INPUT: '%s' ===\n", input);
-        
-        // Actually parse the input instead of hardcoding
         t_ast *ast = parse_input(input);
         if (!ast) {
             printf("Failed to parse input\n");
             free(input);
             continue;
         }
-
-        printf("\n=== PARSED AST ===\n");
-        print_ast1(ast, 0);
-        printf("=================\n");
-
         execute_command(ast, envp);
-        // Free the AST properly
         free_ast(ast);
         free(input);
     }

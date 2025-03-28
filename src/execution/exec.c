@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/28 18:43:02 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/28 19:07:49 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,6 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 	return (-1);
 }
 
-void ft_env(char **envp)
-{
-    int i = 0;
-
-    char *env = envp[i];
-    while (envp[i])
-    {
-        i++;
-        printf("%s\n" , env);
-        env = envp[i];
-    }
-}
 
 static void execute_external(t_ast *cmd, char **envp) {
     pid_t pid;
@@ -219,7 +207,8 @@ void	execute(char *input, char **envp)
 }
 
 
-int execute_command(t_ast *cmd, char **envp) {
+int execute_command(t_ast *cmd, char **envp)
+{
 	printf("\n=== EXECUTE COMMAND ===\n");
     printf("Command: %s\n", cmd->value ? cmd->value : "(null)");
     printf("Params: ");
@@ -237,14 +226,16 @@ int execute_command(t_ast *cmd, char **envp) {
     if (cmd->type == PIPE) {
         int pipefd[2];
         pipe(pipefd);
-
-        if (fork() == 0) {
+        if (fork() == 0)
+        {
 			close(pipefd[0]);
             dup2(pipefd[1], STDOUT_FILENO);  // cmd1 writes to pipe
             close(pipefd[1]);
             execute_command(cmd->left, envp);
             exit(EXIT_SUCCESS);
-        } else {
+        } 
+        else
+        {
 			close (pipefd[1]);
             dup2(pipefd[0], STDIN_FILENO);   // cmd2 reads from pipe
             close(pipefd[0]);

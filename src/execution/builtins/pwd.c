@@ -6,7 +6,13 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:24:32 by nhaber            #+#    #+#             */
-/*   Updated: 2025/03/27 23:24:33 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/28 22:31:01 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "../../../includes/minishell.h"
+
+void ft_pwd(char **envp)
+{
+    
+}
