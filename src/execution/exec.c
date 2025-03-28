@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/26 17:20:42 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/28 18:43:02 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,20 +32,28 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
     while (cmd->params && cmd->params[count]) count++;
     printf("%d\n", count);
 
-    if (!cmd || !cmd->value) {
+    if (!cmd || !cmd->value)
+    {
         printf("Error: Invalid command\n");
         return 1;
     }
-
-    if (ft_strcmp(cmd->value, "cd") == 0) {
+    if (ft_strcmp(cmd->value, "cd") == 0)
+    {
         printf("Executing cd with %d params\n", count);
-        if (count > 1) {
+        if (count > 1)
+        {
             printf("Changing dir to: %s\n", cmd->params[1]);
-        } else {
+        }
+        else
+        {
             printf("Changing to home directory\n");
         }
         ft_cd(cmd, envp_ptr);
         return 0;
+    }
+    if (ft_strcmp(cmd->value, "env") == 0)
+    {
+        ft_env(envp_ptr);
     }
 	// if (!cmd || !cmd->value)
 	// 	return (1);
@@ -70,7 +78,18 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 	return (-1);
 }
 
+void ft_env(char **envp)
+{
+    int i = 0;
 
+    char *env = envp[i];
+    while (envp[i])
+    {
+        i++;
+        printf("%s\n" , env);
+        env = envp[i];
+    }
+}
 
 static void execute_external(t_ast *cmd, char **envp) {
     pid_t pid;
@@ -89,7 +108,8 @@ static void execute_external(t_ast *cmd, char **envp) {
     if (pid == 0) {
         if (cmd->in_file) {
             fd_in = open(cmd->in_file, O_RDONLY);
-            if (fd_in == -1) {
+            if (fd_in == -1)
+            {
                 perror("open");
                 exit(EXIT_FAILURE);
             }

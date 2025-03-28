@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/27 23:22:01 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/28 16:41:38 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,27 +50,30 @@ static char *get_home_or_oldpwd(t_ast *cmd, char **envp)
     return (char *)cmd->params[1];
 }
 
-void update_env(char **envp,t_ast *path)
+void update_env(t_ast *path)
 {
-    ft_setenv(envp, path);       // Update PWD
+    ft_setenv( path);       // Update PWD
 }
 
-void ft_setenv(char **envp,t_ast *cmd_path)
+void ft_setenv(t_ast *cmd_path)
 {
-    int i = 0;
+    // int i = 0;
     // char *new_dir = strcat("/", dir);
-    char *env = envp[i];
-    char *path;
-    path = getenv("PWD");
-    path = strcat(path,"/");
-    path = strcat(path,(cmd_path->params[1]));
-    envp[i] = path;
-    while (envp[i])
+    // char *env = envp[i];
+    if (cmd_path->params[1])
     {
-        printf("%s\n", env);
-        i++;
-        env  = envp[i];
+        char *path;
+        path = getenv("PWD");
+        path = strcat(path,"/");
+        path = strcat(path,(cmd_path->params[1]));
     }
+    // envp[i] = path;
+    // while (envp[i])
+    // {
+    //     printf("%s\n", env);
+    //     i++;
+    //     env  = envp[i];
+    // }
 }
 
 
@@ -101,14 +104,12 @@ void ft_cd(t_ast *cmd, char **envp) {
         fprintf(stderr, "cd: could not determine target directory\n");
         return;
     }
-
     // Get current working directory before changing
     old_pwd = getcwd(NULL, 0);
     if (!old_pwd) {
         perror("cd: getcwd");
         return;
     }
-
     // Attempt to change directory
     printf("Attempting to change to: %s\n", path);
     if (chdir(path) != 0)
@@ -121,6 +122,6 @@ void ft_cd(t_ast *cmd, char **envp) {
     // printf("hello2\n");
     printf("%s\n",old_pwd);
     // Update environment variables
-    update_env(envp,cmd);
+    update_env(cmd);
     free(old_pwd);
 }

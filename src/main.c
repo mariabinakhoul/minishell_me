@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/27 23:20:10 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/28 18:31:15 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,6 @@ int main(int argc, char **argv, char **envp)
         printf("=================\n");
 
         execute_command(ast, envp);
-
         // Free the AST properly
         free_ast(ast);
         free(input);
