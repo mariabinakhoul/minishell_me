@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/29 14:27:25 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:17:23 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,8 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 	// 	return (1);
 	// if (ft_strcmp(cmd->value, "echo") == 0)
 	// 	return (ft_echo(cmd->params));
-	// if (ft_strcmp(cmd->value, "cd") == 0)
-	// {
-	// 	ft_cd(cmd, envp);
-	// 	return (0);
-	// }
-
-	// if (ft_strcmp(cmd->value, "pwd") == 0)
-	// 	ft_pwd();
+	if (ft_strcmp(cmd->value, "pwd") == 0)
+		ft_pwd();
 	// if (ft_strcmp(cmd->value, "exit") == 0)
 		// return (ft_exit(cmd->params));
 	// if (ft_strcmp(cmd->value, "env") == 0)
@@ -212,6 +206,7 @@ int execute_command(t_ast *cmd, char **envp)
 	printf("\n=== EXECUTE COMMAND ===\n");
     printf("Command: %s\n", cmd->value ? cmd->value : "(null)");
     printf("Params: ");
+    
     if (cmd->params) {
         for (int i = 0; cmd->params[i]; i++) {
             printf("[%s] ", cmd->params[i]);
