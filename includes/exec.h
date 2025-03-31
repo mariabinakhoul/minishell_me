@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/25 21:10:17 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:23:00 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	execute(char *input, char **envp);
 char	*findcommandpath(char *comand, char **envp);
 void	freearray(char **array);
 void ft_cd(t_ast *cmd, char **envp_ptr);
+int	ft_echo(char **args);
 
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 18:17:23 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/31 19:22:45 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
     }
 	// if (!cmd || !cmd->value)
 	// 	return (1);
-	// if (ft_strcmp(cmd->value, "echo") == 0)
-	// 	return (ft_echo(cmd->params));
+	if (ft_strcmp(cmd->value, "echo") == 0)
+		return (ft_echo(cmd->params));
 	if (ft_strcmp(cmd->value, "pwd") == 0)
 		ft_pwd();
 	// if (ft_strcmp(cmd->value, "exit") == 0)

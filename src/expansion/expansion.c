@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expension.c                                        :+:      :+:    :+:   */
+/*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/27 20:47:47 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:05:38 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,6 @@ void expand_command_node(t_ast *cmd, char **env, int last_status)
         free(cmd->out_file);
         cmd->out_file = expanded;
     }
-    
 }
 
 void expand_tree(t_ast *node, char **env, int last_status)
