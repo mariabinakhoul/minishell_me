@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/28 19:30:55 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/31 19:01:08 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,27 +70,15 @@ typedef struct s_lexer
 	int			count;
 }	t_lexer;
 
-void		parse_heredoc(t_token_b *token, t_ast_utils **util);
-int			parse_input_redirection(t_ast_utils **util, t_token_b **tok);
-int			parse_output_redirection(t_ast_utils **util, t_token_b **tok);
-t_ast		*generate_echo_cmd(t_ast_utils *util);
-t_ast		*make_ast_separator(t_ast *left, t_ast *right, int type);
-int			parse_pipeline1(t_ast_utils **util, t_lexer **lex, t_token_b **tok);
-int			parser_in_heroc(t_ast_utils **util, t_lexer **lex, t_token_b **tok);
-void		parsing_the_commands(t_ast_utils **util, t_lexer **lex,
-				t_token_b *tok);
-void		make_cmd_ast(t_ast *node, t_ast *util);
-void		redirect_to_in(t_ast_utils **util);
-void		redirect_to_out(char *filename);
-t_ast_utils	*make_util_ast(t_ast_utils **util);
-t_ast		*building_pipe(t_lexer **lex, t_token_b *tok);
-char		*create_cmd_params(char *value, char *params);
-t_ast		*parser_build_tree(t_lexer **lex, t_token_b *tok);
-void		expand_tree(t_ast *node);
 t_ast		*parse_input(char *input);
 t_ast		*parse_pipeline(t_chain **tokens);
 t_ast		*parse_command(t_chain **tokens);
 void		parse_redirection(t_chain **tokens, t_ast *cmd);
-
+char		*join_and_free(char *s1, const char *s2);
+char		*join_and_free_char(char *s, char c);
+char		*get_env_value(char *var, char **env);
+char		*expand_argument(char *arg, int quoted, char **env, int last_status);
+void		expand_command_node(t_ast *cmd, char **env, int last_status);
+void		expand_tree(t_ast *node, char **env, int last_status);
 
 #endif
