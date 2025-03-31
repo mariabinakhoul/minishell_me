@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 19:26:53 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/31 23:12:08 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 				result = join_and_free(result, ft_itoa(last_status));
 				i += 2;
 			}
-			else if (ft_isalpha(arg[i + 1]) || arg[i] == '_')
+			else if (ft_isalpha(arg[i + 1]) || arg[i + 1] == '_')
 			{
 				start = ++i;
 				// char	c = arg[i];

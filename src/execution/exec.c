@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 20:49:22 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/31 23:11:51 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
     int count = 0;
     while (cmd->params && cmd->params[count]) count++;
     printf("%d\n", count);
-
     if (!cmd || !cmd->value)
     {
         printf("Error: Invalid command\n");
@@ -73,29 +72,30 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 }
 
 
-static void execute_external(t_ast *cmd, char **envp) {
+static int execute_external(t_ast *cmd, char **envp) {
     pid_t pid;
     char *path;
     int fd_in, fd_out;
+    int status;
 
-    if (!cmd->params[0]) return;
+    if (!cmd->params[0])
+        return (1);
     path = (access(cmd->params[0], X_OK) == 0) 
            ?  cmd->params[0]
            : findcommandpath(cmd->params[0],envp);
     if (!path) {
         fprintf(stderr, "minishell: %s: command not found\n", cmd->params[0]);
-        return;
+        return (127);
     }
     pid = fork();
     if (pid == 0) {
         if (cmd->in_file) {
             fd_in = open(cmd->in_file, O_RDONLY);
-            if (fd_in == -1)
-            {
+            if (fd_in == -1) {
                 perror("open");
                 exit(EXIT_FAILURE);
             }
-            dup2(fd_in, STDIN_FILENO);  // Replace stdin with the file
+            dup2(fd_in, STDIN_FILENO);
             close(fd_in);
         }
         if (cmd->out_file) {
@@ -106,20 +106,21 @@ static void execute_external(t_ast *cmd, char **envp) {
                 perror("open");
                 exit(EXIT_FAILURE);
             }
-            dup2(fd_out, STDOUT_FILENO);  // Replace stdout with the file
+            dup2(fd_out, STDOUT_FILENO);
             close(fd_out);
         }
-
-        // Execute the command
         execve(path, cmd->params, envp);
         perror("execve");
         exit(EXIT_FAILURE);
     } else if (pid > 0) {
-        waitpid(pid, NULL, 0);  // Wait for child
+        waitpid(pid, &status, 0);
+        free(path);
+        return (WIFEXITED(status)) ? WEXITSTATUS(status) : 1;
     } else {
         perror("fork");
+        free(path);
+        return 1;
     }
-    free(path);
 }
 
 
@@ -135,26 +136,34 @@ void	findpath(char ***envp)
 
 char	*findcommandpath(char *comand, char **envp)
 {
+    char    **envp_copy = envp;
 	char	**all_path;
 	char	*finalpath;
 	char	*cmdpath;
 	int		i;
 
-	findpath(&envp);
-	all_path = ft_split(*envp + 5, ':');
-	i = 0;
-	while (all_path[i])
-	{
-		finalpath = ft_strjoin(all_path[i], "/");
-		cmdpath = ft_strjoin(finalpath, comand);
-		free(finalpath);
-		if (access(cmdpath, X_OK) == 0)
-			return (cmdpath);
-		free(cmdpath);
-		i++;
-	}
-	freearray(all_path);
-	return (NULL);
+    while (*envp_copy != NULL)
+    {
+        if (ft_strnstr(*envp_copy, "PATH=", 5) != NULL)
+            break;
+        envp_copy++;
+    }
+    if (*envp_copy == NULL)
+        return (NULL);
+    all_path = ft_split(*envp_copy + 5, ':');
+    i = 0;
+    while (all_path[i])
+    {
+        finalpath = ft_strjoin(all_path[i], "/");
+        cmdpath = ft_strjoin(finalpath, comand);
+        free(finalpath);
+        if (access(cmdpath, X_OK) == 0)
+            return (cmdpath);
+        free(cmdpath);
+        i++;
+    }
+    freearray(all_path);
+    return (NULL);
 }
 
 void print_ast(t_ast *node, int depth)
@@ -189,18 +198,19 @@ void print_ast(t_ast *node, int depth)
 
 void	execute(char *input, char **envp)
 {
-	t_ast	*ast;
+    t_ast *ast;
+    int last_status = 0;
 
-	ast = parse_input(input);
-
-	if (!ast)
-		return ;
-	execute_command(ast, envp);
-	free_ast(ast);
+    ast = parse_input(input);
+    if (!ast)
+        return;
+    expand_tree(ast, envp, last_status);
+    last_status = execute_command(ast, envp, &last_status);
+    free_ast(ast);
 }
 
 
-int execute_command(t_ast *cmd, char **envp)
+int execute_command(t_ast *cmd, char **envp, int *last_status)
 {
 	printf("\n=== EXECUTE COMMAND ===\n");
     printf("Command: %s\n", cmd->value ? cmd->value : "(null)");
@@ -214,18 +224,20 @@ int execute_command(t_ast *cmd, char **envp)
     printf("\n");
     if (!cmd) {
         printf("Error: Null command\n");
+        *last_status = 1;
         return 1;
     }
     // Handle pipelines (e.g., cmd1 | cmd2)
     if (cmd->type == PIPE) {
         int pipefd[2];
+        int status_right;
         pipe(pipefd);
         if (fork() == 0)
         {
 			close(pipefd[0]);
             dup2(pipefd[1], STDOUT_FILENO);  // cmd1 writes to pipe
             close(pipefd[1]);
-            execute_command(cmd->left, envp);
+            execute_command(cmd->left, envp, last_status);
             exit(EXIT_SUCCESS);
         } 
         else
@@ -233,18 +245,21 @@ int execute_command(t_ast *cmd, char **envp)
 			close (pipefd[1]);
             dup2(pipefd[0], STDIN_FILENO);   // cmd2 reads from pipe
             close(pipefd[0]);
-            execute_command(cmd->right, envp);
+            status_right = execute_command(cmd->right, envp, last_status);
+            // execute_command(cmd->right, envp);
+            *last_status = status_right; 
         }
-        return 0;
+        return *last_status;
     }
 	if (!cmd->value)
 	{
 		fprintf(stderr, "Error: command is null\n");
+        *last_status = 1;
 		return (1);
 	}
     if (is_builtin(cmd->value))
-        return execute_builtin(cmd, envp);
+        *last_status = execute_builtin(cmd, envp);
     else
-        execute_external(cmd, envp);
-    return 0;
+        *last_status = execute_external(cmd, envp);
+    return (*last_status);
 }
