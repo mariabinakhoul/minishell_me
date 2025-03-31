@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 18:54:44 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:56:43 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,6 @@ void ft_cd(t_ast *cmd, char **envp) {
         return;
     }
 
-    // Handle `cd ~`
     if (cmd->params[1] && strcmp(cmd->params[1], "~") == 0)
         cmd->params[1] = NULL;
 
