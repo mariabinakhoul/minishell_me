@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 18:26:47 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/31 18:54:44 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,40 +82,46 @@ void ft_setenv(t_ast *cmd_path)
 void ft_cd(t_ast *cmd, char **envp) {
     char *path;
     char *old_pwd;
-    char **envp_ptr = envp;
-    printf("TEST123  :  %s",*envp_ptr);
-    printf("\n=== FT_CD ===\n");
-    printf("Param`s: ");
+
     if (cmd->params) {
         for (int i = 0; cmd->params[i]; i++) {
             printf("[%s] ", cmd->params[i]);
         }
     }
     printf("\n");
+
     if (cmd->params && cmd->params[1] && cmd->params[2]) {
         fprintf(stderr, "bash: cd: too many arguments\n");
         return;
     }
+
+    // Handle `cd ~`
+    if (cmd->params[1] && strcmp(cmd->params[1], "~") == 0)
+        cmd->params[1] = NULL;
+
     path = get_home_or_oldpwd(cmd, envp);
-    if (!path)
-    {
+    
+    if (!path) {
         fprintf(stderr, "cd: could not determine target directory\n");
         return;
     }
+
     old_pwd = getcwd(NULL, 0);
     if (!old_pwd) {
         perror("cd: getcwd");
         return;
     }
+
     printf("Attempting to change to: %s\n", path);
-    if (chdir(path) != 0)
-    {
-        printf("hello1");
+
+    if (chdir(path) != 0) {
         perror("cd");
         free(old_pwd);
         return;
     }
-    printf("%s\n",old_pwd);
+
     update_env(cmd);
     free(old_pwd);
 }
+
+
