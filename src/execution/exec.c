@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 19:22:45 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/31 20:49:22 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -195,7 +195,6 @@ void	execute(char *input, char **envp)
 
 	if (!ast)
 		return ;
-
 	execute_command(ast, envp);
 	free_ast(ast);
 }

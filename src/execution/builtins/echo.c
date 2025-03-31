@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:06:04 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 19:18:01 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:31:56 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,6 @@ int	ft_echo(char **args)
 		i++;
 	}
 	if (newline)
-		printf("/n");
+		printf("\n");
 	return (0);
 }
