@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 18:56:43 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/03/31 22:45:43 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,20 @@ static char *retrieve_env_path(t_ast *cmd, char **envp, char *key, const char *e
     return NULL;
 }
 
-static char *get_home_or_oldpwd(t_ast *cmd, char **envp)
-{
-    if (!cmd->params[1])
-        return retrieve_env_path(cmd, envp, "HOME", "cd: HOME not set", false);
+// static char *get_home_or_oldpwd(t_ast *cmd, char **envp)
+// {
+//     if (!cmd->params[1])
+//         return retrieve_env_path(cmd, envp, "HOME", "cd: HOME not set", false);
 
-    if (ft_strcmp(cmd->params[1], "-") == 0)
-        return retrieve_env_path(cmd, envp, "OLDPWD", "cd: OLDPWD not set", true);
-
-    // if (ft_strcmp(cmd->params[1], "--") == 0)
-    // {
-    //     ft_cd(cmd,envp);
-    //     printf("%s", ft_get_oldpwd());
-    // }
-    return (char *)cmd->params[1];
-}
+//     if (ft_strcmp(cmd->params[1], "-") == 0)
+//         return retrieve_env_path(cmd, envp, "OLDPWD", "cd: OLDPWD not set", true);
+//     // if (ft_strcmp(cmd->params[1], "--") == 0)
+//     // {
+//     //     ft_cd(cmd,envp);
+//     //     printf("%s", ft_get_oldpwd());
+//     // }
+//     return (char *)cmd->params[1];
+// }
 
 void update_env(t_ast *path)
 {
@@ -80,7 +79,7 @@ void ft_setenv(t_ast *cmd_path)
 
 
 void ft_cd(t_ast *cmd, char **envp) {
-    char *path;
+    char *path = NULL;
     char *old_pwd;
 
     if (cmd->params) {
@@ -90,35 +89,38 @@ void ft_cd(t_ast *cmd, char **envp) {
     }
     printf("\n");
 
-    if (cmd->params && cmd->params[1] && cmd->params[2]) {
         fprintf(stderr, "bash: cd: too many arguments\n");
+    if (cmd->params && cmd->params[1] && cmd->params[2]) {
         return;
     }
 
-    if (cmd->params[1] && strcmp(cmd->params[1], "~") == 0)
-        cmd->params[1] = NULL;
+    // if (cmd->params[1] && strcmp(cmd->params[1], "~") == 0)
+    //     cmd->params[1] = NULL;  // Treat `~` as no argument
 
-    path = get_home_or_oldpwd(cmd, envp);
-    
+    // // Handle `cd -`
+    // if (cmd->params[1] && ft_strcmp(cmd->params[1], "-") == 0) {
+    //     path = retrieve_env_path(cmd, envp, "OLDPWD", "cd: OLDPWD not set", true);
+    if (!path)
+        return;  // If OLDPWD is not set, return early
+    printf("%s\n", path);  // Print the new directory (like Bash)
+    // } else {
+    //     path = get_home_or_oldpwd(cmd, envp);
+    // }
     if (!path) {
         fprintf(stderr, "cd: could not determine target directory\n");
         return;
     }
-
     old_pwd = getcwd(NULL, 0);
     if (!old_pwd) {
         perror("cd: getcwd");
         return;
     }
-
     printf("Attempting to change to: %s\n", path);
-
     if (chdir(path) != 0) {
         perror("cd");
         free(old_pwd);
         return;
     }
-
     update_env(cmd);
     free(old_pwd);
 }
