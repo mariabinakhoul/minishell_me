@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 19:05:38 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/03/31 19:26:53 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,14 +35,13 @@ char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 			else if (ft_isalpha(arg[i + 1]) || arg[i] == '_')
 			{
 				start = ++i;
-				char	c = arg[i];
+				// char	c = arg[i];
 				while (ft_isalnum(arg[i]) || arg[i] == '_')
 					i++;
 				char	*varname = ft_substr (arg, start, i - start);
 				char	*value = get_env_value (varname, env);
 				result = join_and_free (result, value ? value : "");
 				free (varname);
-
 			}
 			else
 				result = join_and_free_char(result, arg[i++]);
