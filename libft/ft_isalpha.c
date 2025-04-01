@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_isalpha.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/27 23:24:32 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/01 11:51:06 by mabi-nak         ###   ########.fr       */
+/*   Created: 2024/06/10 12:00:58 by mabi-nak          #+#    #+#             */
+/*   Updated: 2024/06/13 12:43:43 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
-#include <stdlib.h>
+#include "libft.h"
 
-void ft_pwd()
+int	ft_isalpha(int c)
 {
-    char cwd[1024];
-
-    if (getcwd(cwd, sizeof(cwd)))
-        printf("%s\n", cwd);
-    else
-        perror("getcwd failed");
+	if ((c > 64 && c < 91) || (c > 96 && c < 123))
+		return (1);
+	return (0);
 }
 
-char *ft_get_oldpwd(void)
-{
-    return getenv("OLDPWD");
-}
+// #include <stdio.h>
+// int	main(void){
+// 	char str[] = "1m2";
+// 	printf("%d", ft_isalpha(str));
+// 	return 0;
+// }

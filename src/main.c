@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/28 21:46:17 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/01 02:08:46 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,13 +121,23 @@ int main(int argc, char **argv, char **envp)
 {
     (void)argc;
     (void)argv;
-    char *input;
+    int last_status = 0;  // Local variable for tracking last status
+    // int i = 0;
 
+    // Print out the environment variables for debugging.
+    // printf("Environment variables:\n");
+    // while (envp[i])
+    // {
+    //     printf("env[%d]: %s\n", i, envp[i]);
+    //     i++;
+    // }
+
+    char *input;
     while (1)
     {
         input = readline("minishell> ");
         if (!input)
-            break ;
+            break;
         if (*input)
             add_history(input);
         if (strcmp(input, "exit") == 0)
@@ -136,15 +146,18 @@ int main(int argc, char **argv, char **envp)
             break;
         }
         t_ast *ast = parse_input(input);
-        if (!ast) {
+        if (!ast)
+        {
             printf("Failed to parse input\n");
             free(input);
             continue;
         }
-        execute_command(ast, envp);
+        expand_tree(ast, envp, last_status);
+        last_status = execute_command(ast, envp, &last_status);
         free_ast(ast);
         free(input);
     }
+    return 0;
 }
 
 

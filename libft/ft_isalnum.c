@@ -1,29 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   ft_isalnum.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/27 23:24:32 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/01 11:51:06 by mabi-nak         ###   ########.fr       */
+/*   Created: 2024/06/10 12:14:13 by mabi-nak          #+#    #+#             */
+/*   Updated: 2024/06/13 12:40:03 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../../includes/minishell.h"
-#include <stdlib.h>
+#include "libft.h"
 
-void ft_pwd()
+int	ft_isalnum(int c)
 {
-    char cwd[1024];
-
-    if (getcwd(cwd, sizeof(cwd)))
-        printf("%s\n", cwd);
-    else
-        perror("getcwd failed");
-}
-
-char *ft_get_oldpwd(void)
-{
-    return getenv("OLDPWD");
+	if ((c >= 'a' && c <= 'z') || (c > 47 && c < 58) || (c >= 'A' && c <= 'Z'))
+		return (1);
+	return (0);
 }

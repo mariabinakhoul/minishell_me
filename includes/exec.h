@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/25 21:10:17 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/01 11:52:52 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,14 @@
 
 // int	execute_builtin(t_ast *cmd, char **envp);
 // void	execute_external(t_ast *cmd, char **envp);
-int		execute_command(t_ast *cmd, char **envp);
+int execute_command(t_ast *cmd, char **envp, int *last_status);
 void	execute(char *input, char **envp);
 char	*findcommandpath(char *comand, char **envp);
 void	freearray(char **array);
-void ft_cd(t_ast *cmd, char **envp_ptr);
+void     ft_cd(t_ast *cmd, char **envp_ptr);
+int	    ft_echo(char **args);
+int 	ft_unset(char **args, char ***envp);
+
 
 
 #endif

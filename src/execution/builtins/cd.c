@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/04/01 12:40:52 by nhaber           ###   ########.fr       */
+=======
+/*   Updated: 2025/04/01 02:36:36 by mabi-nak         ###   ########.fr       */
+>>>>>>> refs/remotes/origin/main
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,25 +60,47 @@ void update_env(t_ast *path)
     ft_setenv( path);       // Update PWD
 }
 
+// void ft_setenv(t_ast *cmd_path)
+// {
+//     // int i = 0;
+//     // char *new_dir = strcat("/", dir);
+//     // char *env = envp[i];
+//     if (cmd_path->params[1])
+//     {
+//         char *path;
+//         path = getenv("PWD");
+//         path = strcat(path,"/");
+//         path = strcat(path,(cmd_path->params[1]));
+//     }
+//     // envp[i] = path;
+//     // while (envp[i])
+//     // {
+//     //     printf("%s\n", env);
+//     //     i++;
+//     //     env  = envp[i];
+//     // }
+// }
+
 void ft_setenv(t_ast *cmd_path)
 {
-    // int i = 0;
-    // char *new_dir = strcat("/", dir);
-    // char *env = envp[i];
     if (cmd_path->params[1])
     {
-        char *path;
-        path = getenv("PWD");
-        path = strcat(path,"/");
-        path = strcat(path,(cmd_path->params[1]));
+        char *old_pwd = getenv("PWD");
+        if (!old_pwd)
+            return;  // or handle error
+        
+        size_t new_size = strlen(old_pwd) + 1 /* for "/" */ + strlen(cmd_path->params[1]) + 1;
+        char *new_path = malloc(new_size);
+        if (!new_path)
+            return;  // or handle malloc failure
+
+        snprintf(new_path, new_size, "%s/%s", old_pwd, cmd_path->params[1]);
+        // Now update your environment variable or internal PWD accordingly,
+        // for example with setenv("PWD", new_path, 1);
+        setenv("PWD", new_path, 1);
+
+        free(new_path);
     }
-    // envp[i] = path;
-    // while (envp[i])
-    // {
-    //     printf("%s\n", env);
-    //     i++;
-    //     env  = envp[i];
-    // }
 }
 
 
