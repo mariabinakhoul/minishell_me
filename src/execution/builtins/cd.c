@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/01 02:20:23 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/01 02:36:36 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,6 @@ void ft_cd(t_ast *cmd, char **envp) {
         free(old_pwd);
         return;
     }
-
     update_env(cmd);
     free(old_pwd);
 }
