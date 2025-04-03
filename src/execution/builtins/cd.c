@@ -6,12 +6,13 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/01 02:36:36 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/01 12:32:09 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
+// retrieve the value of an environment variable, 
 static char *retrieve_env_path(t_ast *cmd, char **envp, char *key, const char *error_msg, bool print)
 {
     char *path;
