@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 23:12:08 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/03 19:42:01 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ void expand_tree(t_ast *node, char **env, int last_status)
 {
     if (!node)
         return;
-    if (node->type == CMD)
-        expand_command_node(node, env, last_status);
+    // if (node->type == CMD)
+    //     expand_command_node(node, env, last_status);
     expand_tree(node->left, env, last_status);
     expand_tree(node->right, env, last_status);
 }

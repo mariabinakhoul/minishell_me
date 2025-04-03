@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/01 11:53:52 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/03 19:33:28 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,7 @@ void print_ast(t_ast *node, int depth)
         printf("PIPE\n");
     }
 
-    print_ast(node->left, depth + 1);
+    // print_ast(node->left, depth + 1);
     print_ast(node->right, depth + 1);
 }
 

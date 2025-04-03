@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/01 02:08:46 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/03 19:46:15 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,9 +152,9 @@ int main(int argc, char **argv, char **envp)
             free(input);
             continue;
         }
-        expand_tree(ast, envp, last_status);
+        // expand_tree(ast, envp, last_status);
         last_status = execute_command(ast, envp, &last_status);
-        free_ast(ast);
+        // free_ast(ast);
         free(input);
     }
     return 0;
