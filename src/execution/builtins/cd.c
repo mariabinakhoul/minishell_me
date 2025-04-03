@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/01 12:32:09 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/03 14:40:28 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ static char *retrieve_env_path(t_ast *cmd, char **envp, char *key, const char *e
 
     if (!cmd || !envp || !key)
         return NULL;
-    printf(" hello :  %s\n", envp[i]);
+    // printf(" hello :  %s\n", envp[i]);
     while (envp[i])
     {
         if (ft_strncmp(envp[i], key, ft_strlen(key)) == 0 && envp[i][ft_strlen(key)] == '=')
