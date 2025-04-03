@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/03 19:42:01 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/03 19:48:42 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,8 @@ void expand_tree(t_ast *node, char **env, int last_status)
 {
     if (!node)
         return;
-    // if (node->type == CMD)
-    //     expand_command_node(node, env, last_status);
+    if (node->type == CMD)
+        expand_command_node(node, env, last_status);
     expand_tree(node->left, env, last_status);
     expand_tree(node->right, env, last_status);
 }
