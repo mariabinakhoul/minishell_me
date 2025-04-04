@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/04 09:17:55 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/04 09:21:26 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,93 +79,93 @@
 //     return 0;
 // }
 // #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-// #include <unistd.h>  // For chdir()
-// #include "minishell.h"  // Include header file for declarations
-// void print_ast1(t_ast *node, int depth) {
-//     if (!node) {
-//         printf("(null)\n");
-//         return;
-//     }
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>  // For chdir()
+#include "minishell.h"  // Include header file for declarations
+void print_ast1(t_ast *node, int depth) {
+    if (!node) {
+        printf("(null)\n");
+        return;
+    }
 
-//     for (int i = 0; i < depth; i++)
-//         printf("  ");
+    for (int i = 0; i < depth; i++)
+        printf("  ");
     
-//     // printf("AST NODE: type=%d, value=%s\n", node->type, node->value ? node->value : "(null)");
+    // printf("AST NODE: type=%d, value=%s\n", node->type, node->value ? node->value : "(null)");
     
-//     if (node->type == CMD) {
-//         printf("  PARAMS: ");
-//         if (node->params) {
-//             for (int i = 0; node->params[i]; i++)
-//                 printf("[%s] ", node->params[i]);
-//         } else {
-//             printf("(null)");
-//         }
-//         printf("\n");
+    if (node->type == CMD) {
+        printf("  PARAMS: ");
+        if (node->params) {
+            for (int i = 0; node->params[i]; i++)
+                printf("[%s] ", node->params[i]);
+        } else {
+            printf("(null)");
+        }
+        printf("\n");
         
-//         printf("  REDIRECTIONS: in=%s, out=%s, append=%d\n", 
-//                node->in_file ? node->in_file : "(null)",
-//                node->out_file ? node->out_file : "(null)",
-//                node->append);
-//     }
+        printf("  REDIRECTIONS: in=%s, out=%s, append=%d\n", 
+               node->in_file ? node->in_file : "(null)",
+               node->out_file ? node->out_file : "(null)",
+               node->append);
+    }
     
-//     printf("  LEFT:\n");
-//     print_ast1(node->left, depth + 1);
+    printf("  LEFT:\n");
+    print_ast1(node->left, depth + 1);
     
-//     printf("  RIGHT:\n");
-//     print_ast1(node->right, depth + 1);
-// }
+    printf("  RIGHT:\n");
+    print_ast1(node->right, depth + 1);
+}
 
-// int main(int argc, char **argv, char **envp)
-// {
-//     (void)argc;
-//     (void)argv;
-//     int last_status = 0;  // Local variable for tracking last status
-//     // int i = 0;
+int main(int argc, char **argv, char **envp)
+{
+    (void)argc;
+    (void)argv;
+    int last_status = 0;  // Local variable for tracking last status
+    // int i = 0;
 
-//     // Print out the environment variables for debugging.
-//     // printf("Environment variables:\n");
-//     // while (envp[i])
-//     // {
-//     //     printf("env[%d]: %s\n", i, envp[i]);
-//     //     i++;
-//     // }
+    // Print out the environment variables for debugging.
+    // printf("Environment variables:\n");
+    // while (envp[i])
+    // {
+    //     printf("env[%d]: %s\n", i, envp[i]);
+    //     i++;
+    // }
 
-//     char *input;
-//     while (1)
-//     {
-//         input = readline("minishell> ");
-//         if (!input)
-//             break;
-//         if (*input)
-//             add_history(input);
-//         if (strcmp(input, "exit") == 0)
-//         {
-//             free(input);
-//             break;
-//         }
-//         t_ast *ast = parse_input(input);
-//         if (!ast)
-//         {
-//             printf("Failed to parse input\n");
-//             free(input);
-//             continue;
-//         }
-//         expand_tree(ast, envp, last_status);
-//         last_status = execute_command(ast, envp, &last_status);
-//         // free_ast(ast);
-//         free(input);
-//     }
-//     return 0;
-// }
-
-int main(int argc, char **argv, char **envp) {
-    (void) argc;
-    (void) argv;
-    print_export(envp);
+    char *input;
+    while (1)
+    {
+        input = readline("minishell> ");
+        if (!input)
+            break;
+        if (*input)
+            add_history(input);
+        if (strcmp(input, "exit") == 0)
+        {
+            free(input);
+            break;
+        }
+        t_ast *ast = parse_input(input);
+        if (!ast)
+        {
+            printf("Failed to parse input\n");
+            free(input);
+            continue;
+        }
+        expand_tree(ast, envp, last_status);
+        last_status = execute_command(ast, envp, &last_status);
+        // free_ast(ast);
+        free(input);
+    }
     return 0;
 }
+
+// int main(int argc, char **argv, char **envp) {
+//     (void) argc;
+//     (void) argv;
+//     print_export(envp);
+//     return 0;
+// }
 
 
 // int main(int argc, char **argv, char **envp)
