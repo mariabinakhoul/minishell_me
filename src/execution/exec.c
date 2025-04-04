@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/03 19:33:28 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/03 20:16:20 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ static bool is_builtin(char *cmd) {
 
 static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 {
-    printf("%s", *envp_ptr);
-	printf("\n=== EXECUTE BUILTIN ===\n");
-    printf("Builtin: %s\n", cmd->value);
-    printf("Param count: ");
+    // printf("%s", *envp_ptr);
+	// printf("\n=== EXECUTE BUILTIN ===\n");
+    // printf("Builtin: %s\n", cmd->value);
+    // printf("Param count: ");
     int count = 0;
     while (cmd->params && cmd->params[count]) count++;
-    printf("%d\n", count);
+    // printf("%d\n", count);
     if (!cmd || !cmd->value)
     {
         printf("Error: Invalid command\n");
@@ -38,14 +38,14 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
     }
     if (ft_strcmp(cmd->value, "cd") == 0)
     {
-        printf("Executing cd with %d params\n", count);
+        // printf("Executing cd with %d params\n", count);
         if (count > 1)
         {
-            printf("Changing dir to: %s\n", cmd->params[1]);
+            // printf("Changing dir to: %s\n", cmd->params[1]);
         }
         else
         {
-            printf("Changing to home directory\n");
+            // printf("Changing to home directory\n");
         }
         ft_cd(cmd, envp_ptr);
         return 0;
@@ -212,16 +212,16 @@ void	execute(char *input, char **envp)
 
 int execute_command(t_ast *cmd, char **envp, int *last_status)
 {
-	printf("\n=== EXECUTE COMMAND ===\n");
-    printf("Command: %s\n", cmd->value ? cmd->value : "(null)");
-    printf("Params: ");
+	// printf("\n=== EXECUTE COMMAND ===\n");
+    // printf("Command: %s\n", cmd->value ? cmd->value : "(null)");
+    // printf("Params: ");
     
-    if (cmd->params) {
-        for (int i = 0; cmd->params[i]; i++) {
-            printf("[%s] ", cmd->params[i]);
-        }
-    }
-    printf("\n");
+    // if (cmd->params) {
+    //     for (int i = 0; cmd->params[i]; i++) {
+    //         printf("[%s] ", cmd->params[i]);
+    //     }
+    // }
+    // printf("\n");
     if (!cmd) {
         printf("Error: Null command\n");
         *last_status = 1;

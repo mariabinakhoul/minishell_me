@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_reader.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:54 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/06 19:32:41 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/03 20:13:48 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,8 +93,8 @@ t_chain	*lexer_filler(char *str)
 		if (str[i])
 		{
 		head = current_node_helper(str, &i, &head, &current);
-		if (current)
-			printf("Token: Type = %d, Value = %s\n", current->type, current->value);
+		// if (current)
+		// 	printf("Token: Type = %d, Value = %s\n", current->type, current->value);
 		}
 	}
 	return (head);

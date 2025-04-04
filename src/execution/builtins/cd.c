@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/01 02:36:36 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/03 23:05:22 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,12 +105,12 @@ void ft_cd(t_ast *cmd, char **envp) {
     char *path;
     char *old_pwd;
 
-    if (cmd->params) {
-        for (int i = 0; cmd->params[i]; i++) {
-            printf("[%s] ", cmd->params[i]);
-        }
-    }
-    printf("\n");
+    // if (cmd->params) {
+    //     for (int i = 0; cmd->params[i]; i++) {
+    //         printf("[%s] ", cmd->params[i]);
+    //     }
+    // }
+    // printf("\n");
 
     if (cmd->params && cmd->params[1] && cmd->params[2]) {
         fprintf(stderr, "bash: cd: too many arguments\n");
@@ -133,7 +133,7 @@ void ft_cd(t_ast *cmd, char **envp) {
         return;
     }
 
-    printf("Attempting to change to: %s\n", path);
+    // printf("Attempting to change to: %s\n", path);
 
     if (chdir(path) != 0) {
         perror("cd");
@@ -143,5 +143,3 @@ void ft_cd(t_ast *cmd, char **envp) {
     update_env(cmd);
     free(old_pwd);
 }
-
-
