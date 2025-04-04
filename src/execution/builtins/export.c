@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/04 09:20:39 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/04 22:09:59 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,3 +68,7 @@ void print_export(char **envp)
     }
 }
 
+void ft_export(char **envp)
+{
+    print_export(envp);
+}

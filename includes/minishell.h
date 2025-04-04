@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/04 09:08:39 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/04 22:10:13 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ char *ft_get_oldpwd();
 void ft_env(char **envp);
 char **sort_envp(char **envp);
 void print_export(char **envp);
+void ft_export(char **envp);
 void ft_pwd();
 
 #endif
