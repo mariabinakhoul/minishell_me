@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/04 22:10:13 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/06 22:11:29 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,11 @@ void    free_ast(t_ast *node);
 void ft_setenv(t_ast *cmd_path);
 void update_env(t_ast *path);
 char *ft_get_oldpwd();
-void ft_env(char **envp);
 char **sort_envp(char **envp);
 void print_export(char **envp);
 void ft_export(char **envp);
+t_env *clone_env(char **envp);
+void ft_env(char **envp);
 void ft_pwd();
 
 #endif

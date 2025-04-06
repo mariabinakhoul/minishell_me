@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/04 09:21:26 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/06 22:18:30 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,8 @@
 #include <string.h>
 #include <unistd.h>  // For chdir()
 #include "minishell.h"  // Include header file for declarations
-void print_ast1(t_ast *node, int depth) {
+void print_ast1(t_ast *node, int depth)
+{
     if (!node) {
         printf("(null)\n");
         return;
@@ -131,7 +132,6 @@ int main(int argc, char **argv, char **envp)
     //     printf("env[%d]: %s\n", i, envp[i]);
     //     i++;
     // }
-
     char *input;
     while (1)
     {
@@ -160,12 +160,16 @@ int main(int argc, char **argv, char **envp)
     return 0;
 }
 
-// int main(int argc, char **argv, char **envp) {
-//     (void) argc;
-//     (void) argv;
-//     print_export(envp);
+// int main(int argc, char **argv, char **envp)
+// {
+//     (void)argc;
+//     (void)argv;
+
+//     ft_export(envp);
+
 //     return 0;
 // }
+
 
 
 // int main(int argc, char **argv, char **envp)

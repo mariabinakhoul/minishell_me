@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/04 22:09:59 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/06 22:17:43 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@ char **sort_envp(char **envp)
     int i = 0;
     int j;
     char **sorted;
+    
+    t_env *env = NULL;
+    env = clone_env(envp);
     while (envp[i])
     {
         count++;
@@ -37,7 +40,8 @@ char **sort_envp(char **envp)
     i = 0;
     while (i < count)
     {
-        sorted[i] = envp[i];
+        sorted[i] = env->data;
+        env = env->next;
         i++;
     }
     sorted[count] = NULL;

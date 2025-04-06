@@ -3,15 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/01 11:52:52 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/06 21:47:29 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXEC_H
 # define EXEC_H
+
+
+typedef struct s_env
+{
+    char *data;
+    struct s_env *next;   
+}t_env;
+
 
 // int	execute_builtin(t_ast *cmd, char **envp);
 // void	execute_external(t_ast *cmd, char **envp);
