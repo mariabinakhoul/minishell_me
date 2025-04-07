@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/06 22:01:05 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/07 18:55:31 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,6 @@ static bool is_builtin(char *cmd) {
 
 static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 {
-    // printf("%s", *envp_ptr);
-	// printf("\n=== EXECUTE BUILTIN ===\n");
-    // printf("Builtin: %s\n", cmd->value);
-    // printf("Param count: ");
     int count = 0;
     while (cmd->params && cmd->params[count]) count++;
     // printf("%d\n", count);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/03 19:48:42 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/07 21:25:16 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,15 @@ char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 	return result;
 }
 
+int cmd_node_param_count(char **params)
+{
+	int i = 0;
+	while (params[i])
+		i++;
+	return i;
+}
+
+
 void expand_command_node(t_ast *cmd, char **env, int last_status)
 {
     int i;
@@ -65,6 +74,8 @@ void expand_command_node(t_ast *cmd, char **env, int last_status)
     
     i = 0;
     expanded = NULL;
+	if (cmd->params)
+		cmd->params[cmd_node_param_count(cmd->params)] = NULL;
     while(cmd->params && cmd->params[i])
     {
         expanded = expand_argument(cmd->params[i], 0, env, last_status);

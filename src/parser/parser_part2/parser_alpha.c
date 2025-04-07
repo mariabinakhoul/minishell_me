@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/01 12:21:42 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/07 22:04:33 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,12 +53,20 @@ t_ast	*parse_command(t_chain **tokens)
 	if ((!(*tokens)) || (*tokens)->type == TYPE_PIPE)
 		return (NULL);
 	cmd_node = malloc(sizeof(t_ast));
+	if (!cmd_node)
+		return NULL;
 	cmd_node->type = CMD;
 	cmd_node->params = NULL;
 	cmd_node->value = NULL;
 	cmd_node->in_file = NULL;
 	cmd_node->out_file = NULL;
 	cmd_node->append = 0;
+	cmd_node->right = NULL;
+	cmd_node->left = NULL;
+	cmd_node->tree_link = NULL;
+	cmd_node->exit = 0;
+	cmd_node->lexer = NULL;
+	cmd_node->heredoc = 0;
 	param_count = 0;
 	while (*tokens && (*tokens)->type != TYPE_PIPE)
 	{
@@ -71,8 +79,10 @@ t_ast	*parse_command(t_chain **tokens)
 		{
 			if (!(cmd_node->value))
 				cmd_node->value = ft_strdup((*tokens)->value);
-			cmd_node->params = ft_realloc(cmd_node->params,
-					sizeof(char *) * (param_count + 2));
+			// cmd_node->params = ft_realloc(cmd_node->params,
+			// 		sizeof(char *) * (param_count + 2));
+			cmd_node->params = (char **)safe_expand_array((void **)cmd_node->params,
+			param_count, param_count + 2);
 			cmd_node->params[param_count++] = ft_strdup((*tokens)->value);
 			cmd_node->params[param_count] = NULL;
 			*tokens = (*tokens)->next;

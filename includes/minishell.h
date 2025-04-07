@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/06 22:11:29 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/07 20:41:45 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,6 @@ void ft_export(char **envp);
 t_env *clone_env(char **envp);
 void ft_env(char **envp);
 void ft_pwd();
+void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count);
 
 #endif
