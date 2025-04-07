@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:44:09 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/01 11:53:17 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/07 22:45:49 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,13 +31,14 @@ int	ft_unset(char **args, char ***envp)
 		{
 			if (ft_strncmp((*envp)[j], args[i], key_len) == 0 && (*envp)[j][key_len] == '=')
 			{
-				free((*envp)[j]);
+				// free((*envp)[j]);
 				k = j;
 				while((*envp)[k])
 				{
 					(*envp)[k] = (*envp)[k + 1];
 					k++;
 				}
+				(*envp)[k] = NULL;
 				break ;
 			}
 			j++;

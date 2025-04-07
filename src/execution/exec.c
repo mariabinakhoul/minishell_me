@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/07 18:55:31 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/07 22:35:53 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static bool is_builtin(char *cmd) {
 static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 {
     int count = 0;
-    while (cmd->params && cmd->params[count]) count++;
+    while (cmd->params && cmd->params[count])
+        count++;
     // printf("%d\n", count);
     if (!cmd || !cmd->value)
     {
@@ -208,16 +209,6 @@ void	execute(char *input, char **envp)
 
 int execute_command(t_ast *cmd, char **envp, int *last_status)
 {
-	// printf("\n=== EXECUTE COMMAND ===\n");
-    // printf("Command: %s\n", cmd->value ? cmd->value : "(null)");
-    // printf("Params: ");
-    
-    // if (cmd->params) {
-    //     for (int i = 0; cmd->params[i]; i++) {
-    //         printf("[%s] ", cmd->params[i]);
-    //     }
-    // }
-    // printf("\n");
     if (!cmd) {
         printf("Error: Null command\n");
         *last_status = 1;
