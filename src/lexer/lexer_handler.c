@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:51:21 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/08 19:23:06 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:56:38 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,11 @@ t_chain	*handle_single_quotes(char *str, int *i,
 		(*i)++;
 	if (str[*i] == '\'')
 		(*i)++;
+	else
+	{
+		printf("unmatched single quotes\n");
+		return (NULL);
+	}
 	if (*i - start > 0)
 		new_node = create_new_node(TYPE_QUOTE,
 				ft_strndup(&str[start], *i - start - 1));
@@ -54,6 +59,11 @@ t_chain	*handle_double_quotes(char *str, int *i,
 		(*i)++;
 	if (str[*i] == '"')
 		(*i)++;
+	else
+	{
+		printf("unmatched double quotes\n");
+		return (NULL);
+	}
 	if (*i - start > 0)
 		new_node = create_new_node(TYPE_DQUOTE, ft_strndup(&str[start], *i - start - 1));
 	else
