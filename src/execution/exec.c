@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/07 22:35:53 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:17:37 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,10 +167,8 @@ void print_ast(t_ast *node, int depth)
 {
     if (!node)
         return;
-
     for (int i = 0; i < depth; i++)
-        printf("  ");  // Indentation for tree structure
-
+        printf("  ");
     if (node->type == CMD)
     {
         printf("CMD: ");
@@ -183,10 +181,7 @@ void print_ast(t_ast *node, int depth)
         printf("\n");
     }
     else if (node->type == PIPE)
-    {
         printf("PIPE\n");
-    }
-
     // print_ast(node->left, depth + 1);
     print_ast(node->right, depth + 1);
 }

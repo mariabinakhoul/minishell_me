@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/07 20:41:45 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:36:48 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,16 +30,16 @@ void	*ft_realloc(void *ptr, size_t new_size);
 void	findpath(char ***envp);
 char	*ft_strnstr(char *big,char *little, size_t len);
 char	*findcommandpath(char *comand, char **envp);
-void    free_ast(t_ast *node);
-void ft_setenv(t_ast *cmd_path);
-void update_env(t_ast *path);
-char *ft_get_oldpwd();
-char **sort_envp(char **envp);
-void print_export(char **envp);
-void ft_export(char **envp);
-t_env *clone_env(char **envp);
-void ft_env(char **envp);
-void ft_pwd();
+void	free_ast(t_ast *node);
+void	ft_setenv(t_ast *cmd_path);
+void	update_env(t_ast *path);
+char	*ft_get_oldpwd(void);
+char	**sort_envp(char **envp);
+void	print_export(char **envp);
+void	ft_export(char **envp);
+t_env	*clone_env(char **envp);
+void	ft_env(char **envp);
+void	ft_pwd(void);
 void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count);
 
 #endif

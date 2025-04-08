@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:06:04 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 19:31:56 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:32:29 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 static int	is_n_flag(const char *arg)
 {
-    int	i;
+	int	i;
 
-    i = 0;
+	i = 0;
 	if (!arg || arg[0] != '-')
 		return (0);
 	i = 1;
@@ -32,7 +32,7 @@ static int	is_n_flag(const char *arg)
 int	ft_echo(char **args)
 {
 	int	i;
-	int newline;
+	int	newline;
 
 	i = 1;
 	newline = 1;
@@ -41,7 +41,7 @@ int	ft_echo(char **args)
 		newline = 0;
 		i++;
 	}
-	while(args[i])
+	while (args[i])
 	{
 		printf("%s", args[i]);
 		if (args[i + 1])
