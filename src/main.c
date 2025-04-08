@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/06 22:18:30 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/08 21:42:33 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ int main(int argc, char **argv, char **envp)
         t_ast *ast = parse_input(input);
         if (!ast)
         {
-            printf("Failed to parse input\n");
+            // printf("Failed to parse input\n");
             free(input);
             continue;
         }

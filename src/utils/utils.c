@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:26:56 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/08 18:17:41 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/08 21:26:37 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ char	*ft_strndup(const char *src, int n)
 		i++;
 	}
 	smt[i] = '\0';
-	printf("%d  /%d  \n", smt[i], smt[i - 1]);
 	return (smt);
 }
 
