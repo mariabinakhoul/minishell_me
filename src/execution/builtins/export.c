@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/08 22:51:38 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/09 19:04:38 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,12 @@ void	ft_swap(char **a, char **b)
 {
 	char	*tmp;
 
-	*tmp = *a;
+	tmp = *a;
 	*a = *b;
 	*b = tmp;
 }
 
-char	**sort_envp(char **envp)
+static char	**sort_envp(char **envp)
 {
 	int		count = 0;
 	int		i = 0;
@@ -53,7 +53,7 @@ char	**sort_envp(char **envp)
 		j = 0;
 		while (j < count - i - 1)
 		{
-			if (ft_strcmp(sorted[j],sorted[j + 1]) > 0)
+			if (ft_strcmp(sorted[j], sorted[j + 1]) > 0)
 				ft_swap(&sorted[j], &sorted[j + 1]);
 			j++;
 		}
@@ -62,7 +62,7 @@ char	**sort_envp(char **envp)
 	return (sorted);
 }
 
-void	print_export(char **envp)
+static void	print_export(char **envp)
 {
 	char	**sorted;
 	int		i;
