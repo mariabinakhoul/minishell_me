@@ -6,47 +6,17 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/09 19:04:38 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 02:59:49 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-
-void	ft_swap(char **a, char **b)
+static void	sort_array(char **sorted, int count)
 {
-	char	*tmp;
+	int	i;
+	int	j;
 
-	tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
-
-static char	**sort_envp(char **envp)
-{
-	int		count = 0;
-	int		i = 0;
-	int		j;
-	char	**sorted;
-
-	t_env *env = NULL;
-	env = clone_env(envp);
-	while (envp[i])
-	{
-		count++;
-		i++;
-	}
-	sorted = malloc(sizeof(char *) * (count + 1));
-	if (!sorted)
-		return (NULL);
-	i = 0;
-	while (i < count)
-	{
-		sorted[i] = env->data;
-		env = env->next;
-		i++;
-	}
-	sorted[count] = NULL;
 	i = 0;
 	while (i < count - 1)
 	{
@@ -59,6 +29,43 @@ static char	**sort_envp(char **envp)
 		}
 		i++;
 	}
+}
+
+static void	populate_sorted_array(char **sorted, t_env *env, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		sorted[i] = env->data;
+		env = env->next;
+		i++;
+	}
+}
+
+static char	**sort_envp(char **envp)
+{
+	int		count;
+	int		i;
+	char	**sorted;
+	t_env	*env;
+
+	count = 0;
+	i = 0;
+	env = NULL;
+	env = clone_env(envp);
+	while (envp[i])
+	{
+		count++;
+		i++;
+	}
+	sorted = malloc(sizeof(char *) * (count + 1));
+	if (!sorted)
+		return (NULL);
+	populate_sorted_array(sorted, env, count);
+	sorted[count] = NULL;
+	sort_array(sorted, count);
 	return (sorted);
 }
 

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/08 22:42:34 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 09:58:47 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,28 @@ t_ast	*parse_pipeline(t_chain **tokens)
 	return (left);
 }
 
+void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
+{
+	while (*tokens && (*tokens)->type != TYPE_PIPE)
+	{
+		if (((*tokens)->type == TYPE_INDIR) || (*tokens)->type == TYPE_OUTDIR
+			|| (*tokens)->type == TYPE_APPEND
+			|| (*tokens)->type == TYPE_HEREDOC)
+			parse_redirection(tokens, cmd_node);
+		else
+		{
+			if (!(cmd_node->value))
+				cmd_node->value = ft_strdup((*tokens)->value);
+			cmd_node->params = (char **)safe_expand_array(
+					(void **)cmd_node->params, *param_count, *param_count + 2);
+			cmd_node->params[*param_count] = ft_strdup((*tokens)->value);
+			(*param_count)++;
+			cmd_node->params[*param_count] = NULL;
+			*tokens = (*tokens)->next;
+		}
+	}
+}
+
 t_ast	*parse_command(t_chain **tokens)
 {
 	t_ast	*cmd_node;
@@ -68,24 +90,7 @@ t_ast	*parse_command(t_chain **tokens)
 	cmd_node->lexer = NULL;
 	cmd_node->heredoc = 0;
 	param_count = 0;
-	while (*tokens && (*tokens)->type != TYPE_PIPE)
-	{
-
-		if (((*tokens)->type == TYPE_INDIR) || (*tokens)->type == TYPE_OUTDIR
-			|| (*tokens)->type == TYPE_APPEND
-			|| (*tokens)->type == TYPE_HEREDOC)
-			parse_redirection(tokens, cmd_node);
-		else
-		{
-			if (!(cmd_node->value))
-				cmd_node->value = ft_strdup((*tokens)->value);
-			cmd_node->params = (char **)safe_expand_array(
-					(void **)cmd_node->params, param_count, param_count + 2);
-			cmd_node->params[param_count++] = ft_strdup((*tokens)->value);
-			cmd_node->params[param_count] = NULL;
-			*tokens = (*tokens)->next;
-		}
-	}
+	process_tokens(tokens, cmd_node, &param_count);
 	return (cmd_node);
 }
 

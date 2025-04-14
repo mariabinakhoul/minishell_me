@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/08 22:32:05 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 04:40:41 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 {
 	char	*result;
 	int		i;
-	int		start;
 
-	start = 0;
 	result = ft_strdup("");
 	i = 0;
 	if (quoted == 1)
@@ -26,33 +24,13 @@ char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 	while (arg[i])
 	{
 		if (arg[i] == '$')
+			result = expand_variable(arg, &i, env, last_status, result);
+		else
 		{
-			if (arg[i + 1] == '?')
-			{
-				result = join_and_free(result, ft_itoa(last_status));
-				i += 2;
-			}
-			else if (ft_isalpha(arg[i + 1]) || arg[i + 1] == '_')
-			{
-				start = ++i;
-				while (ft_isalnum(arg[i]) || arg[i] == '_')
-					i++;
-				char	*varname = ft_substr (arg, start, i - start);
-				char	*value = get_env_value (varname, env);
-				result = join_and_free (result, value ? value : "");
-				free (varname);
-			}
-			else
+			result = expand_home_directory(arg, &i, env, result);
+			if (arg[i] != '~')
 				result = join_and_free_char(result, arg[i++]);
 		}
-		else if (i == 0 && arg[i] == '~')
-		{
-			char *home = get_env_value("HOME", env);
-			result = join_and_free(result, home ? home : "");
-			i++;
-		}
-		else
-			result = join_and_free_char(result, arg[i++]);
 	}
 	return (result);
 }
@@ -67,6 +45,17 @@ int	cmd_node_param_count(char **params)
 	return (i);
 }
 
+void	expand_file_argument(char **file_arg, char **env, int last_status)
+{
+	char	*expanded;
+
+	if (*file_arg)
+	{
+		expanded = expand_argument(*file_arg, 0, env, last_status);
+		free(*file_arg);
+		*file_arg = expanded;
+	}
+}
 
 void	expand_command_node(t_ast *cmd, char **env, int last_status)
 {
@@ -84,18 +73,8 @@ void	expand_command_node(t_ast *cmd, char **env, int last_status)
 		cmd->params[i] = expanded;
 		i++;
 	}
-	if (cmd->in_file)
-	{
-		expanded = expand_argument(cmd->in_file, 0 , env, last_status);
-		free(cmd->in_file);
-		cmd->in_file = expanded;
-	}
-	if (cmd->out_file)
-	{
-		expanded = expand_argument(cmd->out_file, 0, env, last_status);
-		free(cmd->out_file);
-		cmd->out_file = expanded;
-	}
+	expand_file_argument(&cmd->in_file, env, last_status);
+	expand_file_argument(&cmd->out_file, env, last_status);
 }
 
 void	expand_tree(t_ast *node, char **env, int last_status)

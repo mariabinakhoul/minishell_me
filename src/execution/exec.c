@@ -6,53 +6,56 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/09 21:05:48 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 04:54:48 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-static bool is_builtin(char *cmd) {
-    char *builtins[] = {"echo", "cd", "pwd", "exit", "env", "unset", "export", NULL};
-    for (int i = 0; builtins[i]; i++)
+static bool	is_builtin(char *cmd)
+{
+	int		i;
+	char	*builtins[8];
+
+	i = 0;
+	builtins[0] = "echo";
+	builtins[1] = "cd";
+	builtins[2] = "pwd";
+	builtins[3] = "exit";
+	builtins[4] = "env";
+	builtins[5] = "unset";
+	builtins[6] = "export";
+	builtins[7] = NULL;
+	while (builtins[i])
 	{
-        if (ft_strcmp(cmd, builtins[i]) == 0)
-            return true;
-    }
-    return false;
+		if (ft_strcmp(cmd, builtins[i]) == 0)
+			return (true);
+		i++;
+	}
+	return (false);
 }
 
 static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 {
-    int count = 0;
-    while (cmd->params && cmd->params[count])
-        count++;
-    // printf("%d\n", count);
-    if (!cmd || !cmd->value)
-    {
-        printf("Error: Invalid command\n");
-        return 1;
-    }
-    if (ft_strcmp(cmd->value, "cd") == 0)
-    {
-        // printf("Executing cd with %d params\n", count);
-        if (count > 1)
-        {
-            // printf("Changing dir to: %s\n", cmd->params[1]);
-        }
-        else
-        {
-            // printf("Changing to home directory\n");
-        }
-        ft_cd(cmd, envp_ptr);
-        return 0;
-    }
-    if (ft_strcmp(cmd->value, "env") == 0)
-        ft_env(envp_ptr);
-	// if (!cmd || !cmd->value)
-	// 	return (1);
+	int	count;
+
+	count = 0;
+	while (cmd->params && cmd->params[count])
+		count++;
+	if (!cmd || !cmd->value)
+	{
+		printf("Error: Invalid command\n");
+		return (1);
+	}
+	if (ft_strcmp(cmd->value, "cd") == 0)
+	{
+		ft_cd(cmd, envp_ptr);
+		return (0);
+	}
+	if (ft_strcmp(cmd->value, "env") == 0)
+		ft_env(envp_ptr);
 	if (ft_strcmp(cmd->value, "echo") == 0)
-		return (ft_echo(cmd->params));
+		return (ft_echo(cmd->params, envp_ptr));
 	if (ft_strcmp(cmd->value, "pwd") == 0)
 		ft_pwd();
 	if (ft_strcmp(cmd->value, "exit") == 0)
@@ -65,55 +68,66 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 }
 
 
-static int execute_external(t_ast *cmd, char **envp) {
-    pid_t pid;
-    char *path;
-    int fd_in, fd_out;
-    int status;
+static int	execute_external(t_ast *cmd, char **envp)
+{
+	pid_t	pid;
+	char	*path;
+	int		fd_in;
+	int		fd_out;
+	int		status;
 
-    if (!cmd->params[0])
-        return (1);
-    path = (access(cmd->params[0], X_OK) == 0) 
-           ?  cmd->params[0]
-           : findcommandpath(cmd->params[0],envp);
-    if (!path) {
-        fprintf(stderr, "minishell: %s: command not found\n", cmd->params[0]);
-        return (127);
-    }
-    pid = fork();
-    if (pid == 0) {
-        if (cmd->in_file) {
-            fd_in = open(cmd->in_file, O_RDONLY);
-            if (fd_in == -1) {
-                perror("open");
-                exit(EXIT_FAILURE);
-            }
-            dup2(fd_in, STDIN_FILENO);
-            close(fd_in);
-        }
-        if (cmd->out_file) {
-            int flags = O_WRONLY | O_CREAT;
-            flags |= (cmd->append) ? O_APPEND : O_TRUNC;
-            fd_out = open(cmd->out_file, flags, 0644);
-            if (fd_out == -1) {
-                perror("open");
-                exit(EXIT_FAILURE);
-            }
-            dup2(fd_out, STDOUT_FILENO);
-            close(fd_out);
-        }
-        execve(path, cmd->params, envp);
-        perror("execve");
-        exit(EXIT_FAILURE);
-    } else if (pid > 0) {
-        waitpid(pid, &status, 0);
-        free(path);
-        return (WIFEXITED(status)) ? WEXITSTATUS(status) : 1;
-    } else {
-        perror("fork");
-        free(path);
-        return 1;
-    }
+	if (!cmd->params[0])
+		return (1);
+	path = (access(cmd->params[0], X_OK) == 0) 
+			?  cmd->params[0]
+			: findcommandpath(cmd->params[0],envp);
+	if (!path)
+	{
+		fprintf(stderr, "minishell: %s: command not found\n", cmd->params[0]);
+		return (127);
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+		if (cmd->in_file) {
+			fd_in = open(cmd->in_file, O_RDONLY);
+			if (fd_in == -1)
+			{
+				perror("open");
+				exit(EXIT_FAILURE);
+			}
+			dup2(fd_in, STDIN_FILENO);
+			close(fd_in);
+		}
+		if (cmd->out_file)
+		{
+			int flags = O_WRONLY | O_CREAT;
+			flags |= (cmd->append) ? O_APPEND : O_TRUNC;
+			fd_out = open(cmd->out_file, flags, 0644);
+			if (fd_out == -1)
+			{
+				perror("open");
+				exit(EXIT_FAILURE);
+			}
+			dup2(fd_out, STDOUT_FILENO);
+			close(fd_out);
+		}
+		execve(path, cmd->params, envp);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		free(path);
+		return (WIFEXITED(status)) ? WEXITSTATUS(status) : 1;
+	}
+	else
+	{
+		perror("fork");
+		free(path);
+		return (1);
+	}
 }
 
 

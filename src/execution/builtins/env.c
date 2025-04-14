@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 21:26:34 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/09 18:45:46 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 02:50:17 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ t_env	*clone_env(char **envp)
 	}
 	return (head);
 }
-
 
 void	ft_env(char **envp)
 {

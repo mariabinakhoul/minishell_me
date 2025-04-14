@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/24 20:18:29 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/24 20:18:37 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 03:45:54 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,6 @@ int	ft_strncmp(char *s1, char *s2, unsigned int n)
 	if (n == 0)
 		return (0);
 	while ((s1[i] != '\0') && (s1[i] == s2[i]) && (i < n - 1))
-	{
 		i++;
-	}
 	return (s1[i] - s2[i]);
 }

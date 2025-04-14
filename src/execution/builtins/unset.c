@@ -6,11 +6,38 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:44:09 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/08 22:37:33 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 02:40:45 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
+
+static int	remove_env_variable(char **envp, char *key)
+{
+	int		j;
+	size_t	key_len;
+	int		k;
+
+	j = 0;
+	key_len = ft_strlen(key);
+	while (envp[j])
+	{
+		if (ft_strncmp((envp)[j], key, key_len) == 0
+				&& envp[j][key_len] == '=')
+		{
+			k = j;
+			while (envp[k])
+			{
+				envp[k] = envp[k + 1];
+				k++;
+			}
+			envp[k] = NULL;
+			return (1);
+		}
+		j++;
+	}
+	return (0);
+}
 
 int	ft_unset(char **args, char ***envp)
 {
@@ -25,24 +52,7 @@ int	ft_unset(char **args, char ***envp)
 	key_len = 0;
 	while (args[i])
 	{
-		key_len = ft_strlen(args[i]);
-		j = 0;
-		while ((*envp)[j])
-		{
-			if (ft_strncmp((*envp)[j], args[i], key_len) == 0
-				&& (*envp)[j][key_len] == '=')
-			{
-				k = j;
-				while ((*envp)[k])
-				{
-					(*envp)[k] = (*envp)[k + 1];
-					k++;
-				}
-				(*envp)[k] = NULL;
-				break ;
-			}
-			j++;
-		}
+		remove_env_variable(*envp, args[i]);
 		i++;
 	}
 	return (0);

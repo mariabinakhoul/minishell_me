@@ -6,26 +6,24 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/09 19:04:14 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 04:56:34 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXEC_H
 # define EXEC_H
 
-
 typedef struct s_env
 {
 	char			*data;
-	struct s_env	*next;   
+	struct s_env	*next;
 }t_env;
-
 
 int		execute_command(t_ast *cmd, char **envp, int *last_status);
 void	execute(char *input, char **envp);
 void	freearray(char **array);
 void	ft_cd(t_ast *cmd, char **envp_ptr);
-int		ft_echo(char **args);
+int		ft_echo(char **args, char **envp);
 int		ft_unset(char **args, char ***envp);
 void	ft_env(char **envp);
 void	ft_pwd(void);
@@ -34,8 +32,10 @@ t_env	*clone_env(char **envp);
 void	ft_export(char **envp);
 char	*findcommandpath(char *comand, char **envp);
 void	findpath(char ***envp);
-
-
-
+char	*expand_exit_status(int last_status, char *result);
+char	*expand_env_variable(char *arg, int *i, char **env, char *result);
+char	*expand_variable(char *arg, int *i,
+			char **env, int last_status, char *result);
+char	*expand_home_directory(char *arg, int *i, char **env, char *result);
 
 #endif

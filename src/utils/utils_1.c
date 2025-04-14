@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 22:25:42 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/08 22:26:20 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 09:57:50 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,4 +45,13 @@ void	free_ast(t_ast *node)
 	if (node->params)
 		free(node->params);
 	free(node);
+}
+
+void	ft_swap(char **a, char **b)
+{
+	char	*tmp;
+
+	tmp = *a;
+	*a = *b;
+	*b = tmp;
 }

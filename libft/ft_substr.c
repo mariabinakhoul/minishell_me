@@ -6,10 +6,9 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 09:25:41 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/02/25 10:17:40 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/12 04:39:36 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "libft.h"
 
@@ -52,5 +51,5 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	*(str + len) = '\0';
 	while (len-- && *s)
 		*str++ = *s++;
-    return (str2);
+	return (str2);
 }
