@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/12 04:54:48 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/14 20:12:51 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,8 +238,8 @@ int execute_command(t_ast *cmd, char **envp, int *last_status)
             dup2(pipefd[0], STDIN_FILENO);   // cmd2 reads from pipe
             close(pipefd[0]);
             status_right = execute_command(cmd->right, envp, last_status);
-            // execute_command(cmd->right, envp);
             *last_status = status_right; 
+            // execute_command(cmd->right, envp,last_status);
         }
         return *last_status;
     }
