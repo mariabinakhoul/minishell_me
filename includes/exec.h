@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/12 04:56:34 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/15 22:34:42 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_env(char **envp);
 void	ft_pwd(void);
 int		ft_exit(char **args);
 t_env	*clone_env(char **envp);
-void	ft_export(char **envp);
+int	ft_export(char **args, char **envp);
 char	*findcommandpath(char *comand, char **envp);
 void	findpath(char ***envp);
 char	*expand_exit_status(int last_status, char *result);

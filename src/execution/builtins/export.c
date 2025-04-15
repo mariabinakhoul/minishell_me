@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/12 02:59:49 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/15 22:48:44 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,82 @@ static void	print_export(char **envp)
 	}
 }
 
-void	ft_export(char **envp)
+// int	is_valid_identifier(char *arg)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	if (!arg || !arg[0])
+// 		return (0);
+// 	if (arg[0] == '=' || (!ft_isalpha(arg[0]) && arg[0] != '_'))
+// 		return (0);
+// 	while (arg[i] && arg[i] != '=')
+// 	{
+// 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+// 			return (0);
+// 		i++;
+// 	}
+// 	return (1);
+// }
+
+// int	ft_export(char **args, char **envp)
+// {
+// 	int	i;
+
+// 	i = 1;
+// 	if (!args[1])
+// 	{
+// 		print_export(envp);
+// 		return (0);
+// 	}
+// 	while (args[i])
+// 	{
+// 		if (!is_valid_identifier(args[i]))
+// 		{
+// 			printf("export: not a valid identifier\n");
+// 			return (1);
+// 		}
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
+int	is_valid_identifier(char *arg)
 {
-	print_export(envp);
+	int	i = 0;
+
+	if (!arg || !arg[0])
+		return (0);
+	if (arg[0] == '=' || (!ft_isalpha(arg[0]) && arg[0] != '_'))
+		return (0);
+	while (arg[i] && arg[i] != '=')
+	{
+		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+			return (0);
+		i++;
+	}
+	return (1);
+}
+
+int	ft_export(char **args, char **envp)
+{
+	int	i;
+
+	if (!args[1])
+	{
+		print_export(envp);
+		return (0);
+	}
+
+	i = 1;
+	while (args[i])
+	{
+		if (!is_valid_identifier(args[i]))
+		{
+			ft_putstr_fd("export: not a valid identifier\n", 2);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
 }
