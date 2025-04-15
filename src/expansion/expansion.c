@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/12 04:40:41 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/15 20:35:01 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,7 @@ void	expand_command_node(t_ast *cmd, char **env, int last_status)
 {
 	int		i;
 	char	*expanded;
+	int		quote;
 
 	i = 0;
 	expanded = NULL;
@@ -68,7 +69,10 @@ void	expand_command_node(t_ast *cmd, char **env, int last_status)
 		cmd->params[cmd_node_param_count(cmd->params)] = NULL;
 	while (cmd->params && cmd->params[i])
 	{
-		expanded = expand_argument(cmd->params[i], 0, env, last_status);
+		quote = 0;
+		if (cmd->lexer && cmd->lexer[i])
+			quote = cmd->lexer[i]->count;
+		expanded = expand_argument(cmd->params[i], quote, env, last_status);
 		free(cmd->params[i]);
 		cmd->params[i] = expanded;
 		i++;
