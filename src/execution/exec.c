@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/15 22:43:54 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/15 22:57:09 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,10 +48,7 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 		return (1);
 	}
 	if (ft_strcmp(cmd->value, "cd") == 0)
-	{
-		ft_cd(cmd, envp_ptr);
-		return (0);
-	}
+		return(ft_cd(cmd, envp_ptr));
 	if (ft_strcmp(cmd->value, "env") == 0)
 		ft_env(envp_ptr);
 	if (ft_strcmp(cmd->value, "echo") == 0)

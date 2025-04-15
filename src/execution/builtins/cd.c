@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/12 03:00:05 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/15 22:55:46 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,36 +71,39 @@ void	ft_setenv(t_ast *cmd_path)
 	}
 }
 
-void	ft_cd(t_ast *cmd, char **envp)
+int	ft_cd(t_ast *cmd, char **envp)
 {
 	char	*path;
 	char	*old_pwd;
 
 	if (cmd->params && cmd->params[1] && cmd->params[2])
 	{
-		fprintf(stderr, "bash: cd: too many arguments\n");
-		return ;
+		ft_putstr_fd("bash: cd: too many arguments\n", 2);
+		// fprintf(stderr, "bash: cd: too many arguments\n");
+		return (1);
 	}
 	if (cmd->params[1] && strcmp(cmd->params[1], "~") == 0)
 		cmd->params[1] = NULL;
 	path = get_home_or_oldpwd(cmd, envp);
 	if (!path)
 	{
-		fprintf(stderr, "cd: could not determine target directory\n");
-		return ;
+		ft_putstr_fd("cd: could not determine target directory\n", 2);
+		// fprintf(stderr, "cd: could not determine target directory\n");
+		return (1);
 	}
 	old_pwd = getcwd(NULL, 0);
 	if (!old_pwd)
 	{
 		perror("cd: getcwd");
-		return ;
+		return (1);
 	}
 	if (chdir(path) != 0)
 	{
 		perror("cd");
 		free(old_pwd);
-		return ;
+		return (1);
 	}
 	update_env(cmd);
 	free(old_pwd);
+	return (0);
 }
