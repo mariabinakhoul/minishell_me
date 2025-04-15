@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/14 16:40:35 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/15 19:56:34 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ char	*ft_strnstr(char *big, char *little, size_t len);
 void	free_ast(t_ast *node);
 void	ft_setenv(t_ast *cmd_path);
 void	update_env(t_ast *path);
+void reset_sig(int signo);
+void set_signals();
+void def_signals();
+void ignore_signals();
 void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count);
 void	ft_swap(char **a, char **b);
 

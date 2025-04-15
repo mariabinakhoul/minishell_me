@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/14 20:12:51 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/15 20:22:01 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,6 +89,7 @@ static int	execute_external(t_ast *cmd, char **envp)
 	pid = fork();
 	if (pid == 0)
 	{
+		def_signals();
 		if (cmd->in_file) {
 			fd_in = open(cmd->in_file, O_RDONLY);
 			if (fd_in == -1)
@@ -118,8 +119,10 @@ static int	execute_external(t_ast *cmd, char **envp)
 	}
 	else if (pid > 0)
 	{
+		ignore_signals();
 		waitpid(pid, &status, 0);
 		free(path);
+		set_signals();
 		return (WIFEXITED(status)) ? WEXITSTATUS(status) : 1;
 	}
 	else
@@ -214,44 +217,79 @@ void	execute(char *input, char **envp)
 
 int execute_command(t_ast *cmd, char **envp, int *last_status)
 {
+    set_signals();
     if (!cmd) {
-        printf("Error: Null command\n");
+        fprintf(stderr, "Error: Null command\n");
         *last_status = 1;
         return 1;
     }
-    // Handle pipelines (e.g., cmd1 | cmd2)
     if (cmd->type == PIPE) {
         int pipefd[2];
-        int status_right;
-        pipe(pipefd);
-        if (fork() == 0)
-        {
-			close(pipefd[0]);
-            dup2(pipefd[1], STDOUT_FILENO);  // cmd1 writes to pipe
-            close(pipefd[1]);
-            execute_command(cmd->left, envp, last_status);
-            exit(EXIT_SUCCESS);
-        } 
-        else
-        {
-			close (pipefd[1]);
-            dup2(pipefd[0], STDIN_FILENO);   // cmd2 reads from pipe
-            close(pipefd[0]);
-            status_right = execute_command(cmd->right, envp, last_status);
-            *last_status = status_right; 
-            // execute_command(cmd->right, envp,last_status);
+        pid_t left_pid, right_pid;
+        int status_left, status_right;
+
+        if (pipe(pipefd) == -1) {
+            perror("pipe");
+            *last_status = 1;
+            return 1;
         }
+
+        left_pid = fork();
+        if (left_pid == 0) {
+            // Left child: set signals, handle output to pipe
+            set_signals();
+            close(pipefd[0]);
+            dup2(pipefd[1], STDOUT_FILENO);
+            close(pipefd[1]);
+            exit(execute_command(cmd->left, envp, last_status));
+        } else if (left_pid < 0) {
+            perror("fork");
+            close(pipefd[0]);
+            close(pipefd[1]);
+            *last_status = 1;
+            return 1;
+        }
+
+        right_pid = fork();
+        if (right_pid == 0) {
+            // Right child: set signals, handle input from pipe
+            set_signals();
+            close(pipefd[1]);
+            dup2(pipefd[0], STDIN_FILENO);
+            close(pipefd[0]);
+            exit(execute_command(cmd->right, envp, last_status));
+        } else if (right_pid < 0) {
+            perror("fork");
+            close(pipefd[0]);
+            close(pipefd[1]);
+            *last_status = 1;
+            return 1;
+        }
+
+        // Parent: close pipe and wait for children
+        close(pipefd[0]);
+        close(pipefd[1]);
+        waitpid(left_pid, &status_left, 0);
+        waitpid(right_pid, &status_right, 0);
+
+        // Set last_status based on the rightmost command's exit status
+        if (WIFEXITED(status_right))
+            *last_status = WEXITSTATUS(status_right);
+        else
+            *last_status = 1;
+
         return *last_status;
     }
-	if (!cmd->value)
-	{
-		fprintf(stderr, "Error: command is null\n");
+
+    if (!cmd->value) {
+        fprintf(stderr, "Error: command is null\n");
         *last_status = 1;
-		return (1);
-	}
+        return 1;
+    }
+
     if (is_builtin(cmd->value))
         *last_status = execute_builtin(cmd, envp);
     else
         *last_status = execute_external(cmd, envp);
-    return (*last_status);
+    return *last_status;
 }
