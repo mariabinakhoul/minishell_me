@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:37:14 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/12 04:41:23 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:47:56 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ char	*expand_variable(char *arg, int *i,
 		result = expand_env_variable(arg, i, env, result);
 	else
 		result = join_and_free_char(result, arg[(*i)++]);
+	// result = exit_code;
 	return (result);
 }
 

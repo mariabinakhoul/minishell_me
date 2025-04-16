@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:51:21 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/12 10:41:12 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:40:47 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ t_chain *handle_single_quotes(char *str, int *i, t_chain **head, t_chain **curre
         (*i)++;
     if (str[*i] != '\'')
     {
+        exit_code = 2;
         printf("unmatched single quotes\n");
         return (NULL);
     }

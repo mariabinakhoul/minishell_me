@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/15 19:56:34 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/16 10:13:20 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@
 # include "lexer.h"
 # include "tree.h"
 # include "exec.h"
+
+extern int exit_code;
 
 char	*ft_strndup(const char *src, int n);
 int		ft_strcmp(char *s1, char *s2);

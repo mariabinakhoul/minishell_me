@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/15 20:17:46 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/16 10:51:52 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>  
+
+int exit_code = 0;
+
 
 void print_ast1(t_ast *node, int depth)
 {
@@ -54,7 +57,7 @@ void print_ast1(t_ast *node, int depth)
 
 int main(int argc, char **argv, char **envp)
 {
-    // set_signals();
+    set_signals();
     (void)argc;
     (void)argv;
     int last_status = 0;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/15 22:57:09 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/16 10:59:13 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,10 +118,20 @@ static int	execute_external(t_ast *cmd, char **envp)
 	{
 		ignore_signals();
 		waitpid(pid, &status, 0);
+        if (WIFEXITED(status))
+        {
+            exit_code = WEXITSTATUS(status);
+            // printf("%d\n\n",exit_code);   
+        }
+        else if (WIFSIGNALED(status))
+            exit_code = 128 + WTERMSIG(status);
 		free(path);
 		set_signals();
-		return (WIFEXITED(status)) ? WEXITSTATUS(status) : 1;
-	}
+        if (WIFEXITED(status))
+            return WEXITSTATUS(status);
+        else
+            return (128 + WTERMSIG(status));	
+    }
 	else
 	{
 		perror("fork");
