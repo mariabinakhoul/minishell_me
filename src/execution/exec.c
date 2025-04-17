@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/18 00:06:39 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/18 20:42:05 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,19 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 		return (1);
 	}
 	if (ft_strcmp(cmd->value, "cd") == 0)
-		return (ft_cd(cmd, envp_ptr));
+		return(ft_cd(cmd, envp_ptr));
 	if (ft_strcmp(cmd->value, "env") == 0)
 		ft_env(envp_ptr);
 	if (ft_strcmp(cmd->value, "echo") == 0)
 		return (ft_echo(cmd->params, envp_ptr));
 	if (ft_strcmp(cmd->value, "pwd") == 0)
-		ft_pwd(cmd->params);
+		ft_pwd();
 	if (ft_strcmp(cmd->value, "exit") == 0)
 		return (ft_exit(cmd->params));
 	if (ft_strcmp(cmd->value, "unset") == 0)
 		return (ft_unset(cmd->params, &envp_ptr));
 	if (ft_strcmp(cmd->value, "export") == 0)
-		return (ft_export(cmd->params, envp_ptr));
+		return(ft_export(cmd->params, envp_ptr));
 	return (0);
 }
 
@@ -120,11 +120,8 @@ static int	execute_external(t_ast *cmd, char **envp)
 		waitpid(pid, &status, 0);
         if (WIFEXITED(status))
         {
-            exit_code = WEXITSTATUS(status);
-            // printf("%d\n\n",exit_code);   
+            return (WEXITSTATUS(status));
         }
-        else if (WIFSIGNALED(status))
-            exit_code = 128 + WTERMSIG(status);
 		free(path);
 		set_signals();
         if (WIFEXITED(status))
@@ -136,7 +133,7 @@ static int	execute_external(t_ast *cmd, char **envp)
 	{
 		perror("fork");
 		free(path);
-		return (1);
+		return (-1);
 	}
 }
 
@@ -224,62 +221,63 @@ void	execute(char *input, char **envp)
 
 int execute_command(t_ast *cmd, char **envp, int *last_status)
 {
+    int pipefd[2];
+    pid_t left_pid, right_pid;
+    int status_left, status_right;
+
     set_signals();
-    if (!cmd) {
+    if (!cmd)
+    {
         fprintf(stderr, "Error: Null command\n");
         *last_status = 1;
         return 1;
     }
-    if (cmd->type == PIPE) {
-        int pipefd[2];
-        pid_t left_pid, right_pid;
-        int status_left, status_right;
-
-        if (pipe(pipefd) == -1) {
+    if (cmd->type == PIPE)
+    {
+        if (pipe(pipefd) == -1)
+        {
             perror("pipe");
             *last_status = 1;
             return 1;
         }
-
         left_pid = fork();
-        if (left_pid == 0) {
-            // Left child: set signals, handle output to pipe
+        if (left_pid == 0)
+        {
             set_signals();
             close(pipefd[0]);
             dup2(pipefd[1], STDOUT_FILENO);
             close(pipefd[1]);
             exit(execute_command(cmd->left, envp, last_status));
-        } else if (left_pid < 0) {
+        } 
+        else if (left_pid < 0)
+        {
             perror("fork");
             close(pipefd[0]);
             close(pipefd[1]);
             *last_status = 1;
             return 1;
         }
-
         right_pid = fork();
-        if (right_pid == 0) {
-            // Right child: set signals, handle input from pipe
+        if (right_pid == 0)
+        {
             set_signals();
             close(pipefd[1]);
             dup2(pipefd[0], STDIN_FILENO);
             close(pipefd[0]);
             exit(execute_command(cmd->right, envp, last_status));
-        } else if (right_pid < 0) {
+        }
+        else if (right_pid < 0)
+        {
             perror("fork");
             close(pipefd[0]);
             close(pipefd[1]);
             *last_status = 1;
             return 1;
         }
-
-        // Parent: close pipe and wait for children
         close(pipefd[0]);
         close(pipefd[1]);
         waitpid(left_pid, &status_left, 0);
         waitpid(right_pid, &status_right, 0);
-
-        // Set last_status based on the rightmost command's exit status
         if (WIFEXITED(status_right))
             *last_status = WEXITSTATUS(status_right);
         else
@@ -287,13 +285,12 @@ int execute_command(t_ast *cmd, char **envp, int *last_status)
 
         return *last_status;
     }
-
-    if (!cmd->value) {
+    if (!cmd->value) 
+    {
         fprintf(stderr, "Error: command is null\n");
         *last_status = 1;
         return 1;
     }
-
     if (is_builtin(cmd->value))
         *last_status = execute_builtin(cmd, envp);
     else

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 22:37:15 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/15 23:11:21 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/18 00:29:48 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	is_numeric(char *str)
 		i++;
 	if (!str[i])
 		return (0);
-	while(str[i])
+	while (str[i])
 	{
 		if (!ft_isdigit(str[i]))
 			return (0);
@@ -54,7 +54,7 @@ int	ft_exit(char **args)
 	if (args[2])
 	{
 		ft_putstr_fd("bash: exit: too many arguments\n", 2);
-		return (1);
+		exit (1);
 	}
 	status = ft_atoi(arg);
 	printf("exit\n");

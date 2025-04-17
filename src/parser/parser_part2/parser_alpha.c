@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/15 20:36:44 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/18 00:32:02 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,11 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
 					(void **)cmd_node->params, *param_count, *param_count + 2);
 			cmd_node->params[*param_count] = ft_strdup((*tokens)->value);
 			cmd_node->lexer = (struct s_lexer **)safe_expand_array(
-				(void **)cmd_node->lexer, *param_count, *param_count + 2);
-		cmd_node->lexer[*param_count] = malloc(sizeof(struct s_lexer));
-		cmd_node->lexer[*param_count]->t_list = NULL;
-		cmd_node->lexer[*param_count]->count = (*tokens)->quote;  // storing quote type
-		cmd_node->lexer[*param_count + 1] = NULL;
+					(void **)cmd_node->lexer, *param_count, *param_count + 2);
+			cmd_node->lexer[*param_count] = malloc(sizeof(struct s_lexer));
+			cmd_node->lexer[*param_count]->t_list = NULL;
+			cmd_node->lexer[*param_count]->count = (*tokens)->quote;
+			cmd_node->lexer[*param_count + 1] = NULL;
 			(*param_count)++;
 			cmd_node->params[*param_count] = NULL;
 			*tokens = (*tokens)->next;
