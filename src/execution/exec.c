@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/16 10:59:13 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/18 00:06:39 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,19 +48,19 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 		return (1);
 	}
 	if (ft_strcmp(cmd->value, "cd") == 0)
-		return(ft_cd(cmd, envp_ptr));
+		return (ft_cd(cmd, envp_ptr));
 	if (ft_strcmp(cmd->value, "env") == 0)
 		ft_env(envp_ptr);
 	if (ft_strcmp(cmd->value, "echo") == 0)
 		return (ft_echo(cmd->params, envp_ptr));
 	if (ft_strcmp(cmd->value, "pwd") == 0)
-		ft_pwd();
+		ft_pwd(cmd->params);
 	if (ft_strcmp(cmd->value, "exit") == 0)
 		return (ft_exit(cmd->params));
 	if (ft_strcmp(cmd->value, "unset") == 0)
 		return (ft_unset(cmd->params, &envp_ptr));
 	if (ft_strcmp(cmd->value, "export") == 0)
-		return(ft_export(cmd->params, envp_ptr));
+		return (ft_export(cmd->params, envp_ptr));
 	return (0);
 }
 
