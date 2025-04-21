@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/18 20:42:05 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/18 20:54:09 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 	if (ft_strcmp(cmd->value, "echo") == 0)
 		return (ft_echo(cmd->params, envp_ptr));
 	if (ft_strcmp(cmd->value, "pwd") == 0)
-		ft_pwd();
+		ft_pwd(cmd->params);
 	if (ft_strcmp(cmd->value, "exit") == 0)
 		return (ft_exit(cmd->params));
 	if (ft_strcmp(cmd->value, "unset") == 0)

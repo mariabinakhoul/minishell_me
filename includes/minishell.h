@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/16 10:13:20 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/21 13:45:48 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <stdbool.h>
 # include <stdlib.h>
 # include <sys/wait.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 #include <signal.h>
 # include "lexer.h"
 # include "tree.h"
@@ -38,6 +40,7 @@ void reset_sig(int signo);
 void set_signals();
 void def_signals();
 void ignore_signals();
+void	ft_pwd(char **args);
 void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count);
 void	ft_swap(char **a, char **b);
 
