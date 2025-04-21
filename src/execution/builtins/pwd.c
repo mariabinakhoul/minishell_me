@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:24:32 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/18 00:03:52 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/21 18:10:58 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_pwd(char **args)
 		perror("getcwd failed");
 }
 
-static char	*ft_get_oldpwd(void)
-{
-	return (getenv("OLDPWD"));
-}
+// static char	*ft_get_oldpwd(void)
+// {
+// 	return (getenv("OLDPWD"));
+// }
