@@ -1,7 +1,8 @@
  echo hola > bonjour
 $> cat bonjour
-
+->
+this one just needs a condition in the echo
+->
 574
 559
 560 exit code
-552 (met my laptop lama 3mltla run)
