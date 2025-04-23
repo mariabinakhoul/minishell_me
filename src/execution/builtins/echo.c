@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:06:04 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/22 13:12:36 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/23 19:52:48 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,8 @@ int	ft_echo(char **args, char **env)
 		expanded_argument = expand_argument(args[i], 0, env, 0);
 		printf("%s", args[i]);
 		free(expanded_argument);
-		if (args[i] != '\'\'' || (strcmp (args[i] ,'\"\"') == 0))
-			printf(" ");
+		if (args[i + 1])
+		   printf(" ");
 		i++;
 	}
 	if (newline)

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/15 20:35:01 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:54:51 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,12 @@ char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 		return (ft_strdup(arg));
 	while (arg[i])
 	{
+		if (arg[i] == '\\' && arg[i+1] == '$')
+		{
+			result = join_and_free_char(result, '$');
+			i += 2;
+			continue ;
+		}
 		if (arg[i] == '$')
 			result = expand_variable(arg, &i, env, last_status, result);
 		else

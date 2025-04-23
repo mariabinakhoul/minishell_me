@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_handler.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:51:21 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/18 20:42:11 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/23 19:03:27 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,11 @@ t_chain	*handle_single_quotes(char *str, int *i,
 	quote_end = *i;
 	quoted_part = ft_strndup(&str[start], quote_end - start);
 	(*i)++;
+	if (quoted_part && quoted_part[0] == '\0')  // If the quoted part is empty, do nothing
+	{
+		free(quoted_part);
+		return *head;  // Skip empty quoted part
+	}
 	if (*current && (*current)->end_pos == quote_start)
 	{
 		merged_value = ft_strjoin((*current)->value, quoted_part);
@@ -75,6 +80,11 @@ t_chain	*handle_double_quotes(char *str, int *i,
 	}
 	quoted_part = ft_strndup(&str[start], *i - start);
 	(*i)++;
+	if (quoted_part && quoted_part[0] == '\0')  // If the quoted part is empty, do nothing
+	{
+		free(quoted_part);
+		return *head;  // Skip empty quoted part
+	}
 	if (*current && ((*current)->end_pos == quote_start))
 	{
 		merged_value = ft_strjoin((*current)->value, quoted_part);

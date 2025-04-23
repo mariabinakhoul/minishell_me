@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:37:14 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/18 00:33:07 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/23 19:55:51 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ char	*expand_variable(char *arg, int *i,
 	}
 	else if (ft_isalpha(arg[*i + 1]) || arg[*i + 1] == '_')
 		result = expand_env_variable(arg, i, env, result);
+	else if (ft_isdigit(arg[*i + 1]))
+	    *i += 2;
 	else
 		result = join_and_free_char(result, arg[(*i)++]);
 	// result = exit_code;
