@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 19:04:45 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/22 16:24:30 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/24 18:28:42 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,7 @@
 void reset_sig(int signo)
 {
     (void) signo;
-    write(1, "\n", 1);
-    // exit_code = 130;
+    write(STDIN_FILENO, "\n", 1);
     rl_on_new_line();
     rl_replace_line("",1);
     rl_redisplay();
