@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_alpha.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/18 00:32:02 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/28 22:57:17 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,10 @@ void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 	token = *tokens;
 	if (token->type == TYPE_OUTDIR)
 	{
+		
 		cmd_node->out_file = ft_strdup(token->next->value);
+		if (cmd_node->out_file == NULL)
+			
 		*tokens = token->next->next;
 	}
 	else if (token->type == TYPE_APPEND)
@@ -117,6 +120,11 @@ void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 		*tokens = token->next->next;
 	}
 	else if (token->type == TYPE_INDIR)
+	{
+		cmd_node->in_file = ft_strdup(token->next->value);
+		*tokens = token->next->next;
+	}
+	if (token->type == TYPE_HEREDOC)
 	{
 		cmd_node->in_file = ft_strdup(token->next->value);
 		*tokens = token->next->next;

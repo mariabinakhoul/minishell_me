@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:54 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/22 13:19:04 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/28 22:30:10 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ else
 {
 	while (str[*i] && set_lexer_type(str[*i]) == TYPE_WORD)
 		(*i)++;
-	state = TYPE_WORD;
+	state = TYPE_WORD;//marc goat
 	new_node = create_new_node(state, ft_strndup(&str[start], *i - start));
 	if (!new_node)
 		return (NULL);

@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/22 13:54:10 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/28 22:14:04 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,16 +87,7 @@ static int	execute_external(t_ast *cmd, char **envp)
 	if (pid == 0)
 	{
 		def_signals();
-		if (cmd->in_file) {
-			fd_in = open(cmd->in_file, O_RDONLY);
-			if (fd_in == -1)
-			{
-				perror("open");
-				exit(EXIT_FAILURE);
-			}
-			dup2(fd_in, STDIN_FILENO);
-			close(fd_in);
-		}
+		// if 
 		if (cmd->out_file)
 		{
 			int flags = O_WRONLY | O_CREAT;
@@ -131,7 +122,7 @@ static int	execute_external(t_ast *cmd, char **envp)
     }
 	else
 	{
-		perror("fork");
+        perror("fork");
 		free(path);
 		return (-1);
 	}
