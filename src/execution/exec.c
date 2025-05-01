@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/28 22:14:04 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/30 13:48:46 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,20 +87,25 @@ static int	execute_external(t_ast *cmd, char **envp)
 	if (pid == 0)
 	{
 		def_signals();
-		// if 
 		if (cmd->out_file)
 		{
-			int flags = O_WRONLY | O_CREAT;
+            int flags = O_WRONLY | O_CREAT;
 			flags |= (cmd->append) ? O_APPEND : O_TRUNC;
 			fd_out = open(cmd->out_file, flags, 0644);
 			if (fd_out == -1)
 			{
-				perror("open");
+                perror("open");
 				exit(EXIT_FAILURE);
 			}
 			dup2(fd_out, STDOUT_FILENO);
 			close(fd_out);
 		}
+        else if (cmd->heredoc)
+        {
+            // printf("test");
+            ft_heredoc();
+            signal(SIGQUIT,SIG_IGN);
+        } 
 		execve(path, cmd->params, envp);
 		perror("execve");
 		exit(EXIT_FAILURE);
@@ -128,6 +133,24 @@ static int	execute_external(t_ast *cmd, char **envp)
 	}
 }
 
+
+void ft_heredoc()
+{
+    int fd = open("tmp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+    if (fd == -1)
+        return ;
+    const char *text = "Hello from low-level I/O!\n";
+    ssize_t bytes_written = write(fd, text, 26);  // 26 is length of string    
+    if (bytes_written == -1)
+    {
+        perror("write");
+            close(fd);
+            return ;
+        }
+    
+        close(fd);  // Always close the file descriptor
+        return ;
+}
 
 void	findpath(char ***envp)
 {

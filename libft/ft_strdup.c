@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:48:06 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/28 22:55:58 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/29 21:34:44 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,8 @@ char	*ft_strdup(const char *src)
 	int		i;
 	char	*smt;
 
-	if (src == null)
-		return NULL:
+	if (src == NULL)
+		return NULL;
 	i = 0;
 	len = ft_strlen(src);
 	

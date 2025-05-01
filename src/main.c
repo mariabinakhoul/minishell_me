@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/16 10:51:52 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/04/30 20:34:33 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,7 @@ int main(int argc, char **argv, char **envp)
         }
         expand_tree(ast, envp, last_status);
         last_status = execute_command(ast, envp, &last_status);
+        print_ast1(ast,100);
         // free_ast(ast);
         free(input);
     }
