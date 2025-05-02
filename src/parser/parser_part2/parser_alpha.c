@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/29 21:50:33 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/02 16:55:05 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,30 @@ t_ast	*parse_command(t_chain **tokens)
 	return (cmd_node);
 }
 
+
+int parse_heredoc(t_chain **tokens, t_ast *cmd_node)
+{
+	t_chain	*token;
+	if (token->type == TYPE_HEREDOC)
+	{
+		t_chain *next_token = token->next;
+		if (next_token && (next_token->type == TYPE_WORD || next_token->type == TYPE_QUOTE))
+		{
+			cmd_node->heredoc = true;
+			cmd_node->heredoc_delim = ft_strdup(next_token->value);
+		}
+		else
+		{
+			write(2, "bash: syntax error near unexpected token `newline'\n", 52);
+			// exit_code = 2;
+			return 2;
+			// *tokens= token->next;
+		}
+		*tokens = token->next->next;
+	}
+	return 0;
+}
+
 void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 {
 	t_chain	*token;
@@ -120,11 +144,6 @@ void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 		*tokens = token->next->next;
 	}
 	else if (token->type == TYPE_INDIR)
-	{
-		cmd_node->in_file = ft_strdup(token->next->value);
-		*tokens = token->next->next;
-	}
-	if (token->type == TYPE_HEREDOC)
 	{
 		cmd_node->in_file = ft_strdup(token->next->value);
 		*tokens = token->next->next;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/12 03:42:40 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/02 16:17:20 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ typedef struct s_ast
 	char					**params;
 	int						append;
 	int						heredoc;
+	char					*heredoc_content;
+	char					*heredoc_delim;
 	int						exit;
 	struct s_syntax_tree	*tree_link;
 	struct s_lexer			**lexer;
@@ -77,8 +79,8 @@ char		*join_and_free(char *s1, const char *s2);
 char		*join_and_free_char(char *s, char c);
 char		*get_env_value(char *var, char **env);
 char		*expand_argument(char *arg, int quoted, char **env,
-				int last_status);
-void		expand_command_node(t_ast *cmd, char **env, int last_status);
-void		expand_tree(t_ast *node, char **env, int last_status);
+				int exit_code);
+void		expand_command_node(t_ast *cmd, char **env, int exit_code);
+void		expand_tree(t_ast *node, char **env, int exit_code);
 
 #endif

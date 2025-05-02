@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 19:04:45 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/24 18:28:42 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/02 13:45:10 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,19 @@ void ignore_signals()
 {
     signal(SIGQUIT,SIG_IGN);
     signal(SIGINT,SIG_IGN);
+}
+
+
+void handle_signal(int sig)
+{
+    if (sig == SIGINT)
+    {
+        write(1, "\n", 1);
+        exit_code = 130;
+    }
+    else if (sig == SIGQUIT)
+    {
+        write(1, "Quit (core dumped)\n", 20);
+        exit_code = 131;
+    }
 }

@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:37:14 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/23 19:55:51 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/02 13:34:13 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*expand_exit_status(int last_status, char *result)
+char	*expand_exit_status(int exit_code, char *result)
 {
 	char	*status_str;
 
-	status_str = ft_itoa(last_status);
+	status_str = ft_itoa(exit_code);
 	result = join_and_free(result, status_str);
 	free(status_str);
 	return (result);
@@ -42,11 +42,11 @@ char	*expand_env_variable(char *arg, int *i, char **env, char *result)
 }
 
 char	*expand_variable(char *arg, int *i,
-		char **env, int last_status, char *result)
+		char **env, int exit_code, char *result)
 {
 	if (arg[*i + 1] == '?')
 	{
-		result = expand_exit_status(last_status, result);
+		result = expand_exit_status(exit_code, result);
 		*i += 2;
 	}
 	else if (ft_isalpha(arg[*i + 1]) || arg[*i + 1] == '_')

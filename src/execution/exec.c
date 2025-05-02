@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/30 13:48:46 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/02 17:05:39 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,59 +97,50 @@ static int	execute_external(t_ast *cmd, char **envp)
                 perror("open");
 				exit(EXIT_FAILURE);
 			}
-			dup2(fd_out, STDOUT_FILENO);
-			close(fd_out);
 		}
-        else if (cmd->heredoc)
+        if (cmd->heredoc)
         {
-            // printf("test");
-            ft_heredoc();
-            signal(SIGQUIT,SIG_IGN);
-        } 
+            int pipefd[2];
+            if (pipe(pipefd) == -1)
+            {
+                perror("pipe");
+                exit(EXIT_FAILURE);
+            }
+
+            ft_heredoc(cmd->heredoc_delim, pipefd[1]); // write to pipe
+            close(pipefd[1]); // close write end
+            dup2(pipefd[0], STDIN_FILENO); // replace stdin with read end
+            close(pipefd[0]); // close read end, it's now stdin
+        }
+        dup2(fd_out, STDOUT_FILENO);
+        close(fd_out);
+        // else if (cmd->heredoc)
+        // {
+        //     // printf("test");
+        //     ft_heredoc();
+        //     signal(SIGQUIT,SIG_IGN);
+        // } 
 		execve(path, cmd->params, envp);
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
 	else if (pid > 0)
-	{
-		ignore_signals();
-		waitpid(pid, &status, 0);
+    {
+        ignore_signals();
+        waitpid(pid, &status, 0);
+        free(path);
+        set_signals();
         if (WIFEXITED(status))
-        {
             return (WEXITSTATUS(status));
-        }
-		free(path);
-		set_signals();
-        if (WIFEXITED(status))
-            return WEXITSTATUS(status);
         else
             return (128 + WTERMSIG(status));	
-    }
+    }   
 	else
 	{
         perror("fork");
 		free(path);
 		return (-1);
 	}
-}
-
-
-void ft_heredoc()
-{
-    int fd = open("tmp.txt", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-    if (fd == -1)
-        return ;
-    const char *text = "Hello from low-level I/O!\n";
-    ssize_t bytes_written = write(fd, text, 26);  // 26 is length of string    
-    if (bytes_written == -1)
-    {
-        perror("write");
-            close(fd);
-            return ;
-        }
-    
-        close(fd);  // Always close the file descriptor
-        return ;
 }
 
 void	findpath(char ***envp)
@@ -222,18 +213,18 @@ void print_ast(t_ast *node, int depth)
 void	execute(char *input, char **envp)
 {
     t_ast *ast;
-    int last_status = 0;
+    int exit_code = 0;
 
     ast = parse_input(input);
     if (!ast)
         return;
-    expand_tree(ast, envp, last_status);
-    last_status = execute_command(ast, envp, &last_status);
+    expand_tree(ast, envp, exit_code);
+    exit_code = execute_command(ast, envp, &exit_code);
     free_ast(ast);
 }
 
 
-int execute_command(t_ast *cmd, char **envp, int *last_status)
+int execute_command(t_ast *cmd, char **envp, int *exit_code)
 {
     int pipefd[2];
     pid_t left_pid, right_pid;
@@ -243,7 +234,7 @@ int execute_command(t_ast *cmd, char **envp, int *last_status)
     if (!cmd)
     {
         fprintf(stderr, "Error: Null command\n");
-        *last_status = 1;
+        *exit_code = 1;
         return 1;
     }
     if (cmd->type == PIPE)
@@ -251,7 +242,7 @@ int execute_command(t_ast *cmd, char **envp, int *last_status)
         if (pipe(pipefd) == -1)
         {
             perror("pipe");
-            *last_status = 1;
+            *exit_code = 1;
             return 1;
         }
         left_pid = fork();
@@ -261,14 +252,14 @@ int execute_command(t_ast *cmd, char **envp, int *last_status)
             close(pipefd[0]);
             dup2(pipefd[1], STDOUT_FILENO);
             close(pipefd[1]);
-            exit(execute_command(cmd->left, envp, last_status));
+            exit(execute_command(cmd->left, envp, exit_code));
         } 
         else if (left_pid < 0)
         {
             perror("fork");
             close(pipefd[0]);
             close(pipefd[1]);
-            *last_status = 1;
+            *exit_code = 1;
             return 1;
         }
         right_pid = fork();
@@ -278,14 +269,14 @@ int execute_command(t_ast *cmd, char **envp, int *last_status)
             close(pipefd[1]);
             dup2(pipefd[0], STDIN_FILENO);
             close(pipefd[0]);
-            exit(execute_command(cmd->right, envp, last_status));
+            exit(execute_command(cmd->right, envp, exit_code));
         }
         else if (right_pid < 0)
         {
             perror("fork");
             close(pipefd[0]);
             close(pipefd[1]);
-            *last_status = 1;
+            *exit_code = 1;
             return 1;
         }
         close(pipefd[0]);
@@ -293,21 +284,21 @@ int execute_command(t_ast *cmd, char **envp, int *last_status)
         waitpid(left_pid, &status_left, 0);
         waitpid(right_pid, &status_right, 0);
         if (WIFEXITED(status_right))
-            *last_status = WEXITSTATUS(status_right);
+            *exit_code = WEXITSTATUS(status_right);
         else
-            *last_status = 1;
+            *exit_code = 1;
 
-        return *last_status;
+        return *exit_code;
     }
     if (!cmd->value) 
     {
         fprintf(stderr, "Error: command is null\n");
-        *last_status = 1;
+        *exit_code = 1;
         return 1;
     }
     if (is_builtin(cmd->value))
-        *last_status = execute_builtin(cmd, envp);
+        *exit_code = execute_builtin(cmd, envp);
     else
-        *last_status = execute_external(cmd, envp);
-    return *last_status;
+        *exit_code = execute_external(cmd, envp);
+    return *exit_code;
 }

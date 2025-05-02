@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/30 20:34:33 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/02 13:34:13 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int main(int argc, char **argv, char **envp)
     set_signals();
     (void)argc;
     (void)argv;
-    int last_status = 0;
+    int exit_code = 0;
 
     char *input;
     while (1)
@@ -81,9 +81,9 @@ int main(int argc, char **argv, char **envp)
             free(input);
             continue;
         }
-        expand_tree(ast, envp, last_status);
-        last_status = execute_command(ast, envp, &last_status);
-        print_ast1(ast,100);
+        expand_tree(ast, envp, exit_code);
+        exit_code = execute_command(ast, envp, &exit_code);
+        // print_ast1(ast,100);
         // free_ast(ast);
         free(input);
     }
