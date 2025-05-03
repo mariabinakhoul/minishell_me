@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/02 17:05:39 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/03 15:55:38 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,28 +98,22 @@ static int	execute_external(t_ast *cmd, char **envp)
 				exit(EXIT_FAILURE);
 			}
 		}
-        if (cmd->heredoc)
-        {
-            int pipefd[2];
-            if (pipe(pipefd) == -1)
-            {
-                perror("pipe");
-                exit(EXIT_FAILURE);
-            }
+        // if (cmd->heredoc)
+        // {
+        //     int pipefd[2];
+        //     if (pipe(pipefd) == -1)
+        //     {
+        //         perror("pipe");
+        //         exit(EXIT_FAILURE);
+        //     }
 
-            ft_heredoc(cmd->heredoc_delim, pipefd[1]); // write to pipe
-            close(pipefd[1]); // close write end
-            dup2(pipefd[0], STDIN_FILENO); // replace stdin with read end
-            close(pipefd[0]); // close read end, it's now stdin
-        }
+        //     ft_heredoc(cmd->heredoc_delim, pipefd[1]); // write to pipe
+        //     close(pipefd[1]); // close write end
+        //     dup2(pipefd[0], STDIN_FILENO); // replace stdin with read end
+        //     close(pipefd[0]); // close read end, it's now stdin
+        // }
         dup2(fd_out, STDOUT_FILENO);
         close(fd_out);
-        // else if (cmd->heredoc)
-        // {
-        //     // printf("test");
-        //     ft_heredoc();
-        //     signal(SIGQUIT,SIG_IGN);
-        // } 
 		execve(path, cmd->params, envp);
 		perror("execve");
 		exit(EXIT_FAILURE);

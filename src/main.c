@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/02 13:34:13 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/03 15:52:42 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ void print_ast1(t_ast *node, int depth)
     
     printf("  LEFT:\n");
     print_ast1(node->left, depth + 1);
-    
     printf("  RIGHT:\n");
     print_ast1(node->right, depth + 1);
 }

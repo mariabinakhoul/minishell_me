@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/02 16:55:05 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/03 16:05:12 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,10 +131,9 @@ void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 	token = *tokens;
 	if (token->type == TYPE_OUTDIR)
 	{
-		
 		cmd_node->out_file = ft_strdup(token->next->value);
 		if (cmd_node->out_file == NULL)
-			
+			*tokens = token->next;
 		*tokens = token->next->next;
 	}
 	else if (token->type == TYPE_APPEND)
