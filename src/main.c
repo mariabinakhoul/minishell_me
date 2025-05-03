@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/03 15:52:42 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/04 00:53:30 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,41 @@ void print_ast1(t_ast *node, int depth)
     print_ast1(node->right, depth + 1);
 }
 
+// int main(int argc, char **argv, char **envp)
+// {
+//     set_signals();
+//     (void)argc;
+//     (void)argv;
+//     int exit_code = 0;
+
+//     char *input;
+//     while (1)
+//     {
+//         input = readline("minishell> ");
+//         if (!input)
+//             break;
+//         if (*input)
+//             add_history(input);
+//         if (strcmp(input, "exit") == 0)
+//         {
+//             free(input);
+//             break;
+//         }
+//         t_ast *ast = parse_input(input);
+//         if (!ast)
+//         {
+//             free(input);
+//             continue;
+//         }
+//         expand_tree(ast, envp, exit_code);
+//         exit_code = execute_command(ast, envp, &exit_code);
+//         // print_ast1(ast,100);
+//         // free_ast(ast);
+// 		free_lexer_nodes(to)
+//         free(input);
+//     }
+//     return 0;
+// }
 int main(int argc, char **argv, char **envp)
 {
     set_signals();
@@ -74,16 +109,40 @@ int main(int argc, char **argv, char **envp)
             free(input);
             break;
         }
-        t_ast *ast = parse_input(input);
-        if (!ast)
+
+        // Tokenize input into lexer nodes (t_chain)
+        t_chain *tokens = lexer_filler(input);  // Lexer node list
+        if (!tokens)
         {
             free(input);
             continue;
         }
+
+        // Parse the input into an abstract syntax tree (AST)
+        t_ast *ast = parse_input(input);
+        if (!ast)
+        {
+            free(input);
+            free_lexer_nodes(tokens);  // Free lexer nodes if parsing fails
+            continue;
+        }
+
+        // Perform any necessary expansion (environment variable handling, etc.)
         expand_tree(ast, envp, exit_code);
+
+        // Execute the command and update the exit code
         exit_code = execute_command(ast, envp, &exit_code);
-        // print_ast1(ast,100);
-        // free_ast(ast);
+
+        // Optionally print the AST for debugging (this line can be commented out if not needed)
+        // print_ast1(ast, 100);
+
+        // Free lexer nodes after processing
+        free_lexer_nodes(tokens);  // Free lexer nodes after parsing and execution
+
+        // Free the AST to avoid memory leaks
+        free_ast(ast);  // Free AST
+
+        // Free the input after use
         free(input);
     }
     return 0;

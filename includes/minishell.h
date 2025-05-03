@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/02 16:23:12 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/04 00:54:31 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int		ft_strcmp(char *s1, char *s2);
 char	*ft_strcat(char *dest, char *src);
 void	*ft_realloc(void *ptr, size_t new_size);
 char	*ft_strnstr(char *big, char *little, size_t len);
-void	free_ast(t_ast *node);
 void	ft_setenv(t_ast *cmd_path);
 void	update_env(t_ast *path);
 void reset_sig(int signo);
@@ -43,5 +42,8 @@ void ignore_signals();
 void	ft_pwd(char **args);
 void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count);
 void	ft_swap(char **a, char **b);
-char *ft_heredoc(const char *delimiter, int write_fd);
+char	*ft_heredoc(const char *delimiter, int write_fd);
+void	free_lexer_nodes(t_chain *head);
+void free_ast(t_ast *ast);
+
 #endif

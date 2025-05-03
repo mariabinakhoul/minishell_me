@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/04 00:30:50 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/04 00:35:19 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@ char	*expand_argument(char *arg, int quoted, char **env, int exit_code)
 
 	result = ft_strdup("");
 	i = 0;
-	if (!arg) {
-        fprintf(stderr, "Error: Null argument passed to expand_argument.\n");
-        return NULL;
-    }
-	// if (quoted == 1)
-		// return (ft_strdup(arg));
+	if (!arg)
+	{
+		ft_putstr_fd("Error: Null argument passed to expand_argument.\n", 2);
+		return (NULL);
+	}
 	while (arg[i])
 	{
-		if (arg[i] == '\\' && arg[i+1] == '$')
+		if (arg[i] == '\\' && arg[i + 1] == '$')
 		{
 			result = join_and_free_char(result, '$');
 			i += 2;
@@ -75,12 +74,6 @@ void	expand_command_node(t_ast *cmd, char **env, int last_status)
 
 	i = 0;
 	expanded = NULL;
-	// printf("expand_command_node called for params: ");
-	// for (int j = 0; cmd->params && cmd->params[j]; j++)
-	// {
-	// 	printf("%s ", cmd->params[j]);
-	// }
-	// printf("\n");
 	if (cmd->params)
 		cmd->params[cmd_node_param_count(cmd->params)] = NULL;
 	while (cmd->params && cmd->params[i])

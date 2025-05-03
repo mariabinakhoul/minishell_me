@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 22:25:42 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/12 09:57:50 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/04 00:54:41 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count)
 	return (new_ptr);
 }
 
-void	free_ast(t_ast *node)
-{
-	if (!node)
-		return ;
-	free_ast(node->left);
-	free_ast(node->right);
-	if (node->params)
-		free(node->params);
-	free(node);
-}
+// void	free_ast(t_ast *node)
+// {
+// 	if (!node)
+// 		return ;
+// 	free_ast(node->left);
+// 	free_ast(node->right);
+// 	if (node->params)
+// 		free(node->params);
+// 	free(node);
+// }
 
 void	ft_swap(char **a, char **b)
 {

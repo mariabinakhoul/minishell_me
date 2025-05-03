@@ -11,7 +11,7 @@ CC = gcc
 CFLAGS = -g -I $(HEADER) 
 #-Wall -Wextra -Werror
 
-SRCS = lexer/lexer_types lexer/lexer_handler lexer/lexer_reader main utils/utils utils/utils_1 parser/parser_part2/parser_alpha execution/exec execution/builtins/cd execution/builtins/env execution/builtins/pwd execution/builtins/unset expansion/expansion expansion/expansion_utils expansion/expansion_helpers execution/builtins/echo execution/builtins/export execution/builtins/exit execution/signals execution/heredoc
+SRCS = lexer/lexer_types lexer/lexer_handler lexer/lexer_reader main utils/free utils/utils utils/utils_1 parser/parser_part2/parser_alpha execution/exec execution/builtins/cd execution/builtins/env execution/builtins/pwd execution/builtins/unset expansion/expansion expansion/expansion_utils expansion/expansion_helpers execution/builtins/echo execution/builtins/export execution/builtins/exit execution/signals execution/heredoc 
 
 SRC = $(addprefix src/, $(addsuffix .c, $(SRCS)))
 

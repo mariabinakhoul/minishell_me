@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:51:21 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/23 19:03:27 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/04 00:41:16 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ t_chain	*handle_single_quotes(char *str, int *i,
 	if (quoted_part && quoted_part[0] == '\0')  // If the quoted part is empty, do nothing
 	{
 		free(quoted_part);
-		return *head;  // Skip empty quoted part
+		return *head;
 	}
 	if (*current && (*current)->end_pos == quote_start)
 	{
