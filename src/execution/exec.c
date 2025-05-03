@@ -6,11 +6,36 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/03 18:39:42 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/03 20:46:07 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+int handle_redirections(t_ast *cmd_node)
+{
+    if (cmd_node->out_file)
+    {
+        int fd = open(cmd_node->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        if (fd == -1)
+        {
+            perror("Error opening output file");
+            return -1;
+        }
+        printf("Redirecting output to file: %s\n", cmd_node->out_file);
+        
+        // Redirect stdout to the file
+        if (dup2(fd, STDOUT_FILENO) == -1)
+        {
+            perror("Error duplicating file descriptor");
+            close(fd);
+            return -1;
+        }
+        close(fd);  // Close fd after redirection
+    }
+
+    return 0;  // Success
+}
 
 static bool	is_builtin(char *cmd)
 {
@@ -40,6 +65,11 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 	int	count;
 
 	count = 0;
+	if (handle_redirections(cmd) != 0)
+	{
+		printf("Redirection failed\n");
+		return 1;
+	}
 	while (cmd->params && cmd->params[count])
 		count++;
 	if (!cmd || !cmd->value)

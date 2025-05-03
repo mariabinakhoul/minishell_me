@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/03 20:05:02 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/03 20:41:14 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,8 +62,7 @@ void	expand_file_argument(char **file_arg, char **env, int exit_code)
 		*file_arg = expanded;
 	}
 }
-
-void	expand_command_node(t_ast *cmd, char **env, int exit_code)
+void	expand_command_node(t_ast *cmd, char **env, int last_status)
 {
 	int		i;
 	char	*expanded;
@@ -71,27 +70,26 @@ void	expand_command_node(t_ast *cmd, char **env, int exit_code)
 
 	i = 0;
 	expanded = NULL;
+	printf("expand_command_node called for params: ");
+	for (int j = 0; cmd->params && cmd->params[j]; j++)
+	{
+		printf("%s ", cmd->params[j]);
+	}
+	printf("\n");
 	if (cmd->params)
 		cmd->params[cmd_node_param_count(cmd->params)] = NULL;
 	while (cmd->params && cmd->params[i])
 	{
 		quote = 0;
 		if (cmd->lexer && cmd->lexer[i])
-		{
-			// fprintf(stderr, "lexer[%d]->count = %d\n", i, cmd->lexer[i]->count);
 			quote = cmd->lexer[i]->count;
-		}
-		// else
-		// {
-		// 	fprintf(stderr, "lexer[%d] is NULL\n", i); // <-- and this one
-		// }
-		expanded = expand_argument(cmd->params[i], quote, env, exit_code);
+		expanded = expand_argument(cmd->params[i], quote, env, last_status);
 		free(cmd->params[i]);
 		cmd->params[i] = expanded;
 		i++;
 	}
-	expand_file_argument(&cmd->in_file, env, exit_code);
-	expand_file_argument(&cmd->out_file, env, exit_code);
+	expand_file_argument(&cmd->in_file, env, last_status);
+	expand_file_argument(&cmd->out_file, env, last_status);
 }
 
 void	expand_tree(t_ast *node, char **env, int exit_code)

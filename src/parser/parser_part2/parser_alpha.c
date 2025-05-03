@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/03 20:28:00 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/03 20:39:37 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,7 +147,7 @@ void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 			*tokens = token->next;
 		return ;
 	}
-	printf("DEBUG: parse_redirection() called for token: %s\n", (*tokens)->value);
+	// printf("DEBUG: parse_redirection() called for token: %s\n", (*tokens)->value);
 	if (token->type == TYPE_OUTDIR)
 	{
 		cmd_node->out_file = ft_strdup(token->next->value);
