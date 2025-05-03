@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_alpha.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/03 16:05:12 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/03 20:28:00 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,13 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
 			cmd_node->lexer = (struct s_lexer **)safe_expand_array(
 					(void **)cmd_node->lexer, *param_count, *param_count + 2);
 			cmd_node->lexer[*param_count] = malloc(sizeof(struct s_lexer));
+			if (!cmd_node->lexer[*param_count])
+				exit(EXIT_FAILURE);
 			cmd_node->lexer[*param_count]->t_list = NULL;
-			cmd_node->lexer[*param_count]->count = (*tokens)->quote;
+			cmd_node->lexer[*param_count]->count = 0;
+			printf("DEBUG: process_tokens() called for token: %s\n", (*tokens)->value);
+			if (*tokens)
+				cmd_node->lexer[*param_count]->count = (*tokens)->quote;
 			cmd_node->lexer[*param_count + 1] = NULL;
 			(*param_count)++;
 			cmd_node->params[*param_count] = NULL;
@@ -129,11 +134,23 @@ void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 	t_chain	*token;
 
 	token = *tokens;
+	if (token) {
+        printf("Parsing token: %s\n", token->value);
+        if (token->next) {
+            printf("Next token: %s\n", token->next->value);
+        }
+    }
+	if (!token || !token->next)
+	{
+		printf("Error: Missing file name after redirection operator.\n");
+		if (token)
+			*tokens = token->next;
+		return ;
+	}
+	printf("DEBUG: parse_redirection() called for token: %s\n", (*tokens)->value);
 	if (token->type == TYPE_OUTDIR)
 	{
 		cmd_node->out_file = ft_strdup(token->next->value);
-		if (cmd_node->out_file == NULL)
-			*tokens = token->next;
 		*tokens = token->next->next;
 	}
 	else if (token->type == TYPE_APPEND)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/03 15:55:38 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/03 18:39:42 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,8 +171,11 @@ char	*findcommandpath(char *comand, char **envp)
         cmdpath = ft_strjoin(finalpath, comand);
         free(finalpath);
         if (access(cmdpath, X_OK) == 0)
+		{
+			freearray(all_path);
             return (cmdpath);
-        free(cmdpath);
+        }
+			free(cmdpath);
         i++;
     }
     freearray(all_path);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/02 13:34:13 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/03 20:05:02 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,14 @@ void	expand_command_node(t_ast *cmd, char **env, int exit_code)
 	{
 		quote = 0;
 		if (cmd->lexer && cmd->lexer[i])
+		{
+			// fprintf(stderr, "lexer[%d]->count = %d\n", i, cmd->lexer[i]->count);
 			quote = cmd->lexer[i]->count;
+		}
+		// else
+		// {
+		// 	fprintf(stderr, "lexer[%d] is NULL\n", i); // <-- and this one
+		// }
 		expanded = expand_argument(cmd->params[i], quote, env, exit_code);
 		free(cmd->params[i]);
 		cmd->params[i] = expanded;
