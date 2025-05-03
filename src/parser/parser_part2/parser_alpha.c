@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/03 20:39:37 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/03 20:50:01 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
 				exit(EXIT_FAILURE);
 			cmd_node->lexer[*param_count]->t_list = NULL;
 			cmd_node->lexer[*param_count]->count = 0;
-			printf("DEBUG: process_tokens() called for token: %s\n", (*tokens)->value);
+			// printf("DEBUG: process_tokens() called for token: %s\n", (*tokens)->value);
 			if (*tokens)
 				cmd_node->lexer[*param_count]->count = (*tokens)->quote;
 			cmd_node->lexer[*param_count + 1] = NULL;
