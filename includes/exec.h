@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/02 13:34:13 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/05 22:57:08 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ void	freearray(char **array);
 int		ft_cd(t_ast *cmd, char **envp_ptr);
 int		ft_echo(char **args, char **envp);
 int		ft_unset(char **args, char ***envp);
+void print_env(t_env *head);
 void	ft_env(char **envp);
+t_env *convert_to_list(char **envp);
 void	ft_pwd(char **args);
 int		ft_exit(char **args);
 t_env	*clone_env(char **envp);

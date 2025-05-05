@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_alpha.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/03 20:50:01 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/04 22:59:55 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,11 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
 	while (*tokens && (*tokens)->type != TYPE_PIPE)
 	{
 		if (((*tokens)->type == TYPE_INDIR) || (*tokens)->type == TYPE_OUTDIR
-			|| (*tokens)->type == TYPE_APPEND
-			|| (*tokens)->type == TYPE_HEREDOC)
-			parse_redirection(tokens, cmd_node);
+		|| (*tokens)->type == TYPE_APPEND
+		|| (*tokens)->type == TYPE_HEREDOC)
+		parse_redirection(tokens, cmd_node);
+		// if (parse_redirection(tokens,cmd_node) == 1)
+		// 	return ;
 		else
 		{
 			if (!(cmd_node->value))
@@ -101,6 +103,8 @@ t_ast	*parse_command(t_chain **tokens)
 	cmd_node->lexer = NULL;
 	cmd_node->heredoc = 0;
 	param_count = 0;
+	// if (parse_redirection(tokens,cmd_node) == 1)
+	// 	return (NULL);
 	process_tokens(tokens, cmd_node, &param_count);
 	return (cmd_node);
 }
@@ -129,7 +133,7 @@ int parse_heredoc(t_chain **tokens, t_ast *cmd_node)
 	return 0;
 }
 
-void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
+int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 {
 	t_chain	*token;
 
@@ -145,7 +149,7 @@ void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 		printf("Error: Missing file name after redirection operator.\n");
 		if (token)
 			*tokens = token->next;
-		return ;
+		return 1;
 	}
 	// printf("DEBUG: parse_redirection() called for token: %s\n", (*tokens)->value);
 	if (token->type == TYPE_OUTDIR)
@@ -164,4 +168,5 @@ void	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 		cmd_node->in_file = ft_strdup(token->next->value);
 		*tokens = token->next->next;
 	}
+	return 0;
 }
