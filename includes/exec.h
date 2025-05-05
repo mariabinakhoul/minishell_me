@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/05 22:57:08 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/05 23:09:49 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,8 @@ int		ft_unset(char **args, char ***envp);
 void print_env(t_env *head);
 void	ft_env(char **envp);
 t_env *convert_to_list(char **envp);
+char **convert_to_2d(t_env *head);
+void print2d(char **array);
 void	ft_pwd(char **args);
 int		ft_exit(char **args);
 t_env	*clone_env(char **envp);

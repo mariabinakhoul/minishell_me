@@ -41,5 +41,24 @@ void print_env(t_env *head)
 
 char **convert_to_2d(t_env *head)
 {
+    char **converted_env;
 
+    while (head != NULL)
+    {
+        converted_env = malloc(sizeof(char *));
+        converted_env = head->data;
+        head = head->next;
+    }
+    return converted_env;
+}
+
+
+void print2d(char **array)
+{
+    int i = 0;
+    while (array[i])
+    {
+        printf("%s\n", array[i]);
+        i++;
+    }
 }
