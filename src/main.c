@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/05 23:10:41 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/06 09:00:02 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,7 @@ int main(int argc, char **argv, char **env)
     t_env *envi = NULL;
     envi = convert_to_list(env);
     print_env(envi);
+    printf("\n");
     char **new_env = convert_to_2d(envi);
     print2d(new_env);
 }

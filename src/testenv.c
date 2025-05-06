@@ -41,16 +41,32 @@ void print_env(t_env *head)
 
 char **convert_to_2d(t_env *head)
 {
+    int count;
+    t_env *tmp;
+    int i;
     char **converted_env;
 
-    while (head != NULL)
+    i = 0;
+    count =  0;
+    tmp = head;
+    while (tmp)
     {
-        converted_env = malloc(sizeof(char *));
-        converted_env = head->data;
+        count++;
+        tmp = tmp->next;
+    }
+    converted_env = malloc((count + 1) * sizeof(char *));
+    if (!converted_env)
+        return (NULL);
+    while (head)
+    {
+        converted_env[i] = strdup(head->data);
+        i++;
         head = head->next;
     }
-    return converted_env;
+    converted_env[i] = NULL;
+    return (converted_env);
 }
+
 
 
 void print2d(char **array)
