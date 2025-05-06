@@ -2,16 +2,19 @@
 
 t_env *convert_to_list(char **envp)
 {
-    t_env *head = NULL;
-    t_env *curr = NULL;
+    t_env *head;
+    t_env *curr;
     t_env *new_node;
-    int i = 0;
+    int i;
 
+    i = 0;
+    head = NULL;
+    curr = NULL;
     while (envp[i])
     {
         new_node = malloc(sizeof(t_env));
-        if (!new_node)
-            return NULL;
+        if (!new_node) 
+            return (NULL);
         new_node->data = strdup(envp[i]);
         new_node->next = NULL;
         if (!head)
@@ -26,7 +29,7 @@ t_env *convert_to_list(char **envp)
         }
         i++;
     }
-    return head;
+    return (head);
 }
 
 
@@ -71,7 +74,9 @@ char **convert_to_2d(t_env *head)
 
 void print2d(char **array)
 {
-    int i = 0;
+    int i;
+
+    i = 0;
     while (array[i])
     {
         printf("%s\n", array[i]);
