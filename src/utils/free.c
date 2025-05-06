@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 00:37:37 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/06 09:17:48 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/06 09:21:16 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,36 @@ void	free_lexer_nodes(t_chain *head)
 
 void free_ast(t_ast *ast)
 {
-    if (ast != NULL)
+    if (!ast)
+        return;
+    free_ast(ast->left);
+    free_ast(ast->right);
+    free(ast->value);
+    if (ast->params)
     {
-        free_ast(ast->left);
-        free_ast(ast->right);
+        for (int i = 0; ast->params[i]; i++)
+            free(ast->params[i]);
+        free(ast->params);
+    }
+    if (ast->lexer)
+    {
+        for (int i = 0; ast->lexer[i]; i++)
+            free(ast->lexer[i]);
+        free(ast->lexer);
     }
     free(ast);
 }
 
+
+// void free_ast(t_ast *ast)
+// {
+//     if (ast != NULL)
+//     {
+//         free_ast(ast->left);
+//         free_ast(ast->right);
+//     }
+//     free(ast);
+// }
 
 void free_2d(char **str)
 {

@@ -3,30 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/15 22:48:44 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:21:50 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static void	sort_array(char **sorted, int count)
+char **sort_array(char **sorted)
 {
-	int	i;
-	int	j;
+	int i = 0, j;
+	int len = 0;
 
-	i = 0;
-	while (i < count - 1)
+	while (sorted[len])
+		len++;
+	while (i < len - 1)
 	{
 		j = 0;
-		while (j < count - i - 1)
+		while (j < len - i - 1)
 		{
 			if (ft_strcmp(sorted[j], sorted[j + 1]) > 0)
 				ft_swap(&sorted[j], &sorted[j + 1]);
 			j++;
 		}
+		i++;
+	}
+	return sorted;
+}
+
+
+void export_no_params(char **envp)
+{
+	t_env *env_list;
+	char **new_env;
+	char **sorted_array;
+	int i;
+
+	i = 0;
+	env_list  = convert_to_list(envp);
+	new_env = convert_to_2d(env_list);
+	sorted_array = sort_array(new_env);
+	while (sorted_array[i])
+	{
+		printf("declare -x \"%s\"\n", sorted_array[i]);
 		i++;
 	}
 }
@@ -44,44 +65,44 @@ static void	populate_sorted_array(char **sorted, t_env *env, int count)
 	}
 }
 
-static char	**sort_envp(char **envp)
-{
-	int		count;
-	int		i;
-	char	**sorted;
-	t_env	*env;
+// static char	**sort_envp(char **envp)
+// {
+// 	int		count;
+// 	int		i;
+// 	char	**sorted;
+// 	t_env	*env;
 
-	count = 0;
-	i = 0;
-	env = NULL;
-	env = clone_env(envp);
-	while (envp[i])
-	{
-		count++;
-		i++;
-	}
-	sorted = malloc(sizeof(char *) * (count + 1));
-	if (!sorted)
-		return (NULL);
-	populate_sorted_array(sorted, env, count);
-	sorted[count] = NULL;
-	sort_array(sorted, count);
-	return (sorted);
-}
+// 	count = 0;
+// 	i = 0;
+// 	env = NULL;
+// 	env = clone_env(envp);
+// 	while (envp[i])
+// 	{
+// 		count++;
+// 		i++;
+// 	}
+// 	sorted = malloc(sizeof(char *) * (count + 1));
+// 	if (!sorted)
+// 		return (NULL);
+// 	populate_sorted_array(sorted, env, count);
+// 	sorted[count] = NULL;
+// 	sort_array(sorted, count);
+// 	return (sorted);
+// }
 
-static void	print_export(char **envp)
-{
-	char	**sorted;
-	int		i;
+// static void	print_export(char **envp)
+// {
+// 	char	**sorted;
+// 	int		i;
 
-	i = 0;
-	sorted = sort_envp(envp);
-	while (sorted[i])
-	{
-		printf("declare -x \"%s\"\n", sorted[i]);
-		i++;
-	}
-}
+// 	i = 0;
+// 	sorted = sort_envp(envp);
+// 	while (sorted[i])
+// 	{
+// 		printf("declare -x \"%s\"\n", sorted[i]);
+// 		i++;
+// 	}
+// }
 
 // int	is_valid_identifier(char *arg)
 // {
@@ -146,7 +167,7 @@ int	ft_export(char **args, char **envp)
 
 	if (!args[1])
 	{
-		print_export(envp);
+		export_no_params(envp);
 		return (0);
 	}
 

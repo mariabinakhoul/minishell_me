@@ -70,8 +70,6 @@ char **convert_to_2d(t_env *head)
     return (converted_env);
 }
 
-
-
 void print2d(char **array)
 {
     int i;
@@ -82,4 +80,23 @@ void print2d(char **array)
         printf("%s\n", array[i]);
         i++;
     }
+}
+
+t_env *create_node(t_env *head,t_ast *cmd)
+{
+    t_env *new_node;
+    t_env *tmp;
+
+    new_node = malloc(sizeof(t_env));
+    if (!new_node)
+        return head;
+        new_node->data = ft_strdup(cmd->params[1]);
+        new_node->next = NULL;
+    if (!head)
+        return new_node;
+    tmp = head;
+    while (tmp->next)
+        tmp = tmp->next;
+    tmp->next = new_node;
+    return head;
 }
