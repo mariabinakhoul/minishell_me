@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/06 11:21:50 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/06 19:10:22 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,7 @@ void export_no_params(char **envp)
 	int i;
 
 	i = 0;
-	env_list  = convert_to_list(envp);
-	new_env = convert_to_2d(env_list);
+	new_env = set_env(envp);
 	sorted_array = sort_array(new_env);
 	while (sorted_array[i])
 	{
@@ -159,6 +158,8 @@ int	is_valid_identifier(char *arg)
 		i++;
 	}
 	return (1);
+
+
 }
 
 int	ft_export(char **args, char **envp)
