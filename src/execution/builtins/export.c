@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/06 19:10:22 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/08 22:51:35 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,14 @@ char **sort_array(char **sorted)
 		i++;
 	}
 	return sorted;
+}
+
+char **export_params(char **args,t_env *env)
+{
+	t_env *new_export;
+
+	new_export	= create_node(env,args);
+	return new_export; // make this return a 2d array to use it in ft_export
 }
 
 
@@ -158,20 +166,19 @@ int	is_valid_identifier(char *arg)
 		i++;
 	}
 	return (1);
-
-
 }
 
 int	ft_export(char **args, char **envp)
 {
 	int	i;
+	t_env *env;
 
+	env = convert_to_list(envp);
 	if (!args[1])
 	{
 		export_no_params(envp);
 		return (0);
 	}
-
 	i = 1;
 	while (args[i])
 	{
@@ -179,6 +186,10 @@ int	ft_export(char **args, char **envp)
 		{
 			ft_putstr_fd("export: not a valid identifier\n", 2);
 			return (1);
+		}
+		else
+		{
+			export_params(env,args); //we need it char "** " for set env
 		}
 		i++;
 	}
