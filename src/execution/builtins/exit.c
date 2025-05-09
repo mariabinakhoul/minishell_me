@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 22:37:15 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/28 22:31:16 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/09 22:30:31 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 int	is_numeric(char *str)
 {
 	int	i;
-//marc aamak
 	i = 0;
 	if (!str || !str[0])
 		return (0);
@@ -32,32 +31,57 @@ int	is_numeric(char *str)
 	return (1);
 }
 
+int safe_atoi(const char *str, long long *out)
+{
+	int sign = 1;
+	unsigned long long result = 0;
+
+	*out = 0;
+	while (*str == ' ' || (*str >= 9 && *str <= 13))
+		str++;
+	if (*str == '-')
+		sign = -1;
+	if (*str == '-' || *str == '+')
+		str++;
+	if (!*str)
+		return (0);
+	while (*str >= '0' && *str <= '9')
+	{
+		result = result * 10 + (*str - '0');
+		if ((sign == 1 && result > LLONG_MAX) ||
+			(sign == -1 && result > (unsigned long long)LLONG_MAX + 1))
+			return (0);
+		str++;
+	}
+	*out = sign * result;
+	return (1);
+}
+
+
 int	ft_exit(char **args)
 {
-	char	*arg;
-	int		i;
-	int		status;
+	char			*arg;
+	long long int	status;
+	int				is_valid;
 
-	i = 0;
 	arg = args[1];
-	if (!args[1])
-	{
-		printf("exit\n");
+	printf("exit\n");
+
+	if (!arg)
 		exit(0);
-	}
-	//255
-	if (!is_numeric(args[1]))
+
+	if (!is_numeric(arg) || !safe_atoi(arg, &status))
 	{
-		printf("exit\n");
-		ft_putstr_fd("bash: exit: numeric argument required\n", 2);
-		exit (2);
+		fprintf(stderr, "bash: exit: %s: numeric argument required\n", arg);
+		exit(2);
 	}
+
 	if (args[2])
 	{
-		ft_putstr_fd("bash: exit: too many arguments\n", 2);
-		exit (1);
+		fprintf(stderr, "bash: exit: too many arguments\n");
+		return (1);
 	}
-	status = ft_atoi(arg);
-	printf("exit\n");
-	exit(status);
+
+	exit((unsigned char)status);
 }
+

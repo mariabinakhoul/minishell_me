@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/08 22:51:35 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/09 19:30:49 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,14 @@ char **sort_array(char **sorted)
 char **export_params(char **args,t_env *env)
 {
 	t_env *new_export;
+	char **updated;
 
 	new_export	= create_node(env,args);
-	return new_export; // make this return a 2d array to use it in ft_export
+	printf("*************************************\n");
+	print_env(new_export);
+	printf("*************************************\n");
+	updated = convert_to_2d(new_export);
+	return updated; // make this return a 2d array to use it in ft_export
 }
 
 
@@ -47,14 +52,22 @@ void export_no_params(char **envp)
 	t_env *env_list;
 	char **new_env;
 	char **sorted_array;
+	// int i;
+
+	// i = 0;
+	new_env = set_env(envp);
+	sorted_array = sort_array(new_env);
+	print_export(envp);
+}
+
+void print_export(char **env)
+{
 	int i;
 
 	i = 0;
-	new_env = set_env(envp);
-	sorted_array = sort_array(new_env);
-	while (sorted_array[i])
+	while (env[i])
 	{
-		printf("declare -x \"%s\"\n", sorted_array[i]);
+		printf("declare -x \"%s\"\n", env[i]);
 		i++;
 	}
 }
@@ -172,7 +185,7 @@ int	ft_export(char **args, char **envp)
 {
 	int	i;
 	t_env *env;
-
+	char **new_env;
 	env = convert_to_list(envp);
 	if (!args[1])
 	{
@@ -189,7 +202,8 @@ int	ft_export(char **args, char **envp)
 		}
 		else
 		{
-			export_params(env,args); //we need it char "** " for set env
+			new_env = export_params(args,env); //we need it char "** " for set env
+			// print_export(new_env);
 		}
 		i++;
 	}

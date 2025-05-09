@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/08 22:38:56 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/09 19:31:26 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ char **set_env(char **envp);
 char **sort_array(char **sorted);
 t_env *convert_to_list(char **envp);
 char **convert_to_2d(t_env *head);
-t_env *create_node(t_env *head,t_ast *cmd);
+t_env *create_node(t_env *head,char **args);
 void print2d(char **array);
 void	ft_pwd(char **args);
 int		ft_exit(char **args);
 t_env	*clone_env(char **envp);
 int		ft_export(char **args, char **envp);
+void print_export(char **env);
 char	*findcommandpath(char *comand, char **envp);
 void	findpath(char ***envp);
 char	*expand_exit_status(int exit_code, char *result);

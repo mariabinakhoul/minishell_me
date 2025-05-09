@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 21:26:34 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/06 19:12:24 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/09 19:34:56 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void print2d(char **array)
     }
 }
 
-t_env *create_node(t_env *head,t_ast *cmd)
+t_env *create_node(t_env *head,char **args)
 {
     t_env *new_node;
     t_env *tmp;
@@ -101,7 +101,7 @@ t_env *create_node(t_env *head,t_ast *cmd)
     new_node = malloc(sizeof(t_env));
     if (!new_node)
         return head;
-        new_node->data = ft_strdup(cmd->params[1]);
+        new_node->data = ft_strdup(args[1]);
         new_node->next = NULL;
     if (!head)
         return new_node;

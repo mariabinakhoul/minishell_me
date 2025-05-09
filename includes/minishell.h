@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/04 00:54:31 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/09 19:53:59 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ void	update_env(t_ast *path);
 void reset_sig(int signo);
 void set_signals();
 void def_signals();
+int exit_helper(long long int nb);
 void ignore_signals();
 void	ft_pwd(char **args);
 void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count);

@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:51:31 by mabi-nak          #+#    #+#             */
-/*   Updated: 2024/06/13 12:30:03 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/09 22:12:35 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int	ft_atoi(const char *str)
+long long int	ft_atoi(const char *str)
 {
-	int	result;
-	int	sign;
+	long long int				result;
+	int 						sign;
 
 	result = 0;
 	sign = 1;
@@ -27,6 +27,7 @@ int	ft_atoi(const char *str)
 		str++;
 	while (*str >= '0' && *str <= '9')
 	{
+		// printf("%lld\n", result);
 		result = result * 10 + *str - '0';
 		str++;
 	}

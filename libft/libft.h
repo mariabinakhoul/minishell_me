@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:53:51 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/03/31 19:25:10 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/09 20:06:00 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ typedef struct s_list
 	struct s_list	*next;
 	int				index;
 }					t_list;
-int				ft_atoi(const char *str);
+long long int	ft_atoi(const char *str);
 char			*ft_itoa(int n);
 int				ft_isdigit(int c);
 void			ft_putchar_fd(char c, int fd);

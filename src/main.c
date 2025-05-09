@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/06 17:09:17 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/09 19:41:26 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,6 +106,7 @@ int main(int argc, char **argv, char **envp)
             add_history(input);
         if (strcmp(input, "exit") == 0)
         {
+            printf("exit\n");
             free(input);
             break;
         }
