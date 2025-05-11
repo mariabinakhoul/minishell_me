@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/09 19:53:59 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/10 09:50:26 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count);
 void	ft_swap(char **a, char **b);
 char	*ft_heredoc(const char *delimiter, int write_fd);
 void	free_lexer_nodes(t_chain *head);
+void free_2d(char **str);
+int costum_atoi(const char *str, long long *out);
 void free_ast(t_ast *ast);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/09 19:30:49 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/11 19:39:39 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,12 +200,9 @@ int	ft_export(char **args, char **envp)
 			ft_putstr_fd("export: not a valid identifier\n", 2);
 			return (1);
 		}
-		else
-		{
-			new_env = export_params(args,env); //we need it char "** " for set env
-			// print_export(new_env);
-		}
 		i++;
 	}
+	new_env = export_params(args,env); //we need it char "** " for set env
+		// print_export(new_env);	
 	return (0);
 }

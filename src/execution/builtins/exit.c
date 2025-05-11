@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 22:37:15 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/09 22:30:31 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/10 09:40:25 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,33 +31,6 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-int safe_atoi(const char *str, long long *out)
-{
-	int sign = 1;
-	unsigned long long result = 0;
-
-	*out = 0;
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
-		str++;
-	if (*str == '-')
-		sign = -1;
-	if (*str == '-' || *str == '+')
-		str++;
-	if (!*str)
-		return (0);
-	while (*str >= '0' && *str <= '9')
-	{
-		result = result * 10 + (*str - '0');
-		if ((sign == 1 && result > LLONG_MAX) ||
-			(sign == -1 && result > (unsigned long long)LLONG_MAX + 1))
-			return (0);
-		str++;
-	}
-	*out = sign * result;
-	return (1);
-}
-
-
 int	ft_exit(char **args)
 {
 	char			*arg;
@@ -70,7 +43,7 @@ int	ft_exit(char **args)
 	if (!arg)
 		exit(0);
 
-	if (!is_numeric(arg) || !safe_atoi(arg, &status))
+	if (!is_numeric(arg) || !costum_atoi(arg, &status))
 	{
 		fprintf(stderr, "bash: exit: %s: numeric argument required\n", arg);
 		exit(2);

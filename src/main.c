@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/09 19:41:26 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/11 19:38:58 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,53 +97,33 @@ int main(int argc, char **argv, char **envp)
     int exit_code = 0;
 
     char *input;
+    char **env = set_env(envp);
     while (1)
     {
+        env = set_env(env);
         input = readline("minishell> ");
         if (!input)
             break;
         if (*input)
             add_history(input);
-        if (strcmp(input, "exit") == 0)
-        {
-            printf("exit\n");
-            free(input);
-            break;
-        }
-
-        // Tokenize input into lexer nodes (t_chain)
-        t_chain *tokens = lexer_filler(input);  // Lexer node list
+        t_chain *tokens = lexer_filler(input);
         if (!tokens)
         {
             free(input);
             continue;
         }
-
-        // Parse the input into an abstract syntax tree (AST)
         t_ast *ast = parse_input(input);
         if (!ast)
         {
             free(input);
-            free_lexer_nodes(tokens);  // Free lexer nodes if parsing fails
+            free_lexer_nodes(tokens);
             continue;
         }
-
-        // Perform any necessary expansion (environment variable handling, etc.)
-        expand_tree(ast, envp, exit_code);
-
-        // Execute the command and update the exit code
-        exit_code = execute_command(ast, envp, &exit_code);
-
-        // Optionally print the AST for debugging (this line can be commented out if not needed)
-        // print_ast1(ast, 100);
-
-        // Free lexer nodes after processing
-        free_lexer_nodes(tokens);  // Free lexer nodes after parsing and execution
-
-        // Free the AST to avoid memory leaks
-        free_ast(ast);  // Free AST
-
-        // Free the input after use
+        expand_tree(ast, env, exit_code);
+        exit_code = execute_command(ast, env, &exit_code);
+        free_lexer_nodes(tokens);
+        free_ast(ast);
+        // free_2d(env);
         free(input);
     }
     return 0;
