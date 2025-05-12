@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/11 19:39:39 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/12 23:01:28 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,12 +33,13 @@ char **sort_array(char **sorted)
 	return sorted;
 }
 
-char **export_params(char **args,t_env *env)
+char **export_params(char **args,char **env)
 {
 	t_env *new_export;
 	char **updated;
-
-	new_export	= create_node(env,args);
+	t_env *new_env;
+	new_env = convert_to_list(env);
+	new_export	= create_node(new_env,args);
 	printf("*************************************\n");
 	print_env(new_export);
 	printf("*************************************\n");
@@ -181,12 +182,14 @@ int	is_valid_identifier(char *arg)
 	return (1);
 }
 
-int	ft_export(char **args, char **envp)
+char	**ft_export(char **args, char **envp) //not returning the new env so it is not getting updated
 {
 	int	i;
 	t_env *env;
 	char **new_env;
-	env = convert_to_list(envp);
+
+	// i = 0;
+	// env = convert_to_list(envp);
 	if (!args[1])
 	{
 		export_no_params(envp);
@@ -202,7 +205,12 @@ int	ft_export(char **args, char **envp)
 		}
 		i++;
 	}
-	new_env = export_params(args,env); //we need it char "** " for set env
+	new_env = export_params(args,envp); //we need it char "** " for set env
 		// print_export(new_env);	
-	return (0);
+	return (new_env);
+}
+
+char **update_envv(char **envp) //make a function that updates the env rvry time withut execution everytime
+{
+	return envp;
 }
