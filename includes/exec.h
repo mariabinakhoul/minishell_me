@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/12 22:46:31 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/13 20:28:00 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ typedef struct s_env
 	struct s_env	*next;
 }t_env;
 
-int		execute_command(t_ast *cmd, char **envp, int *exit_code);
-void	execute(char *input, char **envp);
+int		execute_command(t_ast *cmd, char ***envp, int *exit_code);
+void	execute(char *input, char ***envp);
 void	freearray(char **array);
 int		ft_cd(t_ast *cmd, char **envp_ptr);
 int		ft_echo(char **args, char **envp);

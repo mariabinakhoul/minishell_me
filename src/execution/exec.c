@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/12 22:46:58 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/13 20:27:45 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ static bool	is_builtin(char *cmd)
 	return (false);
 }
 
-static int	execute_builtin(t_ast *cmd, char **envp_ptr)
+static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 {
 	int	count;
 
@@ -78,19 +78,19 @@ static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 		return (1);
 	}
 	if (ft_strcmp(cmd->value, "cd") == 0)
-		return(ft_cd(cmd, envp_ptr));
+		return(ft_cd(cmd, *envp_ptr));
 	if (ft_strcmp(cmd->value, "env") == 0)
-		ft_env(envp_ptr);
+		ft_env(*envp_ptr);
 	if (ft_strcmp(cmd->value, "echo") == 0)
-		return (ft_echo(cmd->params, envp_ptr));
+		return (ft_echo(cmd->params, *envp_ptr));
 	if (ft_strcmp(cmd->value, "pwd") == 0)
 		ft_pwd(cmd->params);
 	if (ft_strcmp(cmd->value, "exit") == 0)
 		return (ft_exit(cmd->params));
 	if (ft_strcmp(cmd->value, "unset") == 0)
-		return (ft_unset(cmd->params, &envp_ptr));
+		return (ft_unset(cmd->params, envp_ptr));
 	if (ft_strcmp(cmd->value, "export") == 0)
-		ft_export(cmd->params, envp_ptr);
+		*envp_ptr = ft_export(cmd->params, *envp_ptr);
 	return (0);
 }
 
@@ -237,7 +237,7 @@ void print_ast(t_ast *node, int depth)
 
 
 
-void	execute(char *input, char **envp)
+void	execute(char *input, char ***envp)
 {
     t_ast *ast;
     int exit_code = 0;
@@ -245,13 +245,13 @@ void	execute(char *input, char **envp)
     ast = parse_input(input);
     if (!ast)
         return;
-    expand_tree(ast, envp, exit_code);
+    expand_tree(ast, *envp, exit_code);
     exit_code = execute_command(ast, envp, &exit_code);
     free_ast(ast);
 }
 
 
-int execute_command(t_ast *cmd, char **envp, int *exit_code)
+int execute_command(t_ast *cmd, char ***envp, int *exit_code)
 {
     int pipefd[2];
     pid_t left_pid, right_pid;
@@ -326,6 +326,6 @@ int execute_command(t_ast *cmd, char **envp, int *exit_code)
     if (is_builtin(cmd->value))
         *exit_code = execute_builtin(cmd, envp);
     else
-        *exit_code = execute_external(cmd, envp);
+        *exit_code = execute_external(cmd, *envp);
     return *exit_code;
 }

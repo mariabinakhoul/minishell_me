@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/12 23:01:28 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/16 11:06:47 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ char **export_params(char **args,char **env)
 	t_env *new_env;
 	new_env = convert_to_list(env);
 	new_export	= create_node(new_env,args);
-	printf("*************************************\n");
-	print_env(new_export);
-	printf("*************************************\n");
+	// printf("*************************************\n");
+	// print_env(new_export);
+	// printf("*************************************\n");
 	updated = convert_to_2d(new_export);
 	return updated; // make this return a 2d array to use it in ft_export
 }
@@ -66,11 +66,35 @@ void print_export(char **env)
 	int i;
 
 	i = 0;
-	while (env[i])
+	int j = 0;
+	while (env[i][j])
 	{
-		printf("declare -x \"%s\"\n", env[i]);
+		j = 0;
+		printf("declare -x ");
+		while(env[i][j] != '=')
+		{
+			// if (env[i][j] != '=')
+			// {
+				printf("%c", env[i][j]);
+				j++;
+				// }
+		}
+		printf("%c", env[i][j] );
+		j++;
+		// while ()
+		printf("\n");
 		i++;
 	}
+}
+
+int skip_equals(char **envp)
+{
+	int i = 0;
+	int j = 0;
+	while (envp[i][j] != '=')
+		j++;
+	i++;
+	return j;
 }
 
 static void	populate_sorted_array(char **sorted, t_env *env, int count)
@@ -182,7 +206,7 @@ int	is_valid_identifier(char *arg)
 	return (1);
 }
 
-char	**ft_export(char **args, char **envp) //not returning the new env so it is not getting updated
+char	**ft_export(char **args, char **envp)
 {
 	int	i;
 	t_env *env;
@@ -190,10 +214,11 @@ char	**ft_export(char **args, char **envp) //not returning the new env so it is 
 
 	// i = 0;
 	// env = convert_to_list(envp);
+	new_env = envp;
 	if (!args[1])
 	{
 		export_no_params(envp);
-		return (0);
+		return (new_env);
 	}
 	i = 1;
 	while (args[i])
@@ -201,13 +226,19 @@ char	**ft_export(char **args, char **envp) //not returning the new env so it is 
 		if (!is_valid_identifier(args[i]))
 		{
 			ft_putstr_fd("export: not a valid identifier\n", 2);
-			return (1);
+			return (new_env);
 		}
 		i++;
 	}
 	new_env = export_params(args,envp); //we need it char "** " for set env
 		// print_export(new_env);	
 	return (new_env);
+}
+
+int check_export(char **args)
+{
+	if (!args[1])
+		return 0;
 }
 
 char **update_envv(char **envp) //make a function that updates the env rvry time withut execution everytime

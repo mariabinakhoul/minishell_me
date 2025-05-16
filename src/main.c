@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/12 22:53:49 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/13 20:25:47 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,8 @@ int main(int argc, char **argv, char **envp)
             continue;
         }
         expand_tree(ast, env, exit_code);
-        exit_code = execute_command(ast, env, &exit_code);
-        env = ft_export(ast->params,env);
+        exit_code = execute_command(ast, &env, &exit_code);
+        // env = ft_export(ast->params,env);
         free_lexer_nodes(tokens);
         free_ast(ast);
         // free_2d(env);
