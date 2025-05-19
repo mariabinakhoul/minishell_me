@@ -6,36 +6,79 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 10:41:21 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/19 18:54:22 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int handle_redirections(t_ast *cmd_node)
-{
-    if (cmd_node->out_file)
-    {
-        int fd = open(cmd_node->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        if (fd == -1)
-        {
-            perror("Error opening output file");
-            return -1;
-        }
-        printf("Redirecting output to file: %s\n", cmd_node->out_file);
+// int handle_redirections(t_ast *cmd_node)
+// {
+//     if (cmd_node->out_file)
+//     {
+//         int fd = open(cmd_node->out_file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+//         if (fd == -1)
+//         {
+//             perror("Error opening output file");
+//             return -1;
+//         }
+//         printf("Redirecting output to file: %s\n", cmd_node->out_file);
         
-        // Redirect stdout to the file
-        if (dup2(fd, STDOUT_FILENO) == -1)
-        {
-            perror("Error duplicating file descriptor");
-            close(fd);
-            return -1;
-        }
-        close(fd);  // Close fd after redirection
-    }
+//         // Redirect stdout to the file
+//         if (dup2(fd, STDOUT_FILENO) == -1)
+//         {
+//             perror("Error duplicating file descriptor");
+//             close(fd);
+//             return -1;
+//         }
+//         close(fd);  // Close fd after redirection
+//     }
 
-    return 0;  // Success
+//     return 0;  // Success
+// }
+
+int	handle_redirections(t_ast *cmd_node)
+{
+	int	fd;
+
+	if (cmd_node->in_file)
+	{
+		fd = open(cmd_node->in_file, O_RDONLY);
+		if (fd == -1)
+		{
+			perror(cmd_node->in_file);
+			return 1;
+		}
+		if (dup2(fd, STDIN_FILENO) == -1)
+		{
+			perror("dup2 (stdin)");
+			close(fd);
+			return 1;
+		}
+		close(fd);
+	}
+	if (cmd_node->out_file)
+	{
+		int flags = O_WRONLY | O_CREAT;
+		flags |= (cmd_node->append) ? O_APPEND : O_TRUNC;
+		fd = open(cmd_node->out_file, flags, 0644);
+		if (fd == -1)
+		{
+			perror(cmd_node->out_file);
+			return 1;
+		}
+		if (dup2(fd, STDOUT_FILENO) == -1)
+		{
+			perror("dup2 (stdout)");
+			close(fd);
+			return 1;
+		}
+		close(fd);
+	}
+
+	return (0);
 }
+
 
 static bool	is_builtin(char *cmd)
 {

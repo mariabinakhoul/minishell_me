@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:52:47 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/03 18:17:52 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/19 19:15:01 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,7 @@ char	*ft_heredoc(const char *delimiter, int write_fd)
 	len = 0;
 	while (1)
 	{
-		// Print prompt (optional)
 		write(STDOUT_FILENO, "heredoc> ", 9);
-		// Get the next line of input
 		nread = getline(&line, &len, stdin);
 		if (nread == -1)
 		{

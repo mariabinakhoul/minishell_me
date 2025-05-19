@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 10:26:59 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/19 18:48:05 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,6 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
 		|| (*tokens)->type == TYPE_APPEND
 		|| (*tokens)->type == TYPE_HEREDOC)
 		parse_redirection(tokens, cmd_node);
-		// if (parse_redirection(tokens,cmd_node) == 1)
-		// 	return ;
 		else
 		{
 			if (!(cmd_node->value))
@@ -133,40 +131,74 @@ int parse_heredoc(t_chain **tokens, t_ast *cmd_node)
 	return 0;
 }
 
+// int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
+// {
+// 	t_chain	*token;
+
+// 	token = *tokens;
+
+// 	if (!token || !token->next)
+// 	{
+// 		printf("Error: Missing file name after redirection operator.\n");
+// 		if (token)
+// 			*tokens = token->next;
+// 		return 1;
+// 	}
+// 	// printf("DEBUG: parse_redirection() called for token: %s\n", (*tokens)->value);
+// 	if (token->type == TYPE_OUTDIR)
+// 	{
+// 		cmd_node->out_file = ft_strdup(token->next->value);
+// 		*tokens = token->next->next;
+// 	}
+// 	else if (token->type == TYPE_APPEND)
+// 	{
+// 		cmd_node->out_file = ft_strdup(token->next->value);
+// 		cmd_node->append = 1;
+// 		*tokens = token->next->next;
+// 	}
+// 	else if (token->type == TYPE_INDIR)
+// 	{
+// 		cmd_node->in_file = ft_strdup(token->next->value);
+// 		*tokens = token->next->next;
+// 	}
+// 	return 0;
+// }
+
 int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 {
-	t_chain	*token;
+	t_chain	*token = *tokens;
+	t_chain	*next = token ? token->next : NULL;
 
-	token = *tokens;
-	// if (token) {
-    //     // printf("Parsing token: %s\n", token->value);
-    //     if (token->next) {
-    //         printf("Next token: %s\n", token->next->value);
-    //     }
-    // }
-	if (!token || !token->next)
+	if (!token || !next || (next->type != TYPE_WORD && next->type != TYPE_QUOTE))
 	{
-		printf("Error: Missing file name after redirection operator.\n");
-		if (token)
-			*tokens = token->next;
+		ft_putstr_fd("minishell: syntax error: missing file name after redirection operator.\n", 2);
+		*tokens = next ? next->next : NULL;
 		return 1;
 	}
-	// printf("DEBUG: parse_redirection() called for token: %s\n", (*tokens)->value);
+
+	// Always duplicate the filename (whether it's quoted or not)
+	char *filename = ft_strdup(next->value);
+
 	if (token->type == TYPE_OUTDIR)
 	{
-		cmd_node->out_file = ft_strdup(token->next->value);
-		*tokens = token->next->next;
+		cmd_node->out_file = filename;
+		cmd_node->append = 0;
 	}
 	else if (token->type == TYPE_APPEND)
 	{
-		cmd_node->out_file = ft_strdup(token->next->value);
+		cmd_node->out_file = filename;
 		cmd_node->append = 1;
-		*tokens = token->next->next;
 	}
 	else if (token->type == TYPE_INDIR)
 	{
-		cmd_node->in_file = ft_strdup(token->next->value);
-		*tokens = token->next->next;
+		cmd_node->in_file = filename;
 	}
+	else if (token->type == TYPE_HEREDOC)
+	{
+		cmd_node->heredoc = true;
+		cmd_node->heredoc_delim = filename;
+	}
+
+	*tokens = next->next;
 	return 0;
 }

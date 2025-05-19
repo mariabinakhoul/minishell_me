@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tree.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/04 22:47:37 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/19 11:28:53 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ typedef struct s_lexer
 t_ast		*parse_input(char *input);
 t_ast		*parse_pipeline(t_chain **tokens);
 t_ast		*parse_command(t_chain **tokens);
-int	parse_redirection(t_chain **tokens, t_ast *cmd_node);
+int			parse_redirection(t_chain **tokens, t_ast *cmd_node);
 char		*join_and_free(char *s1, const char *s2);
 char		*join_and_free_char(char *s, char c);
 char		*get_env_value(char *var, char **env);

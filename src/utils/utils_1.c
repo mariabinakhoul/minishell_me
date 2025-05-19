@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 22:25:42 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/10 09:39:37 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/19 19:16:06 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,10 @@ void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count)
 	return (new_ptr);
 }
 
-
-int costum_atoi(const char *str, long long *out)
+int	costum_atoi(const char *str, long long *out)
 {
-	int sign;
-	unsigned long long result;
+	int					sign;
+	unsigned long long	result;
 
 	*out = 0;
 	result = 0;
@@ -56,25 +55,14 @@ int costum_atoi(const char *str, long long *out)
 	while (*str >= '0' && *str <= '9')
 	{
 		result = result * 10 + (*str - '0');
-		if ((sign == 1 && result > LLONG_MAX) ||
-			(sign == -1 && result > (unsigned long long)LLONG_MAX + 1))
+		if ((sign == 1 && result > LLONG_MAX)
+			|| (sign == -1 && result > (unsigned long long)LLONG_MAX + 1))
 			return (0);
 		str++;
 	}
 	*out = sign * result;
 	return (1);
 }
-
-// void	free_ast(t_ast *node)
-// {
-// 	if (!node)
-// 		return ;
-// 	free_ast(node->left);
-// 	free_ast(node->right);
-// 	if (node->params)
-// 		free(node->params);
-// 	free(node);
-// }
 
 void	ft_swap(char **a, char **b)
 {
