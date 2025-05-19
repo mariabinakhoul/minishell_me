@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/13 20:27:45 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:41:21 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,22 @@ static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 	if (ft_strcmp(cmd->value, "unset") == 0)
 		return (ft_unset(cmd->params, envp_ptr));
 	if (ft_strcmp(cmd->value, "export") == 0)
-		*envp_ptr = ft_export(cmd->params, *envp_ptr);
+		// *envp_ptr = ft_export(cmd->params, *envp_ptr);
+	{
+	char **result = ft_export(cmd->params, *envp_ptr);
+	if (result != *envp_ptr)
+		*envp_ptr = result;
+	
+	// Return exit code based on validation
+	int i = 1;
+	while (cmd->params[i])
+	{
+		if (!is_valid_identifier(cmd->params[i]))
+			return (1);
+		i++;
+	}
+	return (0);
+}
 	return (0);
 }
 

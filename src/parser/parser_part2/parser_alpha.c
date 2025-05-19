@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_alpha.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/04 22:59:55 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:26:59 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,12 +138,12 @@ int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 	t_chain	*token;
 
 	token = *tokens;
-	if (token) {
-        printf("Parsing token: %s\n", token->value);
-        if (token->next) {
-            printf("Next token: %s\n", token->next->value);
-        }
-    }
+	// if (token) {
+    //     // printf("Parsing token: %s\n", token->value);
+    //     if (token->next) {
+    //         printf("Next token: %s\n", token->next->value);
+    //     }
+    // }
 	if (!token || !token->next)
 	{
 		printf("Error: Missing file name after redirection operator.\n");

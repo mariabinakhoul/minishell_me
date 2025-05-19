@@ -6,24 +6,21 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/04 00:35:19 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/19 10:27:22 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-char	*expand_argument(char *arg, int quoted, char **env, int exit_code)
+char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 {
 	char	*result;
 	int		i;
 
 	result = ft_strdup("");
 	i = 0;
-	if (!arg)
-	{
-		ft_putstr_fd("Error: Null argument passed to expand_argument.\n", 2);
-		return (NULL);
-	}
+	if (quoted == 1)
+		return (ft_strdup(arg));
 	while (arg[i])
 	{
 		if (arg[i] == '\\' && arg[i + 1] == '$')
@@ -33,7 +30,7 @@ char	*expand_argument(char *arg, int quoted, char **env, int exit_code)
 			continue ;
 		}
 		if (arg[i] == '$')
-			result = expand_variable(arg, &i, env, exit_code, result);
+			result = expand_variable(arg, &i, env, last_status, result);
 		else
 		{
 			result = expand_home_directory(arg, &i, env, result);

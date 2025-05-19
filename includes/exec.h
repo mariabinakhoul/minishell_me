@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/13 20:28:00 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:42:18 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,5 +45,7 @@ char	*expand_env_variable(char *arg, int *i, char **env, char *result);
 char	*expand_variable(char *arg, int *i,
 			char **env, int exit_code, char *result);
 char	*expand_home_directory(char *arg, int *i, char **env, char *result);
+int		is_valid_identifier(char *arg);
+
 
 #endif

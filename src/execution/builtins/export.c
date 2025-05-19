@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/18 13:20:00 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/19 10:40:28 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,9 @@ void print_export(char **env)
 
 int	is_valid_identifier(char *arg)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	if (!arg || !arg[0])
 		return (0);
 	if (arg[0] == '=' || (!ft_isalpha(arg[0]) && arg[0] != '_'))
@@ -106,34 +107,75 @@ int	is_valid_identifier(char *arg)
 	return (1);
 }
 
+// char	**ft_export(char **args, char **envp)
+// {
+// 	int	i;
+// 	t_env *env;
+// 	char **new_env;
+// 	int ret;
+
+// 	ret = 0;
+// 	new_env = envp;
+// 	if (!args[1])
+// 	{
+// 		export_no_params(envp);
+// 		return (new_env);
+// 	}
+// 	i = 1;
+// 	while (args[i])
+// 	{
+// 		if (!is_valid_identifier(args[i]))
+// 		{
+// 			ft_putstr_fd("minishell: export: `", 2);
+// 			ft_putstr_fd(args[i], 2);
+// 			ft_putstr_fd("': not a valid identifier\n", 2);
+// 			ret = 1;
+// 		}
+// 		i++;
+// 	}
+// 	new_env = export_params(args,envp); //we need it char "** " for set env
+// 		// print_export(new_env);	
+// 	return (new_env);
+// }
+
 char	**ft_export(char **args, char **envp)
 {
-	int	i;
-	t_env *env;
-	char **new_env;
+	int		i;
+	int		ret;
+	char	**new_env;
 
-	// i = 0;
-	// env = convert_to_list(envp);
+	ret = 0;
 	new_env = envp;
+
 	if (!args[1])
 	{
 		export_no_params(envp);
 		return (new_env);
 	}
+
 	i = 1;
 	while (args[i])
 	{
 		if (!is_valid_identifier(args[i]))
 		{
-			ft_putstr_fd("export: not a valid identifier\n", 2);
-			return (new_env);
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(args[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			ret = 1;
 		}
 		i++;
 	}
-	new_env = export_params(args,envp); //we need it char "** " for set env
-		// print_export(new_env);	
+
+	if (ret == 1)
+	{
+		// Skip applying export since at least one argument was invalid
+		return (new_env);
+	}
+
+	new_env = export_params(args, envp);
 	return (new_env);
 }
+
 
 int check_export(char **args)
 {
