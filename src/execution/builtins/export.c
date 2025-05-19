@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/19 19:57:27 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/19 19:58:15 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ char	**export_params(char **args, char **env)
 	updated = convert_to_2d(new_export);
 	return (updated);
 }
-
 
 void	export_no_params(char **envp)
 {
