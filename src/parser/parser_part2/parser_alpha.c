@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 18:48:05 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/19 19:21:55 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
 	while (*tokens && (*tokens)->type != TYPE_PIPE)
 	{
 		if (((*tokens)->type == TYPE_INDIR) || (*tokens)->type == TYPE_OUTDIR
-		|| (*tokens)->type == TYPE_APPEND
-		|| (*tokens)->type == TYPE_HEREDOC)
-		parse_redirection(tokens, cmd_node);
+			|| (*tokens)->type == TYPE_APPEND
+			|| (*tokens)->type == TYPE_HEREDOC)
+			parse_redirection(tokens, cmd_node);
 		else
 		{
 			if (!(cmd_node->value))
@@ -67,7 +67,6 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
 				exit(EXIT_FAILURE);
 			cmd_node->lexer[*param_count]->t_list = NULL;
 			cmd_node->lexer[*param_count]->count = 0;
-			// printf("DEBUG: process_tokens() called for token: %s\n", (*tokens)->value);
 			if (*tokens)
 				cmd_node->lexer[*param_count]->count = (*tokens)->quote;
 			cmd_node->lexer[*param_count + 1] = NULL;
@@ -101,20 +100,21 @@ t_ast	*parse_command(t_chain **tokens)
 	cmd_node->lexer = NULL;
 	cmd_node->heredoc = 0;
 	param_count = 0;
-	// if (parse_redirection(tokens,cmd_node) == 1)
-	// 	return (NULL);
 	process_tokens(tokens, cmd_node, &param_count);
 	return (cmd_node);
 }
 
 
-int parse_heredoc(t_chain **tokens, t_ast *cmd_node)
+int	parse_heredoc(t_chain **tokens, t_ast *cmd_node)
 {
 	t_chain	*token;
+	t_chain	*next_token;
+
 	if (token->type == TYPE_HEREDOC)
 	{
-		t_chain *next_token = token->next;
-		if (next_token && (next_token->type == TYPE_WORD || next_token->type == TYPE_QUOTE))
+		next_token = token->next;
+		if (next_token && (next_token->type == TYPE_WORD
+				|| next_token->type == TYPE_QUOTE))
 		{
 			cmd_node->heredoc = true;
 			cmd_node->heredoc_delim = ft_strdup(next_token->value);
@@ -122,13 +122,11 @@ int parse_heredoc(t_chain **tokens, t_ast *cmd_node)
 		else
 		{
 			write(2, "bash: syntax error near unexpected token `newline'\n", 52);
-			// exit_code = 2;
-			return 2;
-			// *tokens= token->next;
+			return (2);
 		}
 		*tokens = token->next->next;
 	}
-	return 0;
+	return (0);
 }
 
 // int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
@@ -144,7 +142,6 @@ int parse_heredoc(t_chain **tokens, t_ast *cmd_node)
 // 			*tokens = token->next;
 // 		return 1;
 // 	}
-// 	// printf("DEBUG: parse_redirection() called for token: %s\n", (*tokens)->value);
 // 	if (token->type == TYPE_OUTDIR)
 // 	{
 // 		cmd_node->out_file = ft_strdup(token->next->value);
@@ -169,14 +166,13 @@ int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 	t_chain	*token = *tokens;
 	t_chain	*next = token ? token->next : NULL;
 
-	if (!token || !next || (next->type != TYPE_WORD && next->type != TYPE_QUOTE))
+	if (!token || !next || (next->type != TYPE_WORD
+			&& next->type != TYPE_QUOTE))
 	{
 		ft_putstr_fd("minishell: syntax error: missing file name after redirection operator.\n", 2);
 		*tokens = next ? next->next : NULL;
-		return 1;
+		return (1);
 	}
-
-	// Always duplicate the filename (whether it's quoted or not)
 	char *filename = ft_strdup(next->value);
 
 	if (token->type == TYPE_OUTDIR)
@@ -200,5 +196,5 @@ int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 	}
 
 	*tokens = next->next;
-	return 0;
+	return (0);
 }

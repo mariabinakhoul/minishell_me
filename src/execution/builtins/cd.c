@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/15 22:55:46 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/19 19:29:18 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,13 +56,17 @@ void	update_env(t_ast *path)
 
 void	ft_setenv(t_ast *cmd_path)
 {
+	size_t	new_size;
+	char	*new_path;
+	char	*old_pwd;
+
 	if (cmd_path->params[1])
 	{
-		char *old_pwd = getenv("PWD");
+		old_pwd = getenv("PWD");
 		if (!old_pwd)
 			return ;
-		size_t new_size = strlen(old_pwd) + 1 /* for "/" */ + strlen(cmd_path->params[1]) + 1;
-		char *new_path = malloc(new_size);
+		new_size = strlen(old_pwd) + 1 + strlen(cmd_path->params[1]) + 1;
+		new_path = malloc(new_size);
 		if (!new_path)
 			return ;
 		snprintf(new_path, new_size, "%s/%s", old_pwd, cmd_path->params[1]);
@@ -79,7 +83,6 @@ int	ft_cd(t_ast *cmd, char **envp)
 	if (cmd->params && cmd->params[1] && cmd->params[2])
 	{
 		ft_putstr_fd("bash: cd: too many arguments\n", 2);
-		// fprintf(stderr, "bash: cd: too many arguments\n");
 		return (1);
 	}
 	if (cmd->params[1] && strcmp(cmd->params[1], "~") == 0)
@@ -88,7 +91,6 @@ int	ft_cd(t_ast *cmd, char **envp)
 	if (!path)
 	{
 		ft_putstr_fd("cd: could not determine target directory\n", 2);
-		// fprintf(stderr, "cd: could not determine target directory\n");
 		return (1);
 	}
 	old_pwd = getcwd(NULL, 0);

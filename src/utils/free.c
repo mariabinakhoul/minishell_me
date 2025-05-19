@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 00:37:37 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/07 15:21:28 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/19 19:17:35 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,57 +25,34 @@ void	free_lexer_nodes(t_chain *head)
 	}
 }
 
-// void free_ast(t_ast *ast)
-// {
-//     if (!ast)
-//         return;
-//     free_ast(ast->left);
-//     free_ast(ast->right);
-//     free(ast->value);
-//     if (ast->params)
-//     {
-//         for (int i = 0; ast->params[i]; i++)
-//             free(ast->params[i]);
-//         free(ast->params);
-//     }
-//     if (ast->lexer)
-//     {
-//         for (int i = 0; ast->lexer[i]; i++)
-//             free(ast->lexer[i]);
-//         free(ast->lexer);
-//     }
-//     free(ast);
-// }
-
-
-void free_ast(t_ast *ast)
+void	free_ast(t_ast *ast)
 {
-    if (ast != NULL)
-    {
-        free_ast(ast->left);
-        free_ast(ast->right);
-    }
-    free(ast);
+	if (ast != NULL)
+	{
+		free_ast(ast->left);
+		free_ast(ast->right);
+	}
+	free(ast);
 }
 
-void free_2d(char **str)
+void	free_2d(char **str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    if (!str)
-        return ;
-    while(str[i])
-    {
-        free(str[i]);
-        i++;
-    }
-    free(str);
+	i = 0;
+	if (!str)
+		return ;
+	while (str[i])
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
 }
 
-void free_list(t_env *head)
+void	free_list(t_env *head)
 {
-    if (head != NULL)
-        free_list(head->next);
-    free (head);
+	if (head != NULL)
+		free_list(head->next);
+	free (head);
 }

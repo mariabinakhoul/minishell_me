@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:52:47 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/19 19:15:01 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/19 19:25:23 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,8 @@ char	*ft_heredoc(const char *delimiter, int write_fd)
 			perror("getline");
 			exit(EXIT_FAILURE);
 		}
-		// Check if the line matches the delimiter
 		if (strncmp(line, delimiter, strlen(delimiter)) == 0)
 			break ;
-		// Otherwise, write the content to the pipe
 		write(write_fd, line, nread);
 	}
 	free(line);

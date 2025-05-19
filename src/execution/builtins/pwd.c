@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:24:32 by nhaber            #+#    #+#             */
-/*   Updated: 2025/04/23 18:28:27 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/19 19:39:14 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	ft_pwd(char **args)
 	if (args[1] && args[1][0] == '-')
 	{
 		ft_putstr_fd("bash: pwd: invalid option\n", 2);
-		// ft_putstr_fd("pwd: usage: pwd\n", 2);
 		return ;
 	}
 	if (getcwd(cwd, sizeof(cwd)))
