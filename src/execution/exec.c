@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 18:37:56 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/21 18:37:57 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/21 22:19:23 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -409,7 +409,6 @@ int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 			*exit_code = 1;
 		return (*exit_code);
 	}
-	/* Single command */
 	if (!cmd->value)
 	{
 		fprintf(stderr, "Error: command is null\n");

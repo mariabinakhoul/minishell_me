@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 00:37:37 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 19:17:35 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/21 22:26:04 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,43 @@ void	free_lexer_nodes(t_chain *head)
 	}
 }
 
-void	free_ast(t_ast *ast)
+void	free_ast(t_ast *node)
 {
-	if (ast != NULL)
-	{
-		free_ast(ast->left);
-		free_ast(ast->right);
-	}
-	free(ast);
+	if (!node)
+		return ;
+	free_ast(node->left);
+	free_ast(node->right);
+
+	 if (node->value)
+        free(node->value);
+    
+    if (node->in_file)
+        free(node->in_file);
+    if (node->out_file)
+        free(node->out_file);
+    // if (node->heredoc_delim)
+    //     free(node->heredoc_delim);
+    if (node->params)
+    {
+        for (int i = 0; node->params[i]; i++)
+            free(node->params[i]);
+        free(node->params);
+    }
+
+    // Free any lexer or other allocated fields similarly
+
+    free(node);
 }
+
+// void	free_ast(t_ast *ast)
+// {
+// 	if (ast != NULL)
+// 	{
+// 		free_ast(ast->left);
+// 		free_ast(ast->right);
+// 	}
+// 	free(ast);
+// }
 
 void	free_2d(char **str)
 {
