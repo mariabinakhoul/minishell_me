@@ -5,10 +5,11 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 19:51:13 by mabi-nak         ###   ########.fr       */
+/*   Created: 2025/05/21 18:37:56 by mabi-nak          #+#    #+#             */
+/*   Updated: 2025/05/21 18:37:57 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../../includes/minishell.h"
 
@@ -40,61 +41,59 @@
 int	handle_redirections(t_ast *cmd_node)
 {
 	int	fd;
-	int flags;
+	int	flags;
+	int	house_pipe[2];
 
+	/* Here-document: create a pipe and read until delimiter */
+	if (cmd_node->heredoc)
+	{
+		if (pipe(house_pipe) == -1)
+			return (perror("pipe"), 1);
+		/* write end feeds heredoc, read end becomes STDIN */
+		ft_heredoc(cmd_node->heredoc_delim, house_pipe[1]);
+		close(house_pipe[1]);
+		if (dup2(house_pipe[0], STDIN_FILENO) == -1)
+		{
+			perror("dup2 heredoc");
+			close(house_pipe[0]);
+			return (1);
+		}
+		close(house_pipe[0]);
+	}
+	/* Input redirection (<) */
 	if (cmd_node->in_file)
 	{
 		fd = open(cmd_node->in_file, O_RDONLY);
-		if (fd == -1)
-		{
-			perror(cmd_node->in_file);
-			return (1);
-		}
+		if (fd < 0)
+			return (perror(cmd_node->in_file), 1);
 		if (dup2(fd, STDIN_FILENO) == -1)
-		{
-			perror("dup2 (stdin)");
-			close(fd);
-			return (1);
-		}
+			return (perror("dup2 (stdin)"), close(fd), 1);
 		close(fd);
 	}
+	/* Output redirection (>, >>) */
 	if (cmd_node->out_file)
 	{
 		flags = O_WRONLY | O_CREAT;
 		flags |= (cmd_node->append) ? O_APPEND : O_TRUNC;
 		fd = open(cmd_node->out_file, flags, 0644);
-		if (fd == -1)
-		{
-			perror(cmd_node->out_file);
-			return (1);
-		}
+		if (fd < 0)
+			return (perror(cmd_node->out_file), 1);
 		if (dup2(fd, STDOUT_FILENO) == -1)
-		{
-			perror("dup2 (stdout)");
-			close(fd);
-			return (1);
-		}
+			return (perror("dup2 (stdout)"), close(fd), 1);
 		close(fd);
 	}
-
 	return (0);
 }
 
-
+/**
+ * Check if the command is a shell builtin.
+ */
 static bool	is_builtin(char *cmd)
 {
 	int		i;
-	char	*builtins[8];
+	char	*builtins[] = {"echo", "cd", "pwd", "exit", "env", "unset", "export", NULL};
 
 	i = 0;
-	builtins[0] = "echo";
-	builtins[1] = "cd";
-	builtins[2] = "pwd";
-	builtins[3] = "exit";
-	builtins[4] = "env";
-	builtins[5] = "unset";
-	builtins[6] = "export";
-	builtins[7] = NULL;
 	while (builtins[i])
 	{
 		if (ft_strcmp(cmd, builtins[i]) == 0)
@@ -104,53 +103,65 @@ static bool	is_builtin(char *cmd)
 	return (false);
 }
 
+/**
+ * Execute a builtin command in the current process, with redirections applied.
+ */
 static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 {
-	int	count;
+	int	saved_stdin;
+	int	saved_stdout;
+	int	ret;
 
-	count = 0;
-	if (handle_redirections(cmd) != 0)
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	if (saved_stdin < 0 || saved_stdout < 0)
 	{
-		printf("Redirection failed\n");
-		return 1;
-	}
-	while (cmd->params && cmd->params[count])
-		count++;
-	if (!cmd || !cmd->value)
-	{
-		printf("Error: Invalid command\n");
+		perror("dup");
 		return (1);
 	}
-	if (ft_strcmp(cmd->value, "cd") == 0)
-		return (ft_cd(cmd, *envp_ptr));
-	if (ft_strcmp(cmd->value, "env") == 0)
-		ft_env(*envp_ptr);
-	if (ft_strcmp(cmd->value, "echo") == 0)
-		return (ft_echo(cmd->params, *envp_ptr));
-	if (ft_strcmp(cmd->value, "pwd") == 0)
-		ft_pwd(cmd->params);
-	if (ft_strcmp(cmd->value, "exit") == 0)
-		return (ft_exit(cmd->params));
-	if (ft_strcmp(cmd->value, "unset") == 0)
-		return (ft_unset(cmd->params, envp_ptr));
-	if (ft_strcmp(cmd->value, "export") == 0)
+
+	if (handle_redirections(cmd) != 0)
+		ret = 1;
+	else if (ft_strcmp(cmd->value, "cd") == 0)
+		ret = ft_cd(cmd, *envp_ptr);
+	else if (ft_strcmp(cmd->value, "env") == 0)
 	{
-		char **result = ft_export(cmd->params, *envp_ptr);
-		if (result != *envp_ptr)
-			*envp_ptr = result;
-		int i = 1;
-		while (cmd->params[i])
-		{
-			if (!is_valid_identifier(cmd->params[i]))
-				return (1);
-			i++;
-		}
-		return (0);
+		ft_env(*envp_ptr);
+		ret = 0;
 	}
-	return (0);
+	else if (ft_strcmp(cmd->value, "echo") == 0)
+		ret = ft_echo(cmd->params, *envp_ptr);
+	else if (ft_strcmp(cmd->value, "pwd") == 0)
+	{
+		ft_pwd(cmd->params);
+		ret = 0;
+	}
+	else if (ft_strcmp(cmd->value, "exit") == 0)
+		ret = ft_exit(cmd->params);
+	else if (ft_strcmp(cmd->value, "unset") == 0)
+		ret = ft_unset(cmd->params, envp_ptr);
+	else if (ft_strcmp(cmd->value, "export") == 0)
+	{
+		char **newenv = ft_export(cmd->params, *envp_ptr);
+		if (newenv != *envp_ptr)
+			*envp_ptr = newenv;
+		ret = 0;
+	}
+	else
+		ret = 0;
+
+	/* Restore original std fds */
+	dup2(saved_stdin, STDIN_FILENO);
+	dup2(saved_stdout, STDOUT_FILENO);
+	close(saved_stdin);
+	close(saved_stdout);
+
+	return (ret);
 }
 
-
+/**
+ * Execute an external command by forking and execve.
+ */
 static int	execute_external(t_ast *cmd, char **envp)
 {
 	pid_t	pid;
@@ -161,9 +172,9 @@ static int	execute_external(t_ast *cmd, char **envp)
 
 	if (!cmd->params[0])
 		return (1);
-	path = (access(cmd->params[0], X_OK) == 0) 
-			?  cmd->params[0]
-			: findcommandpath(cmd->params[0],envp);
+	path = (access(cmd->params[0], X_OK) == 0)
+		? cmd->params[0]
+		: findcommandpath(cmd->params[0], envp);
 	if (!path)
 	{
 		fprintf(stderr, "minishell: %s: command not found\n", cmd->params[0]);
@@ -172,10 +183,29 @@ static int	execute_external(t_ast *cmd, char **envp)
 	pid = fork();
 	if (pid == 0)
 	{
+		/* Child process */
 		def_signals();
+		/* input redir */
+		if (cmd->in_file)
+		{
+			fd_in = open(cmd->in_file, O_RDONLY);
+			if (fd_in == -1)
+			{
+				perror(cmd->in_file);
+				exit(EXIT_FAILURE);
+			}
+			if (dup2(fd_in, STDIN_FILENO) == -1)
+			{
+				perror("dup2 (stdin)");
+				close(fd_in);
+				exit(EXIT_FAILURE);
+			}
+			close(fd_in);
+		}
+		/* output redir */
 		if (cmd->out_file)
 		{
-            int flags = O_WRONLY | O_CREAT;
+			int flags = O_WRONLY | O_CREAT;
 			flags |= (cmd->append) ? O_APPEND : O_TRUNC;
 			fd_out = open(cmd->out_file, flags, 0644);
 			if (fd_out == -1)
@@ -183,15 +213,21 @@ static int	execute_external(t_ast *cmd, char **envp)
 				perror("open");
 				exit(EXIT_FAILURE);
 			}
+			if (dup2(fd_out, STDOUT_FILENO) == -1)
+			{
+				perror("dup2 (stdout)");
+				close(fd_out);
+				exit(EXIT_FAILURE);
+			}
+			close(fd_out);
 		}
-		dup2(fd_out, STDOUT_FILENO);
-		close(fd_out);
 		execve(path, cmd->params, envp);
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
 	else if (pid > 0)
 	{
+		/* Parent process */
 		ignore_signals();
 		waitpid(pid, &status, 0);
 		free(path);
@@ -209,32 +245,34 @@ static int	execute_external(t_ast *cmd, char **envp)
 	}
 }
 
+/**
+ * Find PATH in envp.
+ */
 void	findpath(char ***envp)
 {
-	while (**envp != NULL)
+	while (**envp)
 	{
-		if (ft_strnstr(**envp, "PATH=", 5) != NULL)
-			return ;
+		if (ft_strnstr(**envp, "PATH=", 5))
+			return;
 		(*envp)++;
 	}
 }
 
+/**
+ * Search for an executable in PATH directories.
+ */
 char	*findcommandpath(char *comand, char **envp)
 {
-    char    **envp_copy;
+	char	**envp_copy;
 	char	**all_path;
 	char	*finalpath;
 	char	*cmdpath;
-	int		i;
+	int		 i;
 
 	envp_copy = envp;
-	while (*envp_copy != NULL)
-	{
-		if (ft_strnstr(*envp_copy, "PATH=", 5) != NULL)
-			break ;
+	while (*envp_copy && !ft_strnstr(*envp_copy, "PATH=", 5))
 		envp_copy++;
-	}
-	if (*envp_copy == NULL)
+	if (!*envp_copy)
 		return (NULL);
 	all_path = ft_split(*envp_copy + 5, ':');
 	i = 0;
@@ -255,13 +293,16 @@ char	*findcommandpath(char *comand, char **envp)
 	return (NULL);
 }
 
+/**
+ * Print AST for debugging.
+ */
 void	print_ast(t_ast *node, int depth)
 {
-	int	i;
+	int i;
 
 	i = 0;
 	if (!node)
-		return ;
+		return;
 	while (i < depth)
 	{
 		printf("  ");
@@ -270,7 +311,7 @@ void	print_ast(t_ast *node, int depth)
 	if (node->type == CMD)
 	{
 		printf("CMD: ");
-		for (int i = 0; node->params && node->params[i]; i++)
+		for (i = 0; node->params && node->params[i]; i++)
 			printf("[%s] ", node->params[i]);
 		if (node->in_file)
 			printf("(IN: %s) ", node->in_file);
@@ -283,29 +324,31 @@ void	print_ast(t_ast *node, int depth)
 	print_ast(node->right, depth + 1);
 }
 
-
-
+/**
+ * Entry point for execution: parse, expand and execute.
+ */
 void	execute(char *input, char ***envp)
 {
-	t_ast	*ast;
-	int		exit_code;
+	t_ast *ast;
+	int exit_code;
 
 	exit_code = 0;
 	ast = parse_input(input);
 	if (!ast)
-		return ;
+		return;
 	expand_tree(ast, *envp, exit_code);
 	exit_code = execute_command(ast, envp, &exit_code);
 	free_ast(ast);
 }
 
+/**
+ * Dispatch execution based on AST node type.
+ */
 int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 {
-	int		pipefd[2];
-	pid_t	right_pid;
-	pid_t	left_pid;
-	int		status_right;
-	int		status_left;
+	int pipefd[2];
+	pid_t left_pid, right_pid;
+	int status_left, status_right;
 
 	set_signals();
 	if (!cmd)
@@ -366,7 +409,8 @@ int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 			*exit_code = 1;
 		return (*exit_code);
 	}
-	if (!cmd->value) 
+	/* Single command */
+	if (!cmd->value)
 	{
 		fprintf(stderr, "Error: command is null\n");
 		*exit_code = 1;
