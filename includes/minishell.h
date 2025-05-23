@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/10 09:50:26 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/05/22 19:57:13 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,5 +48,6 @@ void	free_lexer_nodes(t_chain *head);
 void free_2d(char **str);
 int costum_atoi(const char *str, long long *out);
 void free_ast(t_ast *ast);
+void	free_list(t_env *head);
 
 #endif

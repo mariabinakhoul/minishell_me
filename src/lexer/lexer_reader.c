@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:54 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 19:24:14 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:51:37 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,15 @@ t_chain	*current_node_helper(char *str, int *i,
 			(*i)++;
 		state = TYPE_WORD;
 		new_node = create_new_node(state, ft_strndup(&str[start], *i - start));
+		// printf("[DEBUG] Created node at %p with value '%s'\n", (void*)new_node, new_node->value);
+
 		if (!new_node)
 			return (NULL);
 		new_node->start_pos = start;
 		new_node->end_pos = *i;
 		add_node_to_list(head, current, new_node);
+		// printf("[DEBUG] Added node %p to list, head=%p, current=%p\n", (void*)new_node, (void*)*head, (void*)*current);
+
 	}
 	return (*head);
 }
@@ -103,7 +107,7 @@ t_chain	*lexer_filler(char *str)
 			|| set_lexer_type(str[i]) == TYPE_TAB)
 			i++;
 		if (str[i])
-			head = current_node_helper(str, &i, &head, &current);
+			current_node_helper(str, &i, &head, &current);
 	}
 	return (head);
 }

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 21:26:34 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/19 19:40:53 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/22 19:58:03 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ t_env	*convert_to_list(char **envp)
 		new_node = malloc(sizeof(t_env));
 		if (!new_node)
 			return (NULL);
-		new_node->data = strdup(envp[i]);
+		new_node->data = ft_strdup(envp[i]);
 		new_node->next = NULL;
 		if (!head)
 		{
@@ -119,6 +119,7 @@ char	**set_env(char **envp)
 
 	env_list = convert_to_list(envp);
 	new_env = convert_to_2d(env_list);
+	free_list(env_list);
 	return (new_env);
 }
 
@@ -134,4 +135,5 @@ void	ft_env(char **envp)
 		printf("%s\n", environment[i]);
 		i++;
 	}
+	free_2d(environment);
 }

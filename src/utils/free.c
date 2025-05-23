@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 00:37:37 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/21 22:26:04 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:59:55 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 void	free_lexer_nodes(t_chain *head)
 {
 	t_chain	*temp;
+	
 
 	while (head)
 	{
@@ -22,8 +23,27 @@ void	free_lexer_nodes(t_chain *head)
 		head = head->next;
 		free(temp->value);
 		free(temp);
+		// free(head);
 	}
+			// printf("[DEBUG] Freed %d lexer nodes\n", count);
 }
+
+void free_lexer_array(struct s_lexer **lexer)
+{
+    int i = 0;
+	if (!lexer)
+        return;
+    while (lexer[i])
+    {
+        // If you allocated t_list inside lexer, free it here:
+        if (lexer[i]->t_list)
+            free(lexer[i]->t_list);
+        free(lexer[i]);
+        i++;
+    }
+    free(lexer);
+}
+
 
 void	free_ast(t_ast *node)
 {
@@ -34,7 +54,6 @@ void	free_ast(t_ast *node)
 
 	 if (node->value)
         free(node->value);
-    
     if (node->in_file)
         free(node->in_file);
     if (node->out_file)
@@ -48,8 +67,8 @@ void	free_ast(t_ast *node)
         free(node->params);
     }
 
-    // Free any lexer or other allocated fields similarly
-
+	if (node->lexer)
+        free_lexer_array(node->lexer);
     free(node);
 }
 
@@ -78,9 +97,23 @@ void	free_2d(char **str)
 	free(str);
 }
 
-void	free_list(t_env *head)
+// void	free_list(t_env *head)
+// {
+// 	if (head != NULL)
+// 		free_list(head->next);
+// 	free (head);
+// }
+	
+void free_list(t_env *head)
 {
-	if (head != NULL)
-		free_list(head->next);
-	free (head);
+    t_env *temp;
+
+    while (head)
+    {
+        temp = head;
+        head = head->next;
+        if (temp->data)
+            free(temp->data);
+        free(temp);
+    }
 }

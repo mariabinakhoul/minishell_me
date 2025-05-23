@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 11:28:53 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:50:56 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct s_lexer
 	int			count;
 }	t_lexer;
 
-t_ast		*parse_input(char *input);
+t_ast	*parse_input(t_chain **tokens);
 t_ast		*parse_pipeline(t_chain **tokens);
 t_ast		*parse_command(t_chain **tokens);
 int			parse_redirection(t_chain **tokens, t_ast *cmd_node);

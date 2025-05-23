@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/19 19:58:15 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/23 13:11:48 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	export_no_params(char **envp)
 	new_env = set_env(envp);
 	sorted_array = sort_array(new_env);
 	print_export(envp);
+
+	free_2d(new_env);
 }
 
 void	print_export(char **env)

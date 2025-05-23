@@ -6,20 +6,20 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 19:21:55 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:50:47 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-t_ast	*parse_input(char *input)
+t_ast	*parse_input(t_chain **tokens)
 {
-	t_chain	*tokens;
+	// t_chain	*tokens;
 
-	tokens = lexer_filler(input);
+	// tokens = lexer_filler(input);
 	if (!tokens)
 		return (NULL);
-	return (parse_pipeline(&tokens));
+	return (parse_pipeline(tokens));
 }
 
 t_ast	*parse_pipeline(t_chain **tokens)
