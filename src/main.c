@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/23 18:57:07 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/23 19:55:41 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,38 +74,45 @@ void print_lexer_list(t_chain *head)
     }
 }
 
+
 int main(int argc, char **argv, char **envp)
 {
     int     exit_code;
     char    *input;
     char    **env;
     t_chain *tokens;
-    t_chain *tokens_head;
+    t_chain *tokens_head;  // Save original head here
     t_ast   *ast;
 
     set_signals();
     (void)argc;
     (void)argv;
-
     env = set_env(envp);
     exit_code = 0;
+
     while (1)
     {
         input = readline("minishell> ");
         if (!input)
-            break ;
+            break;
         if (*input)
             add_history(input);
 
         tokens = lexer_filler(input);
-        tokens_head = tokens;
+tokens_head = tokens;  // Save here and never modify tokens_head
+
+		// printf("[DEBUG] lexer_filler returned %p\n", (void *)tokens);
+		// print_lexer_list(tokens_head);
 
         if (!tokens)
         {
             free(input);
             continue;
-        }
-        ast = parse_input(&tokens);
+	}
+
+        tokens_head = tokens;  // Save original tokens head before any processing
+
+        ast = parse_input(&tokens); 
         if (!ast)
         {
             free(input);
@@ -114,17 +121,12 @@ int main(int argc, char **argv, char **envp)
         }
 
         expand_tree(ast, env, exit_code);
-        exit_code = execute_command(ast, &env, &exit_code);
-		// printf("HERE!\n");
+		// printf("HER!\n");
+        exit_code = execute_command(ast, env, &exit_code);
         free_lexer_nodes(tokens_head);
         free_ast(ast);
         free(input);
-
-        // Free old environment before reassigning new one
-        free_2d(env);  
-        // env = set_env(envp);  // Reassign environment
     }
-    free_2d(env);  // Free at the end of the program
-
+	free_2d(env);
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/21 18:37:56 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/23 18:58:18 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/23 19:55:36 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,10 +103,31 @@ static bool	is_builtin(char *cmd)
 	return (false);
 }
 
+static void free_envp(char ***envp_ptr)
+{
+    int i;
+
+    if (!envp_ptr || !*envp_ptr)
+        return;
+
+    // Free each environment variable (each string)
+    for (i = 0; (*envp_ptr)[i] != NULL; i++)
+    {
+		printf("S%sS\n", (*envp_ptr)[i]);
+        free((*envp_ptr)[i]);  // Free the string (env variable)
+    }
+
+    // Free the array of environment variables
+    free(*envp_ptr);
+    
+    // Set the pointer to NULL to prevent dangling pointer issues
+    *envp_ptr = NULL;
+}
+
 /**
  * Execute a builtin command in the current process, with redirections applied.
  */
-static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
+static int	execute_builtin(t_ast *cmd, char **envp_ptr)
 {
 	int	saved_stdin;
 	int	saved_stdout;
@@ -123,28 +144,32 @@ static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 	if (handle_redirections(cmd) != 0)
 		ret = 1;
 	else if (ft_strcmp(cmd->value, "cd") == 0)
-		ret = ft_cd(cmd, *envp_ptr);
+		ret = ft_cd(cmd, envp_ptr);
 	else if (ft_strcmp(cmd->value, "env") == 0)
 	{
-		ft_env(*envp_ptr);
+		ft_env(envp_ptr);
 		ret = 0;
 	}
 	else if (ft_strcmp(cmd->value, "echo") == 0)
-		ret = ft_echo(cmd->params, *envp_ptr);
+		ret = ft_echo(cmd->params, envp_ptr);
 	else if (ft_strcmp(cmd->value, "pwd") == 0)
 	{
 		ft_pwd(cmd->params);
 		ret = 0;
 	}
 	else if (ft_strcmp(cmd->value, "exit") == 0)
+	{
+		// free_2d(envp_ptr);
 		ret = ft_exit(cmd->params);
+	}
 	else if (ft_strcmp(cmd->value, "unset") == 0)
 		ret = ft_unset(cmd->params, envp_ptr);
 	else if (ft_strcmp(cmd->value, "export") == 0)
 	{
-		char **newenv = ft_export(cmd->params, *envp_ptr);
-		if (newenv != *envp_ptr)
-			*envp_ptr = newenv;
+		envp_ptr = ft_export(cmd->params, envp_ptr);
+		free_2d(envp_ptr); //TO REVISE LATER
+		// if (newenv != envp_ptr)
+		// 	envp_ptr = newenv;
 		ret = 0;
 	}
 	else
@@ -327,24 +352,24 @@ void	print_ast(t_ast *node, int depth)
 /**
  * Entry point for execution: parse, expand and execute.
  */
-void	execute(char *input, char ***envp)
-{
-	t_ast *ast;
-	int exit_code;
+// void	execute(char *input, char ***envp)
+// {
+// 	t_ast *ast;
+// 	int exit_code;
 
-	exit_code = 0;
-	ast = parse_input(input);
-	if (!ast)
-		return;
-	expand_tree(ast, *envp, exit_code);
-	exit_code = execute_command(ast, envp, &exit_code);
-	free_ast(ast);
-}
+// 	exit_code = 0;
+// 	ast = parse_input(input);
+// 	if (!ast)
+// 		return;
+// 	expand_tree(ast, *envp, exit_code);
+// 	exit_code = execute_command(ast, envp, &exit_code);
+// 	free_ast(ast);
+// }
 
 /**
  * Dispatch execution based on AST node type.
  */
-int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
+int	execute_command(t_ast *cmd, char **envp, int *exit_code)
 {
 	int pipefd[2];
 	pid_t left_pid, right_pid;
@@ -418,6 +443,6 @@ int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 	if (is_builtin(cmd->value))
 		*exit_code = execute_builtin(cmd, envp);
 	else
-		*exit_code = execute_external(cmd, *envp);
+		*exit_code = execute_external(cmd, envp);
 	return (*exit_code);
 }

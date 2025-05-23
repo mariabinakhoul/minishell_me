@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 00:37:37 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/23 18:48:47 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/22 20:59:55 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,17 +60,27 @@ void	free_ast(t_ast *node)
         free(node->out_file);
     // if (node->heredoc_delim)
     //     free(node->heredoc_delim);
-	if (node->params)
-	{
-		for (int i = 0; node->params[i]; i++)
-			free(node->params[i]);
-		free(node->params);
-	}
+    if (node->params)
+    {
+        for (int i = 0; node->params[i]; i++)
+            free(node->params[i]);
+        free(node->params);
+    }
 
 	if (node->lexer)
-		free_lexer_array(node->lexer);
+        free_lexer_array(node->lexer);
     free(node);
 }
+
+// void	free_ast(t_ast *ast)
+// {
+// 	if (ast != NULL)
+// 	{
+// 		free_ast(ast->left);
+// 		free_ast(ast->right);
+// 	}
+// 	free(ast);
+// }
 
 void	free_2d(char **str)
 {
@@ -93,7 +103,7 @@ void	free_2d(char **str)
 // 		free_list(head->next);
 // 	free (head);
 // }
-
+	
 void free_list(t_env *head)
 {
     t_env *temp;

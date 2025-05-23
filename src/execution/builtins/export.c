@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/23 13:11:48 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/23 19:43:29 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ char	**export_params(char **args, char **env)
 	new_env = convert_to_list(env);
 	new_export = create_node(new_env, args);
 	updated = convert_to_2d(new_export);
+	free_list(new_env);
 	return (updated);
 }
 
@@ -136,8 +137,12 @@ char	**ft_export(char **args, char **envp)
 		i++;
 	}
 	if (ret == 1)
+	{
+		free_2d(envp);
 		return (new_env);
+	}
 	new_env = export_params(args, envp);
+	free_2d(envp);
 	return (new_env);
 }
 
