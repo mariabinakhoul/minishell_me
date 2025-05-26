@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 00:37:37 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/22 20:59:55 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/23 22:18:37 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 void	free_lexer_nodes(t_chain *head)
 {
 	t_chain	*temp;
-	
 
 	while (head)
 	{
@@ -23,10 +22,19 @@ void	free_lexer_nodes(t_chain *head)
 		head = head->next;
 		free(temp->value);
 		free(temp);
-		// free(head);
 	}
-			// printf("[DEBUG] Freed %d lexer nodes\n", count);
 }
+
+// void	free_ast(t_ast *ast)
+// {
+// 	if (ast != NULL)
+// 	{
+// 		free_ast(ast->left);
+// 		free_ast(ast->right);
+// 	}
+// 	free(ast);
+// }
+
 
 void free_lexer_array(struct s_lexer **lexer)
 {
@@ -72,16 +80,6 @@ void	free_ast(t_ast *node)
     free(node);
 }
 
-// void	free_ast(t_ast *ast)
-// {
-// 	if (ast != NULL)
-// 	{
-// 		free_ast(ast->left);
-// 		free_ast(ast->right);
-// 	}
-// 	free(ast);
-// }
-
 void	free_2d(char **str)
 {
 	int	i;
@@ -97,16 +95,9 @@ void	free_2d(char **str)
 	free(str);
 }
 
-// void	free_list(t_env *head)
-// {
-// 	if (head != NULL)
-// 		free_list(head->next);
-// 	free (head);
-// }
-	
-void free_list(t_env *head)
+void	free_list(t_env *head)
 {
-    t_env *temp;
+	t_env *temp;
 
     while (head)
     {

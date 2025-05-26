@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:44:09 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/23 19:26:34 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/25 22:04:48 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ static int	remove_env_variable(char **envp, char *key)
 		if (ft_strncmp((envp)[j], key, key_len) == 0
 				&& envp[j][key_len] == '=')
 		{
+				free(envp[j]);
 			k = j;
 			while (envp[k])
 			{
@@ -39,7 +40,7 @@ static int	remove_env_variable(char **envp, char *key)
 	return (0);
 }
 
-int	ft_unset(char **args, char **envp)
+int	ft_unset(char **args, char ***envp)
 {
 	int		i;
 	size_t	key_len;
@@ -52,7 +53,7 @@ int	ft_unset(char **args, char **envp)
 	key_len = 0;
 	while (args[i])
 	{
-		remove_env_variable(envp, args[i]);
+		remove_env_variable(*envp, args[i]);
 		i++;
 	}
 	return (0);
