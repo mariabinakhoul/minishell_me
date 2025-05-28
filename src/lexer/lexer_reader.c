@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:54 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/23 22:07:27 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:30:02 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,15 +75,30 @@ t_chain	*current_node_helper(char *str, int *i,
 		return (handle_double_quotes(str, i, head, current));
 	else
 	{
-		while (str[*i] && set_lexer_type(str[*i]) == TYPE_WORD)
-			(*i)++;
-		state = TYPE_WORD;
-		new_node = create_new_node(state, ft_strndup(&str[start], *i - start));
-		if (!new_node)
-			return (NULL);
-		new_node->start_pos = start;
-		new_node->end_pos = *i;
-		add_node_to_list(head, current, new_node);
+		start = *i;
+        while (str[*i] && set_lexer_type(str[*i]) == TYPE_WORD)
+            (*i)++;
+        len = *i - start;
+        char *word = ft_strndup(&str[start], len);
+        if (!word)
+            return NULL;
+
+        /* ← if this chunk is immediately contiguous with the previous token, merge it */
+        if (*current && (*current)->end_pos == start)
+        {
+            char *merged = ft_strjoin((*current)->value, word);
+            free((*current)->value);
+            (*current)->value = merged;
+            (*current)->end_pos = *i;
+            free(word);
+        }
+        else
+        {
+            new_node = create_new_node(TYPE_WORD, word);
+            new_node->start_pos = start;
+            new_node->end_pos = *i;
+            add_node_to_list(head, current, new_node);
+        }
 	}
 	return (*head);
 }

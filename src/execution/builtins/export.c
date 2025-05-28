@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/25 21:56:36 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:15:39 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ char	**sort_array(char **sorted)
 
 char	**export_params(char **args, char **env)
 {
+	// if (!ft_strchr(args[1], '='))
+    //     return (env);
 	t_env	*new_export;
 	char	**updated;
 	t_env	*new_env;
@@ -51,14 +53,14 @@ char	**export_params(char **args, char **env)
 
 void	export_no_params(char **envp)
 {
-	t_env	*env_list;
+	// t_env	*env_list;
 	char	**new_env;
 	char	**sorted_array;
 
 	new_env = set_env(envp);
 	sorted_array = sort_array(new_env);
-	print_export(envp);
-	free_2d(new_env);
+	print_export(sorted_array);
+	free_2d(sorted_array);
 }
 
 void	print_export(char **env)
