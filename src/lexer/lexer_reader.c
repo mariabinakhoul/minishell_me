@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:54 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/28 14:30:02 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:38:49 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,6 @@ t_chain	*current_node_helper(char *str, int *i,
         char *word = ft_strndup(&str[start], len);
         if (!word)
             return NULL;
-
-        /* ← if this chunk is immediately contiguous with the previous token, merge it */
         if (*current && (*current)->end_pos == start)
         {
             char *merged = ft_strjoin((*current)->value, word);

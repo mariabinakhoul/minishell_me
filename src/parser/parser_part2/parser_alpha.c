@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/23 22:17:06 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:45:45 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,9 @@ t_ast	*parse_pipeline(t_chain **tokens)
 		right = parse_command(tokens);
 		if (!right)
 			return (NULL);
-		pipe_node = malloc(sizeof(t_ast));
+		pipe_node = ft_calloc(1, sizeof(t_ast));
+		if (!pipe_node)
+			return (NULL);
 		pipe_node->type = PIPE;
 		pipe_node->left = left;
 		pipe_node->right = right;
