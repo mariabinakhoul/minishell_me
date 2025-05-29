@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/27 21:29:00 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:13:59 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,6 +178,7 @@ static int	execute_external(t_ast *cmd, char **envp)
 	int		fd_in;
 	int		fd_out;
 	int		status;
+	int		ret;
 
 	if (!cmd->params[0])
 		return (1);
@@ -192,55 +193,22 @@ static int	execute_external(t_ast *cmd, char **envp)
 	pid = fork();
 	if (pid == 0)
 	{
-		/* Child process */
 		def_signals();
-		/* input redir */
-		if (cmd->in_file)
-		{
-			fd_in = open(cmd->in_file, O_RDONLY);
-			if (fd_in == -1)
-			{
-				perror(cmd->in_file);
-				exit(EXIT_FAILURE);
-			}
-			if (dup2(fd_in, STDIN_FILENO) == -1)
-			{
-				perror("dup2 (stdin)");
-				close(fd_in);
-				exit(EXIT_FAILURE);
-			}
-			close(fd_in);
-		}
-		/* output redir */
-		if (cmd->out_file)
-		{
-			int flags = O_WRONLY | O_CREAT;
-			flags |= (cmd->append) ? O_APPEND : O_TRUNC;
-			fd_out = open(cmd->out_file, flags, 0644);
-			if (fd_out == -1)
-			{
-				perror("open");
-				exit(EXIT_FAILURE);
-			}
-			if (dup2(fd_out, STDOUT_FILENO) == -1)
-			{
-				perror("dup2 (stdout)");
-				close(fd_out);
-				exit(EXIT_FAILURE);
-			}
-			close(fd_out);
-		}
+		if (handle_redirections(cmd) != 0)
+			ret = 1;
 		execve(path, cmd->params, envp);
 		perror("execve");
 		exit(EXIT_FAILURE);
 	}
 	else if (pid > 0)
 	{
-		/* Parent process */
 		ignore_signals();
 		waitpid(pid, &status, 0);
-		free(path);
+		if (path != cmd->params[0])
+			free(path);
 		set_signals();
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+        	write(STDOUT_FILENO, "\n", 1);
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		else
@@ -248,28 +216,27 @@ static int	execute_external(t_ast *cmd, char **envp)
 	}
 	else
 	{
+		ignore_signals();
+  		waitpid(pid, &status, 0);
+  		set_signals();
 		perror("fork");
-		free(path);
+		if (path != cmd->params[0])
+			free(path);
+
 		return (-1);
 	}
 }
 
-/**
- * Find PATH in envp.
- */
 void	findpath(char ***envp)
 {
 	while (**envp)
 	{
 		if (ft_strnstr(**envp, "PATH=", 5))
-			return;
+			return ;
 		(*envp)++;
 	}
 }
 
-/**
- * Search for an executable in PATH directories.
- */
 char	*findcommandpath(char *comand, char **envp)
 {
 	char	**envp_copy;
@@ -302,16 +269,13 @@ char	*findcommandpath(char *comand, char **envp)
 	return (NULL);
 }
 
-/**
- * Print AST for debugging.
- */
 void	print_ast(t_ast *node, int depth)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!node)
-		return;
+		return ;
 	while (i < depth)
 	{
 		printf("  ");

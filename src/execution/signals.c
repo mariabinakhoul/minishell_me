@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 19:04:45 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/19 19:28:09 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:14:22 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	reset_sig(int signo)
 {
 	(void) signo;
-	write(STDIN_FILENO, "\n", 1);
+	write(STDOUT_FILENO, "\n", 1);
 	rl_on_new_line();
-	rl_replace_line("", 1);
+	rl_replace_line("", 0);
 	rl_redisplay();
 }
 
