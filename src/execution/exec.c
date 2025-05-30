@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/29 17:13:59 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:30:47 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,6 @@ static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 		perror("dup");
 		return (1);
 	}
-
 	if (handle_redirections(cmd) != 0)
 		ret = 1;
 	else if (ft_strcmp(cmd->value, "cd") == 0)
@@ -141,14 +140,7 @@ static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 		ret = ft_unset(cmd->params, envp_ptr);
 	else if (ft_strcmp(cmd->value, "export") == 0)
 	{
-		// char **newenv = ft_export(cmd->params, *envp_ptr);
-		// if (newenv)
-		// {	
-		// 	free_2d(*envp_ptr);
-		// 	*envp_ptr = newenv;
-		// }
 		char **newenv = ft_export(cmd->params, *envp_ptr);
-        /* only free/assign if ft_export really gave us a different array */
         if (newenv && newenv != *envp_ptr)
         {
             free_2d(*envp_ptr);
@@ -158,13 +150,10 @@ static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 	}
 	else
 		ret = 0;
-
-	/* Restore original std fds */
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
 	close(saved_stdout);
-
 	return (ret);
 }
 

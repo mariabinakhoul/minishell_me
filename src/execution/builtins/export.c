@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/28 14:15:39 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/05/30 18:39:26 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -147,9 +147,4 @@ int	check_export(char **args)
 {
 	if (!args[1])
 		return (0);
-}
-
-char	**update_envv(char **envp)
-{
-	return (envp);
 }
