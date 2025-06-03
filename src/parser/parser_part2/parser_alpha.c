@@ -6,20 +6,59 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/28 14:45:45 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/03 11:54:32 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
+
+int validate_pipeline_syntax(t_chain *tokens)
+{
+    t_chain *curr = tokens;
+
+    if (!curr)
+        return 0; // empty input no error
+
+    // The first token cannot be a pipe
+    if (curr->type == TYPE_PIPE)
+    {
+        ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+        return 1;
+    }
+
+    while (curr)
+    {
+        if (curr->type == TYPE_PIPE)
+        {
+            // Pipe must not be last token
+            if (!curr->next)
+            {
+                ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+                return 1;
+            }
+            // Next token must not be a pipe
+            if (curr->next->type == TYPE_PIPE)
+            {
+                ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+                return 1;
+            }
+        }
+        curr = curr->next;
+    }
+
+    return 0;
+}
+
+
 t_ast	*parse_input(t_chain **tokens)
 {
-	// t_chain	*tokens;
+	if (!tokens || !*tokens)
+        return NULL;
 
-	// tokens = lexer_filler(input);
-	if (!tokens)
-		return (NULL);
-	return (parse_pipeline(tokens));
+    if (validate_pipeline_syntax(*tokens))
+        return NULL;
+	return parse_pipeline(tokens);
 }
 
 t_ast	*parse_pipeline(t_chain **tokens)
@@ -200,3 +239,4 @@ int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 	*tokens = next->next;
 	return (0);
 }
+
