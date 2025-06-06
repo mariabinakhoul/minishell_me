@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 10:42:18 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/04 18:44:21 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void print2d(char **array);
 void	ft_pwd(char **args);
 int		ft_exit(char **args);
 t_env	*clone_env(char **envp);
-char	**ft_export(char **args, char **envp); //not returning the new env so it is not getting updated
+char	**ft_export(char **args, char **envp);
 void print_export(char **env);
 char	*findcommandpath(char *comand, char **envp);
 void	findpath(char ***envp);
@@ -46,6 +46,8 @@ char	*expand_variable(char *arg, int *i,
 			char **env, int exit_code, char *result);
 char	*expand_home_directory(char *arg, int *i, char **env, char *result);
 int		is_valid_identifier(char *arg);
+int		args_found(t_env *head, char **args);
+void	update_value(t_env *head, char **args);
 
 
 #endif

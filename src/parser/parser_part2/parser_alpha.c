@@ -6,59 +6,53 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/03 11:54:32 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:26:14 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-
-int validate_pipeline_syntax(t_chain *tokens)
+int	validate_pipeline_syntax(t_chain *tokens)
 {
-    t_chain *curr = tokens;
+	t_chain	*curr;
 
-    if (!curr)
-        return 0; // empty input no error
-
-    // The first token cannot be a pipe
-    if (curr->type == TYPE_PIPE)
-    {
-        ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-        return 1;
-    }
-
-    while (curr)
-    {
-        if (curr->type == TYPE_PIPE)
-        {
-            // Pipe must not be last token
-            if (!curr->next)
-            {
-                ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-                return 1;
-            }
-            // Next token must not be a pipe
-            if (curr->next->type == TYPE_PIPE)
-            {
-                ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
-                return 1;
-            }
-        }
-        curr = curr->next;
-    }
-
-    return 0;
+	curr = tokens;
+	if (!curr)
+		return (0);
+	if (curr->type == TYPE_PIPE)
+	{
+		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+		return (1);
+	}
+	while (curr)
+	{
+		if (curr->type == TYPE_PIPE)
+		{
+			if (!curr->next)
+			{
+				ft_putstr_fd("minishell: syntax error "
+					"near unexpected token `|'\n", 2);
+				return (1);
+			}
+			if (curr->next->type == TYPE_PIPE)
+			{
+				ft_putstr_fd("minishell: syntax error "
+					"near unexpected token `|'\n", 2);
+				return (1);
+			}
+		}
+		curr = curr->next;
+	}
+	return (0);
 }
-
 
 t_ast	*parse_input(t_chain **tokens)
 {
 	if (!tokens || !*tokens)
-        return NULL;
-
-    if (validate_pipeline_syntax(*tokens))
-        return NULL;
-	return parse_pipeline(tokens);
+		return (NULL);
+	if (validate_pipeline_syntax(*tokens))
+		return (NULL);
+	return (parse_pipeline(tokens));
 }
 
 t_ast	*parse_pipeline(t_chain **tokens)
@@ -145,7 +139,6 @@ t_ast	*parse_command(t_chain **tokens)
 	return (cmd_node);
 }
 
-
 int	parse_heredoc(t_chain **tokens, t_ast *cmd_node)
 {
 	t_chain	*token;
@@ -170,52 +163,21 @@ int	parse_heredoc(t_chain **tokens, t_ast *cmd_node)
 	return (0);
 }
 
-// int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
-// {
-// 	t_chain	*token;
-
-// 	token = *tokens;
-
-// 	if (!token || !token->next)
-// 	{
-// 		printf("Error: Missing file name after redirection operator.\n");
-// 		if (token)
-// 			*tokens = token->next;
-// 		return 1;
-// 	}
-// 	if (token->type == TYPE_OUTDIR)
-// 	{
-// 		cmd_node->out_file = ft_strdup(token->next->value);
-// 		*tokens = token->next->next;
-// 	}
-// 	else if (token->type == TYPE_APPEND)
-// 	{
-// 		cmd_node->out_file = ft_strdup(token->next->value);
-// 		cmd_node->append = 1;
-// 		*tokens = token->next->next;
-// 	}
-// 	else if (token->type == TYPE_INDIR)
-// 	{
-// 		cmd_node->in_file = ft_strdup(token->next->value);
-// 		*tokens = token->next->next;
-// 	}
-// 	return 0;
-// }
-
 int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 {
 	t_chain	*token = *tokens;
 	t_chain	*next = token ? token->next : NULL;
+	char	*filename;
 
 	if (!token || !next || (next->type != TYPE_WORD
 			&& next->type != TYPE_QUOTE))
 	{
-		ft_putstr_fd("minishell: syntax error: missing file name after redirection operator.\n", 2);
+		ft_putstr_fd("minishell: syntax error: missing file"
+			" name after redirection operator.\n", 2);
 		*tokens = next ? next->next : NULL;
 		return (1);
 	}
-	char *filename = ft_strdup(next->value);
-
+	filename = ft_strdup(next->value);
 	if (token->type == TYPE_OUTDIR)
 	{
 		cmd_node->out_file = filename;
@@ -239,4 +201,3 @@ int	parse_redirection(t_chain **tokens, t_ast *cmd_node)
 	*tokens = next->next;
 	return (0);
 }
-

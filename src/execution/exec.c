@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/30 18:30:47 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/03 19:11:50 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -258,54 +258,6 @@ char	*findcommandpath(char *comand, char **envp)
 	return (NULL);
 }
 
-void	print_ast(t_ast *node, int depth)
-{
-	int	i;
-
-	i = 0;
-	if (!node)
-		return ;
-	while (i < depth)
-	{
-		printf("  ");
-		i++;
-	}
-	if (node->type == CMD)
-	{
-		printf("CMD: ");
-		for (i = 0; node->params && node->params[i]; i++)
-			printf("[%s] ", node->params[i]);
-		if (node->in_file)
-			printf("(IN: %s) ", node->in_file);
-		if (node->out_file)
-			printf("(OUT: %s, APPEND: %d) ", node->out_file, node->append);
-		printf("\n");
-	}
-	else if (node->type == PIPE)
-		printf("PIPE\n");
-	print_ast(node->right, depth + 1);
-}
-
-/**
- * Entry point for execution: parse, expand and execute.
- */
-// void	execute(char *input, char ***envp)
-// {
-// 	t_ast *ast;
-// 	int exit_code;
-
-// 	exit_code = 0;
-// 	ast = parse_input(input);
-// 	if (!ast)
-// 		return;
-// 	expand_tree(ast, *envp, exit_code);
-// 	exit_code = execute_command(ast, envp, &exit_code);
-// 	free_ast(ast);
-// }
-
-/**
- * Dispatch execution based on AST node type.
- */
 int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 {
 	int pipefd[2];
