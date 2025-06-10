@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/23 22:08:41 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:14:50 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,13 +53,6 @@ typedef struct s_ast_utils
 	bool	has_redirection;
 }	t_ast_utils;
 
-typedef struct s_l_engine
-{
-	t_token	*tok_chain;
-	t_token	*current_tok;
-	int		count;
-}	t_l_engine;
-
 typedef struct s_syntax_tree
 {
 	struct s_ast	*branch;
@@ -71,7 +64,7 @@ typedef struct s_lexer
 	int			count;
 }	t_lexer;
 
-t_ast	*parse_input(t_chain **tokens);
+t_ast		*parse_input(t_chain **tokens);
 t_ast		*parse_pipeline(t_chain **tokens);
 t_ast		*parse_command(t_chain **tokens);
 int			parse_redirection(t_chain **tokens, t_ast *cmd_node);
@@ -82,5 +75,9 @@ char		*expand_argument(char *arg, int quoted, char **env,
 				int exit_code);
 void		expand_command_node(t_ast *cmd, char **env, int exit_code);
 void		expand_tree(t_ast *node, char **env, int exit_code);
+void		expand_params_and_lexer(t_ast *cmd_node, t_chain *token,
+				int *param_count);
+int			condition_redirection(t_ast *cmd_node, t_chain *token,
+				char *filename);
 
 #endif

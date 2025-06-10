@@ -6,36 +6,11 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/03 19:11:50 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:08:34 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-// int handle_redirections(t_ast *cmd_node)
-// {
-//     if (cmd_node->out_file)
-//     {
-//         int fd = open(cmd_node->out_file, O_WRONLY | 
-	//O_CREAT | O_TRUNC, 0644);
-//         if (fd == -1)
-//         {
-//             perror("Error opening output file");
-//             return -1;
-//         }
-//         printf("Redirecting output to file: %s\n", cmd_node->out_file);
-//         // Redirect stdout to the file
-//         if (dup2(fd, STDOUT_FILENO) == -1)
-//         {
-//             perror("Error duplicating file descriptor");
-//             close(fd);
-//             return -1;
-//         }
-//         close(fd);  // Close fd after redirection
-//     }
-
-//     return 0;  // Success
-// }
 
 int	handle_redirections(t_ast *cmd_node)
 {
@@ -43,12 +18,10 @@ int	handle_redirections(t_ast *cmd_node)
 	int	flags;
 	int	house_pipe[2];
 
-	/* Here-document: create a pipe and read until delimiter */
 	if (cmd_node->heredoc)
 	{
 		if (pipe(house_pipe) == -1)
 			return (perror("pipe"), 1);
-		/* write end feeds heredoc, read end becomes STDIN */
 		ft_heredoc(cmd_node->heredoc_delim, house_pipe[1]);
 		close(house_pipe[1]);
 		if (dup2(house_pipe[0], STDIN_FILENO) == -1)
@@ -59,8 +32,7 @@ int	handle_redirections(t_ast *cmd_node)
 		}
 		close(house_pipe[0]);
 	}
-	/* Input redirection (<) */
-	if (cmd_node->in_file)
+	else if (cmd_node->in_file)
 	{
 		fd = open(cmd_node->in_file, O_RDONLY);
 		if (fd < 0)
@@ -69,9 +41,9 @@ int	handle_redirections(t_ast *cmd_node)
 			return (perror("dup2 (stdin)"), close(fd), 1);
 		close(fd);
 	}
-	/* Output redirection (>, >>) */
 	if (cmd_node->out_file)
 	{
+		printf("HERE\n");
 		flags = O_WRONLY | O_CREAT;
 		flags |= (cmd_node->append) ? O_APPEND : O_TRUNC;
 		fd = open(cmd_node->out_file, flags, 0644);
@@ -84,9 +56,6 @@ int	handle_redirections(t_ast *cmd_node)
 	return (0);
 }
 
-/**
- * Check if the command is a shell builtin.
- */
 static bool	is_builtin(char *cmd)
 {
 	int		i;
@@ -102,14 +71,12 @@ static bool	is_builtin(char *cmd)
 	return (false);
 }
 
-/**
- * Execute a builtin command in the current process, with redirections applied.
- */
 static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 {
-	int	saved_stdin;
-	int	saved_stdout;
-	int	ret;
+	int		saved_stdin;
+	int		saved_stdout;
+	int		ret;
+	char	**newenv;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
@@ -140,12 +107,12 @@ static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 		ret = ft_unset(cmd->params, envp_ptr);
 	else if (ft_strcmp(cmd->value, "export") == 0)
 	{
-		char **newenv = ft_export(cmd->params, *envp_ptr);
-        if (newenv && newenv != *envp_ptr)
-        {
-            free_2d(*envp_ptr);
-            *envp_ptr = newenv;
-        }
+		newenv = ft_export(cmd->params, *envp_ptr);
+		if (newenv && newenv != *envp_ptr)
+		{
+			free_2d(*envp_ptr);
+			*envp_ptr = newenv;
+		}
 		ret = 0;
 	}
 	else
@@ -157,9 +124,6 @@ static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 	return (ret);
 }
 
-/**
- * Execute an external command by forking and execve.
- */
 static int	execute_external(t_ast *cmd, char **envp)
 {
 	pid_t	pid;
@@ -167,7 +131,7 @@ static int	execute_external(t_ast *cmd, char **envp)
 	int		fd_in;
 	int		fd_out;
 	int		status;
-	int		ret;
+	// int		ret;
 
 	if (!cmd->params[0])
 		return (1);
@@ -183,8 +147,8 @@ static int	execute_external(t_ast *cmd, char **envp)
 	if (pid == 0)
 	{
 		def_signals();
-		if (handle_redirections(cmd) != 0)
-			ret = 1;
+		// if (handle_redirections(cmd) != 0)
+		// 	ret = 1;
 		execve(path, cmd->params, envp);
 		perror("execve");
 		exit(EXIT_FAILURE);
@@ -197,7 +161,7 @@ static int	execute_external(t_ast *cmd, char **envp)
 			free(path);
 		set_signals();
 		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-        	write(STDOUT_FILENO, "\n", 1);
+			write(STDOUT_FILENO, "\n", 1);
 		if (WIFEXITED(status))
 			return (WEXITSTATUS(status));
 		else
@@ -206,12 +170,11 @@ static int	execute_external(t_ast *cmd, char **envp)
 	else
 	{
 		ignore_signals();
-  		waitpid(pid, &status, 0);
-  		set_signals();
+		waitpid(pid, &status, 0);
+		set_signals();
 		perror("fork");
 		if (path != cmd->params[0])
 			free(path);
-
 		return (-1);
 	}
 }
@@ -232,7 +195,7 @@ char	*findcommandpath(char *comand, char **envp)
 	char	**all_path;
 	char	*finalpath;
 	char	*cmdpath;
-	int		 i;
+	int		i;
 
 	envp_copy = envp;
 	while (*envp_copy && !ft_strnstr(*envp_copy, "PATH=", 5))
@@ -258,11 +221,62 @@ char	*findcommandpath(char *comand, char **envp)
 	return (NULL);
 }
 
+int	handle_left_pid(t_ast *cmd, char ***envp, int *exit_code, int *pipefd)
+{
+	pid_t	left_pid;
+
+	left_pid = fork();
+	if (left_pid == 0)
+	{
+		set_signals();
+		close(pipefd[0]);
+		dup2(pipefd[1], STDOUT_FILENO);
+		close(pipefd[1]);
+		exit(execute_command(cmd->left, envp, exit_code));
+	}
+	else if (left_pid < 0)
+	{
+		perror("fork");
+		close(pipefd[0]);
+		close(pipefd[1]);
+		*exit_code = 1;
+		return (1);
+	}
+	return (0);
+}
+
+int	handle_right_pid(t_ast *cmd, char ***envp, int *exit_code, int *pipefd)
+{
+	pid_t	right_pid;
+
+	right_pid = fork();
+	if (right_pid == 0)
+	{
+		set_signals();
+		close(pipefd[1]);
+		dup2(pipefd[0], STDIN_FILENO);
+		close(pipefd[0]);
+		exit(execute_command(cmd->right, envp, exit_code));
+	}
+	else if (right_pid < 0)
+	{
+		perror("fork");
+		close(pipefd[0]);
+		close(pipefd[1]);
+		*exit_code = 1;
+		return (1);
+	}
+	return (0);
+}
+
+
 int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 {
-	int pipefd[2];
-	pid_t left_pid, right_pid;
-	int status_left, status_right;
+	int		pipefd[2];
+	pid_t	left_pid;
+	pid_t	right_pid;
+	int		status_left;
+	int		status_right;
 
 	set_signals();
 	if (!cmd)
@@ -279,40 +293,10 @@ int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 			*exit_code = 1;
 			return (1);
 		}
-		left_pid = fork();
-		if (left_pid == 0)
-		{
-			set_signals();
-			close(pipefd[0]);
-			dup2(pipefd[1], STDOUT_FILENO);
-			close(pipefd[1]);
-			exit(execute_command(cmd->left, envp, exit_code));
-		}
-		else if (left_pid < 0)
-		{
-			perror("fork");
-			close(pipefd[0]);
-			close(pipefd[1]);
-			*exit_code = 1;
+		if (handle_left_pid(cmd, envp, exit_code, pipefd))
 			return (1);
-		}
-		right_pid = fork();
-		if (right_pid == 0)
-		{
-			set_signals();
-			close(pipefd[1]);
-			dup2(pipefd[0], STDIN_FILENO);
-			close(pipefd[0]);
-			exit(execute_command(cmd->right, envp, exit_code));
-		}
-		else if (right_pid < 0)
-		{
-			perror("fork");
-			close(pipefd[0]);
-			close(pipefd[1]);
-			*exit_code = 1;
+		if (handle_right_pid(cmd, envp, exit_code, pipefd))
 			return (1);
-		}
 		close(pipefd[0]);
 		close(pipefd[1]);
 		waitpid(left_pid, &status_left, 0);
@@ -323,7 +307,6 @@ int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 			*exit_code = 1;
 		return (*exit_code);
 	}
-	/* Single command */
 	if (!cmd->value)
 	{
 		fprintf(stderr, "Error: command is null\n");

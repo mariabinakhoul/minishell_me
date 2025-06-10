@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 11:53:51 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/09 20:06:00 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/06 17:46:33 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,13 @@ typedef struct s_list
 	struct s_list	*next;
 	int				index;
 }					t_list;
+
 long long int	ft_atoi(const char *str);
 char			*ft_itoa(int n);
 int				ft_isdigit(int c);
 void			ft_putchar_fd(char c, int fd);
 void			ft_putnbr_fd(int nb, int fd);
-void			ft_putstr_fd(char *str, int fd);
+void			ft_putstr_fd(const char *str, int fd);
 int				ft_putstr_fd1(char *str, int fd);
 char			**ft_split(char const *str, char c);
 char			*ft_strdup(const char *src);

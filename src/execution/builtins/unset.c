@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/01 11:44:09 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/25 22:04:48 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:11:37 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	remove_env_variable(char **envp, char *key)
 		if (ft_strncmp((envp)[j], key, key_len) == 0
 				&& envp[j][key_len] == '=')
 		{
-				free(envp[j]);
+			free(envp[j]);
 			k = j;
 			while (envp[k])
 			{

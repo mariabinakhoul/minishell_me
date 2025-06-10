@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 11:05:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/04/12 10:28:52 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/09 13:40:40 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,5 @@ t_chain	*handle_single_quotes(char *str, int *i,
 t_chain	*handle_double_quotes(char *str, int *i,
 			t_chain **head, t_chain **current);
 void	add_node_to_list(t_chain **head, t_chain **current, t_chain *new_node);
-t_chain	*merge_adjacent_tokens(t_chain *tokens);
-char	**build_args_from_tokens(t_chain *tokens);
 
 #endif

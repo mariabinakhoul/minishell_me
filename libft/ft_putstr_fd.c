@@ -6,13 +6,13 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/12 16:38:37 by mabi-nak          #+#    #+#             */
-/*   Updated: 2024/06/13 10:06:56 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:42:51 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	ft_putstr_fd(char *str, int fd)
+void	ft_putstr_fd(const char *str, int fd)
 {
 	while (*str != '\0')
 	{

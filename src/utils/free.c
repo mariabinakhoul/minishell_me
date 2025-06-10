@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 00:37:37 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/06 15:42:19 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/09 01:04:31 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,8 +57,8 @@ void	free_ast(t_ast *node)
 		free(node->in_file);
 	if (node->out_file)
 		free(node->out_file);
-	// if (node->heredoc_delim)
-	// 	free(node->heredoc_delim);
+	if (node->heredoc_delim)
+		free(node->heredoc_delim);
 	if (node->params)
 	{
 		while (node->params[i])

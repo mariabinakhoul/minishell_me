@@ -6,12 +6,11 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 21:26:34 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/04 18:44:45 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:19:42 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
-
 
 char	*ft_strjoin_free(char *s1, char *s2, int free_s1, int free_s2)
 {
@@ -26,7 +25,6 @@ char	*ft_strjoin_free(char *s1, char *s2, int free_s1, int free_s2)
 		free(s2);
 	return (joined);
 }
-
 
 t_env	*create_node(t_env *head, char **args)
 {
@@ -48,9 +46,7 @@ t_env	*create_node(t_env *head, char **args)
 		tmp->next = new_node;
 	}
 	else
-	{
 		update_value(head, args);
-	}
 	return (head);
 }
 

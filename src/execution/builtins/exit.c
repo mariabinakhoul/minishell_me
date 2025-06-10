@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 22:37:15 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/19 19:34:45 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:12:35 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,6 @@ int	ft_exit(char **args)
 	printf("exit\n");
 	if (!arg)
 		exit(0);
-
 	if (!is_numeric(arg) || !costum_atoi(arg, &status))
 	{
 		fprintf(stderr, "bash: exit: %s: numeric argument required\n", arg);
@@ -55,4 +54,3 @@ int	ft_exit(char **args)
 	}
 	exit((unsigned char)status);
 }
-

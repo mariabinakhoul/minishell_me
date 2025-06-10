@@ -6,14 +6,38 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/04 18:33:40 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:59:54 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static char	*retrieve_env_path(t_ast *cmd,
-		char **envp, char *key, const char *error_msg, bool print)
+static char	*find_env_path(char **envp, char *key)
+{
+	int	i;
+
+	i = 0;
+	if (!envp || !key)
+		return (NULL);
+	while (envp[i])
+	{
+		if (ft_strncmp(envp[i], key, ft_strlen(key)) == 0
+			&& envp[i][ft_strlen(key)] == '=')
+		{
+			return (&envp[i][ft_strlen(key) + 1]);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
+static void	print_error_message(const char *error_msg)
+{
+	if (error_msg)
+		ft_putstr_fd(error_msg, 2);
+}
+
+static char	*retrieve_env_path(t_ast *cmd, char **envp, char *key)
 {
 	char	*path;
 	int		i;
@@ -27,28 +51,33 @@ static char	*retrieve_env_path(t_ast *cmd,
 			&& envp[i][ft_strlen(key)] == '=')
 		{
 			path = &envp[i][ft_strlen(key) + 1];
-			if (print)
-				printf("%s\n", path);
 			return (path);
 		}
 		i++;
 	}
-	if (error_msg)
-		fprintf(stderr, "%s\n", error_msg);
 	return (NULL);
 }
 
-static char	*get_home_or_oldpwd(t_ast *cmd, char **envp)
+char	*get_home_or_oldpwd(t_ast *cmd, char **envp)
 {
+	char	*path;
+
 	if (!cmd->params[1])
-		return (retrieve_env_path(cmd, envp, "HOME",
-				"cd: HOME not set", false));
+	{
+		path = retrieve_env_path(cmd, envp, "HOME");
+		if (!path)
+			ft_putstr_fd("cd: HOME not set\n", 2);
+		return (path);
+	}
 	if (ft_strcmp(cmd->params[1], "-") == 0)
-		return (retrieve_env_path(cmd, envp, "OLDPWD",
-				"cd: OLDPWD not set", true));
+	{
+		path = retrieve_env_path(cmd, envp, "OLDPWD");
+		if (!path)
+			ft_putstr_fd("cd: OLDPWD not set\n", 2);
+		return (path);
+	}
 	return ((char *)cmd->params[1]);
 }
-
 
 void	ft_setenv(t_ast *cmd_path)
 {
@@ -69,46 +98,4 @@ void	ft_setenv(t_ast *cmd_path)
 		setenv("PWD", new_path, 1);
 		free(new_path);
 	}
-}
-
-int handle_cd_arguments(t_ast *cmd, char **envp, char **path)
-{
-	if (cmd->params && cmd->params[1] && cmd->params[2])
-	{
-		ft_putstr_fd("bash: cd: too many arguments\n", 2);
-		return (1);
-	}
-	if (cmd->params[1] && strcmp(cmd->params[1], "~") == 0)
-		cmd->params[1] = NULL;
-	*path = get_home_or_oldpwd(cmd, envp);
-	if (!path)
-	{
-		ft_putstr_fd("cd: could not determine target directory\n", 2);
-		return (1);
-	}
-	return (0);
-}
-
-int	ft_cd(t_ast *cmd, char **envp)
-{
-	char	*path;
-	char	*old_pwd;
-
-	if (handle_cd_arguments(cmd, envp, &path) != 0)
-		return (1);
-	old_pwd = getcwd(NULL, 0);
-	if (!old_pwd)
-	{
-		perror("cd: getcwd");
-		return (1);
-	}
-	if (chdir(path) != 0)
-	{
-		perror("cd");
-		free(old_pwd);
-		return (1);
-	}
-	ft_setenv (cmd);
-	free(old_pwd);
-	return (0);
 }

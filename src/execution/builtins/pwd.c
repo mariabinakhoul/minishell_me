@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/27 23:24:32 by nhaber            #+#    #+#             */
-/*   Updated: 2025/05/19 19:39:14 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/09 13:39:06 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,3 @@ void	ft_pwd(char **args)
 	else
 		perror("getcwd failed");
 }
-
-// static char	*ft_get_oldpwd(void)
-// {
-// 	return (getenv("OLDPWD"));
-// }

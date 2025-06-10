@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 15:43:39 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/06 15:47:02 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:56:01 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,14 @@ t_chain	*lexer_filler(char *str)
 			|| set_lexer_type(str[i]) == TYPE_TAB)
 			i++;
 		if (str[i])
-			current_node_helper(str, &i, &head, &current);
+		{
+			t_chain *result = current_node_helper(str, &i, &head, &current);
+			if (!result)
+			{
+				free_lexer_nodes(head);
+				return NULL;
+			}
+		}
 	}
 	return (head);
 }

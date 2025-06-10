@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:51:21 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/06 16:38:58 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/09 17:52:22 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ char	*process_single_quoted_string(char *str, int *i, int *quote_start)
 	if (str[*i] != '\'')
 	{
 		exit_code = 2;
-		printf("unmatched single quotes\n");
+		ft_putstr_fd("unmatched single quotes\n", 2);
 		return (NULL);
 	}
 	quote_end = *i;
@@ -53,6 +53,42 @@ void	merge_with_current_value_and_free(t_chain **current,
 	free(quoted_part);
 }
 
+// void merge_with_current_value_and_free(t_chain **current, char *quoted_part, int *i)
+// {
+//     char *merged_value;
+
+//     // Ensure current is valid before accessing its members
+//     if (!current || !(*current))
+//         return;
+
+//     // If (*current)->value is NULL, assign quoted_part directly
+//     if ((*current)->value == NULL)
+//     {
+//         (*current)->value = ft_strdup(quoted_part);  // Allocate memory for the value
+//     }
+//     else
+//     {
+//         // Only call ft_strjoin if (*current)->value is non-NULL
+//         if ((*current)->value)
+//         {
+//             merged_value = ft_strjoin((*current)->value, quoted_part);
+//             if (!merged_value)
+//                 return;  // Return if memory allocation fails
+
+//             free((*current)->value);  // Free the old value
+//             (*current)->value = merged_value;
+//         }
+//         else
+//         {
+//             // Handle the case where (*current)->value is still NULL
+//             (*current)->value = ft_strdup(quoted_part);
+//         }
+//     }
+
+//     (*current)->end_pos = *i;
+//     free(quoted_part);  // Free quoted_part after it's merged
+// }
+
 t_chain	*handle_single_quotes(char *str, int *i,
 	t_chain **head, t_chain **current)
 {
@@ -62,7 +98,12 @@ t_chain	*handle_single_quotes(char *str, int *i,
 	t_chain	*new_node;
 
 	quoted_part = process_single_quoted_string(str, i, &quote_start);
-	if (quoted_part && quoted_part[0] == '\0')
+	if (!quoted_part)
+	{
+		// write(2, "unmatched single quotes\n", 25);
+		return (NULL);
+	}
+	if (quoted_part[0] == '\0')
 	{
 		free(quoted_part);
 		return (*head);

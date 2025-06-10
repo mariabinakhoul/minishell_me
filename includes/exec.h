@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/04 18:44:21 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/09 16:40:01 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,34 +20,35 @@ typedef struct s_env
 }t_env;
 
 int		execute_command(t_ast *cmd, char ***envp, int *exit_code);
-void	execute(char *input, char ***envp);
 void	freearray(char **array);
 int		ft_cd(t_ast *cmd, char **envp_ptr);
 int		ft_echo(char **args, char **envp);
 int		ft_unset(char **args, char ***envp);
-void print_env(t_env *head);
 void	ft_env(char **envp);
-char **set_env(char **envp);
-char **sort_array(char **sorted);
-t_env *convert_to_list(char **envp);
-char **convert_to_2d(t_env *head);
-t_env *create_node(t_env *head,char **args);
-void print2d(char **array);
+char	**set_env(char **envp);
+char	**sort_array(char **sorted);
+t_env	*convert_to_list(char **envp);
+char	**convert_to_2d(t_env *head);
+t_env	*create_node(t_env *head,char **args);
 void	ft_pwd(char **args);
 int		ft_exit(char **args);
-t_env	*clone_env(char **envp);
 char	**ft_export(char **args, char **envp);
-void print_export(char **env);
+void	print_export(char **env);
 char	*findcommandpath(char *comand, char **envp);
 void	findpath(char ***envp);
 char	*expand_exit_status(int exit_code, char *result);
 char	*expand_env_variable(char *arg, int *i, char **env, char *result);
 char	*expand_variable(char *arg, int *i,
 			char **env, int exit_code, char *result);
+// char	*expand_variable(char *arg, int *i, char **env, int exit_code);
 char	*expand_home_directory(char *arg, int *i, char **env, char *result);
 int		is_valid_identifier(char *arg);
 int		args_found(t_env *head, char **args);
 void	update_value(t_env *head, char **args);
+char	*get_home_or_oldpwd(t_ast *cmd, char **envp);
+void	export_no_params(char **envp);
+char	**export_params(char **args, char **env);
+
 
 
 #endif

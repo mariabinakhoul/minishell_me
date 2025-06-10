@@ -6,12 +6,25 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 18:36:28 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/04 18:44:29 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:04:20 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
+static void	add_node_to_list1(t_env **head, t_env **curr, t_env *new_node)
+{
+	if (!*head)
+	{
+		*head = new_node;
+		*curr = *head;
+	}
+	else
+	{
+		(*curr)->next = new_node;
+		*curr = new_node;
+	}
+}
 
 t_env	*convert_to_list(char **envp)
 {
@@ -30,21 +43,11 @@ t_env	*convert_to_list(char **envp)
 			return (NULL);
 		new_node->data = ft_strdup(envp[i]);
 		new_node->next = NULL;
-		if (!head)
-		{
-			head = new_node;
-			curr = head;
-		}
-		else
-		{
-			curr->next = new_node;
-			curr = new_node;
-		}
+		add_node_to_list1(&head, &curr, new_node);
 		i++;
 	}
 	return (head);
 }
-
 
 char	**convert_to_2d(t_env *head)
 {
@@ -74,11 +77,11 @@ char	**convert_to_2d(t_env *head)
 	return (converted_env);
 }
 
-int args_found(t_env *head, char **args)
+int	args_found(t_env *head, char **args)
 {
-	t_env *temp;
-	char **value;
-	char **new;
+	t_env	*temp;
+	char	**value;
+	char	**new;
 
 	temp = head;
 	new = ft_split(args[1], '=');
@@ -96,10 +99,10 @@ int args_found(t_env *head, char **args)
 
 void	update_value(t_env *head, char **args)
 {
-	t_env *temp;
-	char **value;
+	t_env	*temp;
+	char	**value;
 	char	*new_val;
-	char **new;
+	char	**new;
 
 	temp = head;
 	value = ft_split(temp->data, '=');
