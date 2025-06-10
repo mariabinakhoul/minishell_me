@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/06 17:19:04 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/10 21:14:39 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <string.h>
 #include <unistd.h>  
 
-int exit_code = 0;
+int	g_exit_code = 0;
 
 int	main(int argc, char **argv, char **envp)
 {

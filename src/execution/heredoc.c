@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:52:47 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/03 19:11:53 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/10 21:14:29 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ t_ast	*handle_heredoc(t_ast *cmd_node, t_chain *token)
 	else
 	{
 		write(2, "bash: syntax error near unexpected token `newline'\n", 52);
-		exit_code = 2;
+		g_exit_code = 2;
 		return (NULL);
 	}
 	return (cmd_node);

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/10 20:19:31 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/10 21:18:09 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,19 @@ int	handle_redirections(t_ast *cmd_node)
 	return (0);
 }
 
-static bool	is_builtin(char *cmd)
+bool	is_builtin(char *cmd)
 {
 	int		i;
-	char	*builtins[] = {"echo", "cd", "pwd", "exit", "env", "unset", "export", NULL};
+	char	*builtins[8];
 
+	builtins[0] = "echo";
+	builtins[1] = "cd";
+	builtins[2] = "pwd";
+	builtins[3] = "exit";
+	builtins[4] = "env";
+	builtins[5] = "unset";
+	builtins[6] = "export";
+	builtins[7] = NULL;
 	i = 0;
 	while (builtins[i])
 	{
@@ -71,7 +79,7 @@ static bool	is_builtin(char *cmd)
 	return (false);
 }
 
-static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
+int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 {
 	int		saved_stdin;
 	int		saved_stdout;
@@ -124,16 +132,6 @@ static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 	return (ret);
 }
 
-void	findpath(char ***envp)
-{
-	while (**envp)
-	{
-		if (ft_strnstr(**envp, "PATH=", 5))
-			return ;
-		(*envp)++;
-	}
-}
-
 char	*findcommandpath(char *comand, char **envp)
 {
 	char	**envp_copy;
@@ -166,8 +164,7 @@ char	*findcommandpath(char *comand, char **envp)
 	return (NULL);
 }
 
-
-static int	execute_external(t_ast *cmd, char **envp)
+int	execute_external(t_ast *cmd, char **envp)
 {
 	pid_t	pid;
 	char	*path;
@@ -220,102 +217,4 @@ static int	execute_external(t_ast *cmd, char **envp)
 			free(path);
 		return (-1);
 	}
-}
-
-int	handle_left_pid(t_ast *cmd, char ***envp, int *exit_code, int *pipefd)
-{
-	pid_t	left_pid;
-
-	left_pid = fork();
-	if (left_pid == 0)
-	{
-		set_signals();
-		close(pipefd[0]);
-		dup2(pipefd[1], STDOUT_FILENO);
-		close(pipefd[1]);
-		exit(execute_command(cmd->left, envp, exit_code));
-	}
-	else if (left_pid < 0)
-	{
-		perror("fork");
-		close(pipefd[0]);
-		close(pipefd[1]);
-		*exit_code = 1;
-		return (1);
-	}
-	return (0);
-}
-
-int	handle_right_pid(t_ast *cmd, char ***envp, int *exit_code, int *pipefd)
-{
-	pid_t	right_pid;
-
-	right_pid = fork();
-	if (right_pid == 0)
-	{
-		set_signals();
-		close(pipefd[1]);
-		dup2(pipefd[0], STDIN_FILENO);
-		close(pipefd[0]);
-		exit(execute_command(cmd->right, envp, exit_code));
-	}
-	else if (right_pid < 0)
-	{
-		perror("fork");
-		close(pipefd[0]);
-		close(pipefd[1]);
-		*exit_code = 1;
-		return (1);
-	}
-	return (0);
-}
-
-int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
-{
-	int		pipefd[2];
-	pid_t	left_pid;
-	pid_t	right_pid;
-	int		status_left;
-	int		status_right;
-
-	set_signals();
-	if (!cmd)
-	{
-		fprintf(stderr, "Error: Null command\n");
-		*exit_code = 1;
-		return (1);
-	}
-	if (cmd->type == PIPE)
-	{
-		if (pipe(pipefd) == -1)
-		{
-			perror("pipe");
-			*exit_code = 1;
-			return (1);
-		}
-		if (handle_left_pid(cmd, envp, exit_code, pipefd))
-			return (1);
-		if (handle_right_pid(cmd, envp, exit_code, pipefd))
-			return (1);
-		close(pipefd[0]);
-		close(pipefd[1]);
-		waitpid(left_pid, &status_left, 0);
-		waitpid(right_pid, &status_right, 0);
-		if (WIFEXITED(status_right))
-			*exit_code = WEXITSTATUS(status_right);
-		else
-			*exit_code = 1;
-		return (*exit_code);
-	}
-	if (!cmd->value)
-	{
-		fprintf(stderr, "Error: command is null\n");
-		*exit_code = 1;
-		return (1);
-	}
-	if (is_builtin(cmd->value))
-		*exit_code = execute_builtin(cmd, envp);
-	else
-		*exit_code = execute_external(cmd, *envp);
-	return (*exit_code);
 }

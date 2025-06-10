@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:51:21 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/10 20:23:10 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/10 21:14:35 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char	*process_single_quoted_string(char *str, int *i, int *quote_start)
 		(*i)++;
 	if (str[*i] != '\'')
 	{
-		exit_code = 2;
+		g_exit_code = 2;
 		ft_putstr_fd("unmatched single quotes\n", 2);
 		return (NULL);
 	}
@@ -52,7 +52,6 @@ void	merge_with_current_value_and_free(t_chain **current,
 	(*current)->end_pos = *i;
 	free(quoted_part);
 }
-
 
 t_chain	*handle_single_quotes(char *str, int *i,
 	t_chain **head, t_chain **current)

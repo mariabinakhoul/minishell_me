@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 16:48:06 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/30 19:53:40 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/10 21:08:54 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,9 @@ char	*ft_strdup(const char *src)
 	char	*smt;
 
 	if (src == NULL)
-		return NULL;
+		return (NULL);
 	i = 0;
 	len = ft_strlen(src);
-	
 	smt = (char *)malloc(sizeof(char) * (len + 1));
 	if (smt == NULL)
 		return (NULL);

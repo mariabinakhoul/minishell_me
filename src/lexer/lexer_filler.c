@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 15:43:39 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/09 17:56:01 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:54:51 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_chain	*lexer_filler(char *str)
 {
 	int		i;
 	t_chain	*head;
+	t_chain	*result;
 	t_chain	*current;
 
 	head = NULL;
@@ -41,11 +42,11 @@ t_chain	*lexer_filler(char *str)
 			i++;
 		if (str[i])
 		{
-			t_chain *result = current_node_helper(str, &i, &head, &current);
+			result = current_node_helper(str, &i, &head, &current);
 			if (!result)
 			{
 				free_lexer_nodes(head);
-				return NULL;
+				return (NULL);
 			}
 		}
 	}
