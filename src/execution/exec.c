@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/09 17:08:34 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:19:31 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,61 +124,6 @@ static int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 	return (ret);
 }
 
-static int	execute_external(t_ast *cmd, char **envp)
-{
-	pid_t	pid;
-	char	*path;
-	int		fd_in;
-	int		fd_out;
-	int		status;
-	// int		ret;
-
-	if (!cmd->params[0])
-		return (1);
-	path = (access(cmd->params[0], X_OK) == 0)
-		? cmd->params[0]
-		: findcommandpath(cmd->params[0], envp);
-	if (!path)
-	{
-		fprintf(stderr, "minishell: %s: command not found\n", cmd->params[0]);
-		return (127);
-	}
-	pid = fork();
-	if (pid == 0)
-	{
-		def_signals();
-		// if (handle_redirections(cmd) != 0)
-		// 	ret = 1;
-		execve(path, cmd->params, envp);
-		perror("execve");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid > 0)
-	{
-		ignore_signals();
-		waitpid(pid, &status, 0);
-		if (path != cmd->params[0])
-			free(path);
-		set_signals();
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			write(STDOUT_FILENO, "\n", 1);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else
-			return (128 + WTERMSIG(status));
-	}
-	else
-	{
-		ignore_signals();
-		waitpid(pid, &status, 0);
-		set_signals();
-		perror("fork");
-		if (path != cmd->params[0])
-			free(path);
-		return (-1);
-	}
-}
-
 void	findpath(char ***envp)
 {
 	while (**envp)
@@ -219,6 +164,62 @@ char	*findcommandpath(char *comand, char **envp)
 	}
 	freearray(all_path);
 	return (NULL);
+}
+
+
+static int	execute_external(t_ast *cmd, char **envp)
+{
+	pid_t	pid;
+	char	*path;
+	int		fd_in;
+	int		fd_out;
+	int		status;
+	int		ret;
+
+	if (!cmd->params[0])
+		return (1);
+	path = (access(cmd->params[0], X_OK) == 0)
+		? cmd->params[0]
+		: findcommandpath(cmd->params[0], envp);
+	if (!path)
+	{
+		fprintf(stderr, "minishell: %s: command not found\n", cmd->params[0]);
+		return (127);
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+		def_signals();
+		if (handle_redirections(cmd) != 0)
+			ret = 1;
+		execve(path, cmd->params, envp);
+		perror("execve");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid > 0)
+	{
+		ignore_signals();
+		waitpid(pid, &status, 0);
+		if (path != cmd->params[0])
+			free(path);
+		set_signals();
+		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+			write(STDOUT_FILENO, "\n", 1);
+		if (WIFEXITED(status))
+			return (WEXITSTATUS(status));
+		else
+			return (128 + WTERMSIG(status));
+	}
+	else
+	{
+		ignore_signals();
+		waitpid(pid, &status, 0);
+		set_signals();
+		perror("fork");
+		if (path != cmd->params[0])
+			free(path);
+		return (-1);
+	}
 }
 
 int	handle_left_pid(t_ast *cmd, char ***envp, int *exit_code, int *pipefd)
@@ -268,7 +269,6 @@ int	handle_right_pid(t_ast *cmd, char ***envp, int *exit_code, int *pipefd)
 	}
 	return (0);
 }
-
 
 int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 {

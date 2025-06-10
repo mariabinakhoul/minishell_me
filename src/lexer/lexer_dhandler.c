@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:37:26 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/06 16:39:17 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/10 20:23:14 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,9 @@ t_chain	*handle_double_quotes(char *str, int *i,
 
 	quote_start = *i;
 	quoted_part = process_quoted_string(str, i, quote_start);
-	if (quoted_part && quoted_part[0] == '\0')
+	if (!quoted_part)
+		return (NULL);
+	if (quoted_part[0] == '\0')
 	{
 		free(quoted_part);
 		return (*head);
