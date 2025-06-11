@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:54 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/06 15:47:07 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/11 20:16:09 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,8 @@ t_chain	*handle_word_processing(char *str,
 	word = ft_strndup(&str[start], len);
 	if (!word)
 		return (NULL);
-	if (*current && (*current)->end_pos == start)
+	if (*current && (*current)->end_pos == start
+		&& (*current)->type == TYPE_WORD)
 		merge_with_current_node(current, word, i);
 	else
 	{

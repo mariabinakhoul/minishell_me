@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/09 15:41:56 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/11 20:24:26 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	check_pipe_syntax(t_chain *curr)
 	{
 		if (!curr->next)
 		{
-			ft_putstr_fd("minishell: syntax error near"
+			ft_putstr_fd("minishell: syntax error near "
 				"unexpected token `|'\n", 2);
 			return (1);
 		}

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/10 21:18:09 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/11 20:30:09 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,20 +79,12 @@ bool	is_builtin(char *cmd)
 	return (false);
 }
 
-int	execute_builtin(t_ast *cmd, char ***envp_ptr)
+int	execute_builtin_command(t_ast *cmd, char ***envp_ptr)
 {
-	int		saved_stdin;
-	int		saved_stdout;
 	int		ret;
 	char	**newenv;
 
-	saved_stdin = dup(STDIN_FILENO);
-	saved_stdout = dup(STDOUT_FILENO);
-	if (saved_stdin < 0 || saved_stdout < 0)
-	{
-		perror("dup");
-		return (1);
-	}
+	ret = 0;
 	if (handle_redirections(cmd) != 0)
 		ret = 1;
 	else if (ft_strcmp(cmd->value, "cd") == 0)
@@ -123,8 +115,25 @@ int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 		}
 		ret = 0;
 	}
-	else
-		ret = 0;
+	return (ret);
+}
+
+
+int	execute_builtin(t_ast *cmd, char ***envp_ptr)
+{
+	int		saved_stdin;
+	int		saved_stdout;
+	int		ret;
+	char	**newenv;
+
+	saved_stdin = dup(STDIN_FILENO);
+	saved_stdout = dup(STDOUT_FILENO);
+	if (saved_stdin < 0 || saved_stdout < 0)
+	{
+		perror("dup");
+		return (1);
+	}
+	ret = execute_builtin_command(cmd, envp_ptr);
 	dup2(saved_stdin, STDIN_FILENO);
 	dup2(saved_stdout, STDOUT_FILENO);
 	close(saved_stdin);
