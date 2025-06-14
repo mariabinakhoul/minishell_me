@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 18:36:28 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/06 18:04:20 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/12 21:16:03 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,49 +77,39 @@ char	**convert_to_2d(t_env *head)
 	return (converted_env);
 }
 
+int	match_and_cleanup(t_env *node, char **new_arr)
+{
+	char	**value;
+
+	value = ft_split(node->data, '=');
+	if (!value)
+		return (0);
+	if (ft_strncmp(value[0], new_arr[0], ft_strlen(value[0])) == 0)
+	{
+		free_2d(value);
+		free_2d(new_arr);
+		return (1);
+	}
+	free_2d(value);
+	return (0);
+}
+
 int	args_found(t_env *head, char **args)
 {
 	t_env	*temp;
 	char	**value;
 	char	**new;
 
-	temp = head;
 	new = ft_split(args[1], '=');
+	if (!new)
+		return (0);
+	temp = head;
 	while (temp)
 	{
-		value = ft_split(temp->data, '=');
-		if (ft_strncmp(value[0], new[0], ft_strlen(value[0])) == 0)
-		{
+		if (match_and_cleanup(temp, new))
 			return (1);
-		}
 		temp = temp->next;
 	}
+	free_2d(new);
 	return (0);
-}
-
-void	update_value(t_env *head, char **args)
-{
-	t_env	*temp;
-	char	**value;
-	char	*new_val;
-	char	**new;
-
-	temp = head;
-	value = ft_split(temp->data, '=');
-	new = ft_split(args[1], '=');
-	while (temp && ft_strncmp(value[0], new[0], ft_strlen(value[0])) != 0)
-	{
-		temp = temp->next;
-		if (temp)
-			value = ft_split(temp->data, '=');
-	}
-	if (!new[1])
-	{
-		free_2d(new);
-		return ;
-	}
-	value[1] = ft_strdup(new[1]);
-	new_val = ft_strjoin(value[0], "=");
-	new_val = ft_strjoin(new_val, value[1]);
-	temp->data = ft_strdup(new_val);
 }

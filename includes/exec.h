@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/10 21:09:20 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/14 19:47:25 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,14 @@ char	**export_params(char **args, char **env);
 int		execute_external(t_ast *cmd, char **envp);
 bool	is_builtin(char *cmd);
 int		execute_builtin(t_ast *cmd, char ***envp_ptr);
+void	replace_env_node_value(t_env *node, char **old_kv, char **new_kv);
+void	update_value(t_env *head, char **args);
+int		handle_child_exit(pid_t pid, const char *path, const char *orig_cmd);
+int		handle_fork_failure(pid_t pid, const char *path, const char *orig_cmd);
+int		handle_redirections(t_ast *cmd_node);
+int		handle_heredoc_redirection(const char *delim);
+char	*try_build_and_access(const char *dir, const char *cmd);
+int		handle_exit_unset_export(t_ast *cmd, char ***envp_ptr);
+
 
 #endif

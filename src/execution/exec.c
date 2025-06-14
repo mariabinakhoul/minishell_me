@@ -6,55 +6,11 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/11 20:30:09 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/14 19:46:17 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
-
-int	handle_redirections(t_ast *cmd_node)
-{
-	int	fd;
-	int	flags;
-	int	house_pipe[2];
-
-	if (cmd_node->heredoc)
-	{
-		if (pipe(house_pipe) == -1)
-			return (perror("pipe"), 1);
-		ft_heredoc(cmd_node->heredoc_delim, house_pipe[1]);
-		close(house_pipe[1]);
-		if (dup2(house_pipe[0], STDIN_FILENO) == -1)
-		{
-			perror("dup2 heredoc");
-			close(house_pipe[0]);
-			return (1);
-		}
-		close(house_pipe[0]);
-	}
-	else if (cmd_node->in_file)
-	{
-		fd = open(cmd_node->in_file, O_RDONLY);
-		if (fd < 0)
-			return (perror(cmd_node->in_file), 1);
-		if (dup2(fd, STDIN_FILENO) == -1)
-			return (perror("dup2 (stdin)"), close(fd), 1);
-		close(fd);
-	}
-	if (cmd_node->out_file)
-	{
-		printf("HERE\n");
-		flags = O_WRONLY | O_CREAT;
-		flags |= (cmd_node->append) ? O_APPEND : O_TRUNC;
-		fd = open(cmd_node->out_file, flags, 0644);
-		if (fd < 0)
-			return (perror(cmd_node->out_file), 1);
-		if (dup2(fd, STDOUT_FILENO) == -1)
-			return (perror("dup2 (stdout)"), close(fd), 1);
-		close(fd);
-	}
-	return (0);
-}
 
 bool	is_builtin(char *cmd)
 {
@@ -101,23 +57,10 @@ int	execute_builtin_command(t_ast *cmd, char ***envp_ptr)
 		ft_pwd(cmd->params);
 		ret = 0;
 	}
-	else if (ft_strcmp(cmd->value, "exit") == 0)
-		ret = ft_exit(cmd->params);
-	else if (ft_strcmp(cmd->value, "unset") == 0)
-		ret = ft_unset(cmd->params, envp_ptr);
-	else if (ft_strcmp(cmd->value, "export") == 0)
-	{
-		newenv = ft_export(cmd->params, *envp_ptr);
-		if (newenv && newenv != *envp_ptr)
-		{
-			free_2d(*envp_ptr);
-			*envp_ptr = newenv;
-		}
-		ret = 0;
-	}
+	else
+		ret = handle_exit_unset_export(cmd, envp_ptr);
 	return (ret);
 }
-
 
 int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 {
@@ -141,89 +84,41 @@ int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 	return (ret);
 }
 
-char	*findcommandpath(char *comand, char **envp)
+void	run_child_process(t_ast *cmd, const char *path, char **envp)
 {
-	char	**envp_copy;
-	char	**all_path;
-	char	*finalpath;
-	char	*cmdpath;
-	int		i;
-
-	envp_copy = envp;
-	while (*envp_copy && !ft_strnstr(*envp_copy, "PATH=", 5))
-		envp_copy++;
-	if (!*envp_copy)
-		return (NULL);
-	all_path = ft_split(*envp_copy + 5, ':');
-	i = 0;
-	while (all_path[i])
-	{
-		finalpath = ft_strjoin(all_path[i], "/");
-		cmdpath = ft_strjoin(finalpath, comand);
-		free(finalpath);
-		if (access(cmdpath, X_OK) == 0)
-		{
-			freearray(all_path);
-			return (cmdpath);
-		}
-		free(cmdpath);
-		i++;
-	}
-	freearray(all_path);
-	return (NULL);
+	def_signals();
+	if (handle_redirections(cmd) != 0)
+		exit(EXIT_FAILURE);
+	execve(path, cmd->params, envp);
+	perror("execve");
+	exit(EXIT_FAILURE);
 }
 
 int	execute_external(t_ast *cmd, char **envp)
 {
 	pid_t	pid;
 	char	*path;
-	int		fd_in;
-	int		fd_out;
 	int		status;
 	int		ret;
 
 	if (!cmd->params[0])
 		return (1);
-	path = (access(cmd->params[0], X_OK) == 0)
-		? cmd->params[0]
-		: findcommandpath(cmd->params[0], envp);
+	if (access(cmd->params[0], X_OK) == 0)
+		path = cmd->params[0];
+	else
+		path = findcommandpath(cmd->params[0], envp);
 	if (!path)
 	{
-		fprintf(stderr, "minishell: %s: command not found\n", cmd->params[0]);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmd->params[0], STDERR_FILENO);
+		ft_putstr_fd(": command not found\n", STDERR_FILENO);
 		return (127);
 	}
 	pid = fork();
 	if (pid == 0)
-	{
-		def_signals();
-		if (handle_redirections(cmd) != 0)
-			ret = 1;
-		execve(path, cmd->params, envp);
-		perror("execve");
-		exit(EXIT_FAILURE);
-	}
+		run_child_process(cmd, path, envp);
 	else if (pid > 0)
-	{
-		ignore_signals();
-		waitpid(pid, &status, 0);
-		if (path != cmd->params[0])
-			free(path);
-		set_signals();
-		if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-			write(STDOUT_FILENO, "\n", 1);
-		if (WIFEXITED(status))
-			return (WEXITSTATUS(status));
-		else
-			return (128 + WTERMSIG(status));
-	}
+		return (handle_child_exit(pid, path, cmd->params[0]));
 	else
-	{
-		ignore_signals();
-		waitpid(pid, &status, 0);
-		set_signals();
-		perror("fork");
-		if (path != cmd->params[0])
-			free(path);
-		return (-1);
-	}
+		return (handle_fork_failure(pid, path, cmd->params[0]));
 }
