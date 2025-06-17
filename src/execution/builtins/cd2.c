@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:59:06 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/06 18:01:07 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:28:44 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	handle_cd_arguments(t_ast *cmd, char **envp, char **path)
 		ft_putstr_fd("bash: cd: too many arguments\n", 2);
 		return (1);
 	}
-	if (cmd->params[1] && strcmp(cmd->params[1], "~") == 0)
+	if (cmd->params[1] && ft_strcmp(cmd->params[1], "~") == 0)
 		cmd->params[1] = NULL;
 	*path = get_home_or_oldpwd(cmd, envp);
 	if (!path)
