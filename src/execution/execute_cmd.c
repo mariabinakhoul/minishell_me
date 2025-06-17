@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 20:41:22 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/10 20:58:53 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:24:13 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,10 +117,6 @@ int	handle_command_errors_and_pipeline(t_ast *cmd, char ***envp,
 int	execute_command(t_ast *cmd, char ***envp, int *exit_code)
 {
 	int		pipefd[2];
-	pid_t	left_pid;
-	pid_t	right_pid;
-	int		status_left;
-	int		status_right;
 
 	set_signals();
 	if (cmd->type == PIPE)

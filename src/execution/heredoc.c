@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:52:47 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/12 11:53:31 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:06:21 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,27 +17,58 @@
 #include <string.h>
 #include <stdlib.h>
 
-char	*ft_heredoc(const char *delimiter, int write_fd)
+void	sigint_heredoc(int signum)
+{
+	(void)signum;
+	g_exit_code = 130;
+	exit(130);
+}
+
+ssize_t	get_next_heredoc_line(char **line, size_t *len, int write_fd)
+{
+	ssize_t	nread;
+
+	write(STDOUT_FILENO, "heredoc> ", 9);
+	nread = getline(line, len, stdin);
+	if (nread == -1)
+	{
+		if (errno == EINTR)
+		{
+			free(*line);
+			close(write_fd);
+			exit(130);
+		}
+		perror("getline");
+		free(*line);
+		close(write_fd);
+		exit(EXIT_FAILURE);
+	}
+	return (nread);
+}
+
+char	*ft_heredoc(const char *delimiter, int write_fd, char **env)
 {
 	char	*line;
+	char	*expanded;
 	size_t	len;
 	ssize_t	nread;
 
 	line = NULL;
 	len = 0;
+	setup_runtime_signals();
+	signal(SIGINT, sigint_heredoc);
 	while (1)
 	{
-		write(STDOUT_FILENO, "heredoc> ", 9);
-		nread = getline(&line, &len, stdin);
-		if (nread == -1)
-		{
-			perror("getline");
-			exit(EXIT_FAILURE);
-		}
-		if (strncmp(line, delimiter, strlen(delimiter)) == 0)
+		nread = get_next_heredoc_line(&line, &len, write_fd);
+		if (line[nread - 1] == '\n')
+			line[nread - 1] = '\0';
+		if (strcmp(line, delimiter) == 0)
 			break ;
-		write(write_fd, line, nread);
+		expanded = expand_argument(line, 0, env, 0);
+		write(write_fd, expanded, strlen(expanded));
+		free(expanded);
 	}
+	setup_runtime_signals();
 	free(line);
 	return (NULL);
 }

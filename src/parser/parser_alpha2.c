@@ -6,20 +6,21 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:40:52 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/09 16:16:20 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:20:42 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
+void	process_tokens(t_chain **tokens, t_ast *cmd_node,
+	int *param_count, char **env)
 {
 	while (*tokens && (*tokens)->type != TYPE_PIPE)
 	{
 		if (((*tokens)->type == TYPE_INDIR) || (*tokens)->type == TYPE_OUTDIR
 			|| (*tokens)->type == TYPE_APPEND
 			|| (*tokens)->type == TYPE_HEREDOC)
-			parse_redirection(tokens, cmd_node);
+			parse_redirection(tokens, cmd_node, env);
 		else
 		{
 			if (!(cmd_node->value))
@@ -32,7 +33,7 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node, int *param_count)
 	}
 }
 
-t_ast	*parse_command(t_chain **tokens)
+t_ast	*parse_command(t_chain **tokens, char **env)
 {
 	t_ast	*cmd_node;
 	int		param_count;
@@ -55,36 +56,44 @@ t_ast	*parse_command(t_chain **tokens)
 	cmd_node->exit = 0;
 	cmd_node->lexer = NULL;
 	cmd_node->heredoc = 0;
+	cmd_node->here_doc_in = -1;
 	param_count = 0;
-	process_tokens(tokens, cmd_node, &param_count);
+	process_tokens(tokens, cmd_node, &param_count, env);
 	return (cmd_node);
 }
 
-int	parse_heredoc(t_chain **tokens, t_ast *cmd_node)
+void	heredoc_handler(t_ast *cmd_node, t_chain *token, char **env)
 {
-	t_chain	*token;
-	t_chain	*next_token;
+	int		pipefd[2];
+	pid_t	pid;
+	int		status;
 
-	if (token->type == TYPE_HEREDOC)
+	(void)token;
+	pipe(pipefd);
+	pid = fork();
+	if (pid == -1)
+		exit (0);
+	if (pid == 0)
 	{
-		next_token = token->next;
-		if (next_token && (next_token->type == TYPE_WORD
-				|| next_token->type == TYPE_QUOTE))
-		{
-			cmd_node->heredoc = true;
-			cmd_node->heredoc_delim = ft_strdup(next_token->value);
-		}
-		else
-		{
-			write(2, "bash: syntax error near unexpected token `newline'\n", 52);
-			return (2);
-		}
-		*tokens = token->next->next;
+		ft_heredoc(cmd_node->heredoc_delim, pipefd[1], env);
+		close(pipefd[1]);
+		exit(0);
 	}
-	return (0);
+	waitpid(pid, &status, 0);
+	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
+	{
+		close(pipefd[1]);
+		g_exit_code = 130;
+		cmd_node->here_doc_in = -1;
+		cmd_node->heredoc = false;
+		return ;
+	}
+	close(pipefd[1]);
+	cmd_node->here_doc_in = pipefd[0];
 }
 
-int	handle_input_redirection(t_ast *cmd_node, t_chain *token, char *filename)
+int	handle_input_redirection(t_ast *cmd_node, t_chain *token, char *filename,
+	char **env)
 {
 	if (token->type == TYPE_INDIR)
 	{
@@ -98,27 +107,7 @@ int	handle_input_redirection(t_ast *cmd_node, t_chain *token, char *filename)
 			free(cmd_node->heredoc_delim);
 		cmd_node->heredoc = true;
 		cmd_node->heredoc_delim = filename;
+		heredoc_handler(cmd_node, token, env);
 	}
-	return (0);
-}
-
-int	condition_redirection(t_ast *cmd_node, t_chain *token, char *filename)
-{
-	if (token->type == TYPE_OUTDIR)
-	{
-		if (cmd_node->out_file)
-			free(cmd_node->out_file);
-		cmd_node->out_file = filename;
-		cmd_node->append = 0;
-	}
-	else if (token->type == TYPE_APPEND)
-	{
-		if (cmd_node->out_file)
-			free(cmd_node->out_file);
-		cmd_node->out_file = filename;
-		cmd_node->append = 1;
-	}
-	else
-		handle_input_redirection(cmd_node, token, filename);
 	return (0);
 }

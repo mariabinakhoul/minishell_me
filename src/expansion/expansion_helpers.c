@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:37:14 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/09 16:40:26 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:54:35 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,9 +41,14 @@ char	*expand_env_variable(char *arg, int *i, char **env, char *result)
 	return (result);
 }
 
-char	*expand_variable(char *arg, int *i,
-		char **env, int exit_code, char *result)
+char	*expand_variable(char *arg, t_expand *two_in_one,
+		char **env, int exit_code)
 {
+	char	*result;
+	int		*i;
+
+	result = two_in_one->result;
+	i = two_in_one->i;
 	if (arg[*i + 1] == '?')
 	{
 		result = expand_exit_status(exit_code, result);

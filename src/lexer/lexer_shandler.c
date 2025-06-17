@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/13 12:51:21 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/10 21:14:35 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:17:50 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,6 @@ t_chain	*handle_single_quotes(char *str, int *i,
 	t_chain **head, t_chain **current)
 {
 	char	*quoted_part;
-	char	*merged_value;
 	int		quote_start;
 	t_chain	*new_node;
 

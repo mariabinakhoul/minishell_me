@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 16:37:26 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/10 20:23:14 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:18:37 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ char	*process_quoted_string(char *str, int *i, int quote_start)
 	int		start;
 	char	*quoted_part;
 
+	(void)quote_start;
 	start = ++(*i);
 	while (str[*i] && str[*i] != '"')
 		(*i)++;
@@ -53,7 +54,6 @@ t_chain	*handle_double_quotes(char *str, int *i,
 {
 	int		quote_start;
 	char	*quoted_part;
-	char	*merged_value;
 	t_chain	*new_node;
 
 	quote_start = *i;

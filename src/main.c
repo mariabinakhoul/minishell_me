@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/10 21:14:39 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:16:50 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,55 @@
 
 int	g_exit_code = 0;
 
-int	main(int argc, char **argv, char **envp)
+t_ast	*validate_tokens_and_parse(t_chain *tokens,
+	t_chain *tokens_head, char *input, char **env)
 {
-	int		exit_code;
+	t_ast	*ast;
+
+	if (!tokens)
+	{
+		free(input);
+		return (NULL);
+	}
+	ast = parse_input(&tokens, env);
+	if (!ast)
+	{
+		free(input);
+		free_lexer_nodes(tokens_head);
+		return (NULL);
+	}
+	return (ast);
+}
+
+int	process_input_line(char **env, int exit_code)
+{
 	char	*input;
-	char	**env;
 	t_chain	*tokens;
 	t_chain	*tokens_head;
 	t_ast	*ast;
+
+	input = readline("minishell> ");
+	if (!input)
+		return (-1);
+	if (*input)
+		add_history(input);
+	tokens = lexer_filler(input);
+	tokens_head = tokens;
+	ast = validate_tokens_and_parse(tokens, tokens_head, input, env);
+	if (!ast)
+		return (exit_code);
+	expand_tree(ast, env, exit_code);
+	exit_code = execute_command(ast, &env, &exit_code);
+	free_lexer_nodes(tokens_head);
+	free_ast(ast);
+	free(input);
+	return (exit_code);
+}
+
+int	main(int argc, char **argv, char **envp)
+{
+	int		exit_code;
+	char	**env;
 
 	set_signals();
 	(void)argc;
@@ -36,31 +77,9 @@ int	main(int argc, char **argv, char **envp)
 	exit_code = 0;
 	while (1)
 	{
-		input = readline("minishell> ");
-		if (!input)
+		exit_code = process_input_line(env, exit_code);
+		if (exit_code == -1)
 			break ;
-		if (*input)
-			add_history(input);
-		tokens = lexer_filler(input);
-		tokens_head = tokens;
-		if (!tokens)
-		{
-			free(input);
-			continue ;
-		}
-		tokens_head = tokens;
-		ast = parse_input(&tokens);
-		if (!ast)
-		{
-			free(input);
-			free_lexer_nodes(tokens_head);
-			continue ;
-		}
-		expand_tree(ast, env, exit_code);
-		exit_code = execute_command(ast, &env, &exit_code);
-		free_lexer_nodes(tokens_head);
-		free_ast(ast);
-		free(input);
 	}
 	if (env)
 		free_2d(env);

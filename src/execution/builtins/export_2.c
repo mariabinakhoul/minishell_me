@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:27:30 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/09 16:35:28 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:23:49 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,6 @@ int	check_export_identifiers(char **args)
 
 char	**ft_export(char **args, char **envp)
 {
-	int		i;
 	int		ret;
 	char	**new_env;
 

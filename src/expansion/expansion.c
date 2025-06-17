@@ -6,29 +6,42 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/12 11:44:29 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:23:41 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
+int	handle_escaped_dollar(char *arg, int *i, char **result)
+{
+	if (arg[*i] == '\\' && arg[*i + 1] == '$')
+	{
+		*result = join_and_free_char(*result, '$');
+		*i += 2;
+		return (1);
+	}
+	return (0);
+}
+
 char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 {
-	char	*result;
-	int		i;
+	char		*result;
+	int			i;
+	t_expand	two_in_one;
 
+	(void)quoted;
 	result = ft_strdup("");
 	i = 0;
 	while (arg[i])
 	{
-		if (arg[i] == '\\' && arg[i + 1] == '$')
-		{
-			result = join_and_free_char(result, '$');
-			i += 2;
+		if (handle_escaped_dollar(arg, &i, &result))
 			continue ;
-		}
 		if (arg[i] == '$')
-			result = expand_variable(arg, &i, env, last_status, result);
+		{
+			two_in_one.i = &i;
+			two_in_one.result = result;
+			result = expand_variable(arg, &two_in_one, env, last_status);
+		}
 		else
 		{
 			result = expand_home_directory(arg, &i, env, result);
@@ -37,16 +50,6 @@ char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 		}
 	}
 	return (result);
-}
-
-int	cmd_node_param_count(char **params)
-{
-	int	i;
-
-	i = 0;
-	while (params[i])
-		i++;
-	return (i);
 }
 
 void	expand_file_argument(char **file_arg, char **env, int exit_code)

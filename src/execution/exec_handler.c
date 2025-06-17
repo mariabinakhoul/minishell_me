@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 19:41:00 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/14 19:48:24 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:14:17 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,24 +38,15 @@ int	handle_output_redirection(const char *path, bool append)
 	return (0);
 }
 
-int	handle_heredoc_redirection(const char *delim)
+int	handle_heredoc_redirection(t_ast *cmd_node)
 {
-	int	pipefd[2];
-
-	if (pipe(pipefd) == -1)
-	{
-		perror("pipe");
-		return (1);
-	}
-	ft_heredoc(delim, pipefd[1]);
-	close(pipefd[1]);
-	if (dup2(pipefd[0], STDIN_FILENO) == -1)
+	if (dup2(cmd_node->here_doc_in, STDIN_FILENO) == -1)
 	{
 		perror("dup2 heredoc");
-		close(pipefd[0]);
+		close(cmd_node->here_doc_in);
 		return (1);
 	}
-	close(pipefd[0]);
+	close(cmd_node->here_doc_in);
 	return (0);
 }
 
@@ -63,10 +54,10 @@ int	handle_redirections(t_ast *cmd_node)
 {
 	int	fd;
 
-	if (cmd_node->heredoc)
+	if (cmd_node->heredoc && cmd_node->here_doc_in != -1)
 	{
-		if (handle_heredoc_redirection(cmd_node->heredoc_delim))
-			return (1);
+		dup2(cmd_node->here_doc_in, STDIN_FILENO);
+		close(cmd_node->here_doc_in);
 	}
 	else if (cmd_node->in_file)
 	{

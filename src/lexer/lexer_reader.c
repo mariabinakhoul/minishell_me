@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:57:54 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/11 20:16:09 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:19:45 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ t_chain	*handle_word_processing(char *str,
 	int		len;
 	t_chain	*new_node;
 	char	*word;
-	char	*merged;
 
 	start = *i;
 	while (str[*i] && set_lexer_type(str[*i]) == TYPE_WORD)
@@ -88,12 +87,10 @@ t_token	get_operator_type(char *str, int *i, int *len)
 t_chain	*current_node_helper(char *str, int *i,
 	t_chain **head, t_chain **current)
 {
-	int		start;
 	t_chain	*new_node;
 	int		len;
 	t_token	op_type;
 
-	start = *i;
 	if (str[*i] == '>' || str[*i] == '<' || str[*i] == '|')
 	{
 		len = 1;

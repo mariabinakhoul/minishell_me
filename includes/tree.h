@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/12 11:53:43 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:43:26 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ typedef struct s_ast
 	int						exit;
 	struct s_syntax_tree	*tree_link;
 	struct s_lexer			**lexer;
+	int						here_doc_in;
+	bool					heredoc_failed;
 }	t_ast;
 
 typedef struct s_ast_utils
@@ -64,10 +66,16 @@ typedef struct s_lexer
 	int			count;
 }	t_lexer;
 
-t_ast		*parse_input(t_chain **tokens);
-t_ast		*parse_pipeline(t_chain **tokens);
-t_ast		*parse_command(t_chain **tokens);
-int			parse_redirection(t_chain **tokens, t_ast *cmd_node);
+typedef struct s_expand
+{
+	int		*i;
+	char	*result;
+}	t_expand;
+
+t_ast		*parse_input(t_chain **tokens, char **env);
+t_ast		*parse_pipeline(t_chain **tokens, char **env);
+t_ast		*parse_command(t_chain **tokens, char **env);
+int			parse_redirection(t_chain **tokens, t_ast *cmd_node, char **env);
 char		*join_and_free(char *s1, const char *s2);
 char		*join_and_free_char(char *s, char c);
 char		*get_env_value(char *var, char **env);
@@ -78,6 +86,7 @@ void		expand_tree(t_ast *node, char **env, int exit_code);
 void		expand_params_and_lexer(t_ast *cmd_node, t_chain *token,
 				int *param_count);
 int			condition_redirection(t_ast *cmd_node, t_chain *token,
-				char *filename);
+				char *filename, char **env);
+int			cmd_node_param_count(char **params);
 
 #endif

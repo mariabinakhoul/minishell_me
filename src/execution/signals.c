@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/11 19:04:45 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/10 21:05:45 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:51:47 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,23 @@ void	def_signals(void)
 
 void	ignore_signals(void)
 {
-	signal(SIGQUIT, SIG_IGN);
 	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
+}
+
+void	handle_signal(int sig)
+{
+	if (sig == SIGINT)
+	{
+		g_exit_code = 130;
+		rl_replace_line("", 0);
+		ft_putstr_fd("\n", 1);
+		rl_on_new_line();
+		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+	{
+		write(1, "Quit (core dumped)\n", 20);
+		g_exit_code = 131;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 22:37:15 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/12 20:46:31 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:23:58 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ int	ft_exit(char **args)
 {
 	char			*arg;
 	long long int	status;
-	int				is_valid;
 
 	arg = args[1];
 	printf("exit\n");

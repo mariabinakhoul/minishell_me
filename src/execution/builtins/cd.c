@@ -6,36 +6,11 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/06 17:59:54 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:22:44 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
-
-static char	*find_env_path(char **envp, char *key)
-{
-	int	i;
-
-	i = 0;
-	if (!envp || !key)
-		return (NULL);
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], key, ft_strlen(key)) == 0
-			&& envp[i][ft_strlen(key)] == '=')
-		{
-			return (&envp[i][ft_strlen(key) + 1]);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-static void	print_error_message(const char *error_msg)
-{
-	if (error_msg)
-		ft_putstr_fd(error_msg, 2);
-}
 
 static char	*retrieve_env_path(t_ast *cmd, char **envp, char *key)
 {

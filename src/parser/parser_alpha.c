@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/11 20:24:26 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:36:50 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,26 +55,26 @@ int	validate_pipeline_syntax(t_chain *tokens)
 	return (0);
 }
 
-t_ast	*parse_input(t_chain **tokens)
+t_ast	*parse_input(t_chain **tokens, char **env)
 {
 	if (!tokens || !*tokens)
 		return (NULL);
 	if (validate_pipeline_syntax(*tokens))
 		return (NULL);
-	return (parse_pipeline(tokens));
+	return (parse_pipeline(tokens, env));
 }
 
-t_ast	*parse_pipeline(t_chain **tokens)
+t_ast	*parse_pipeline(t_chain **tokens, char **env)
 {
 	t_ast	*left;
 	t_ast	*right;
 	t_ast	*pipe_node;
 
-	left = parse_command(tokens);
+	left = parse_command(tokens, env);
 	while (*tokens && (*tokens)->type == TYPE_PIPE)
 	{
 		*tokens = (*tokens)->next;
-		right = parse_command(tokens);
+		right = parse_command(tokens, env);
 		if (!right)
 			return (NULL);
 		pipe_node = ft_calloc(1, sizeof(t_ast));

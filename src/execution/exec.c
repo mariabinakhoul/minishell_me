@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/14 19:46:17 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:22:15 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ bool	is_builtin(char *cmd)
 int	execute_builtin_command(t_ast *cmd, char ***envp_ptr)
 {
 	int		ret;
-	char	**newenv;
 
 	ret = 0;
 	if (handle_redirections(cmd) != 0)
@@ -67,7 +66,6 @@ int	execute_builtin(t_ast *cmd, char ***envp_ptr)
 	int		saved_stdin;
 	int		saved_stdout;
 	int		ret;
-	char	**newenv;
 
 	saved_stdin = dup(STDIN_FILENO);
 	saved_stdout = dup(STDOUT_FILENO);
@@ -89,6 +87,7 @@ void	run_child_process(t_ast *cmd, const char *path, char **envp)
 	def_signals();
 	if (handle_redirections(cmd) != 0)
 		exit(EXIT_FAILURE);
+	setup_runtime_signals();
 	execve(path, cmd->params, envp);
 	perror("execve");
 	exit(EXIT_FAILURE);
@@ -98,8 +97,6 @@ int	execute_external(t_ast *cmd, char **envp)
 {
 	pid_t	pid;
 	char	*path;
-	int		status;
-	int		ret;
 
 	if (!cmd->params[0])
 		return (1);
@@ -121,4 +118,5 @@ int	execute_external(t_ast *cmd, char **envp)
 		return (handle_child_exit(pid, path, cmd->params[0]));
 	else
 		return (handle_fork_failure(pid, path, cmd->params[0]));
+	return (EXIT_FAILURE);
 }

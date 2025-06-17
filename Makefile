@@ -8,10 +8,10 @@ READLINE_FLAGS = -lreadline -lhistory
 
 CC = gcc
 
-CFLAGS = -g -I $(HEADER) 
-#-Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -g -I $(HEADER) 
 
-SRCS = lexer/lexer_types lexer/lexer_shandler lexer/lexer_dhandler lexer/lexer_reader lexer/lexer_filler main utils/free utils/utils utils/utils_1 parser/parser_alpha parser/parser_alpha2 parser/parser_redirection execution/exec execution/exec_handler execution/exec_helper execution/builtins/cd execution/builtins/cd2 execution/builtins/env execution/builtins/env1 execution/builtins/env_helper execution/builtins/pwd execution/builtins/unset expansion/expansion expansion/expansion_utils expansion/expansion_helpers execution/builtins/echo execution/builtins/export execution/builtins/export_2 execution/builtins/exit execution/signals execution/heredoc execution/execute_cmd
+
+SRCS = lexer/lexer_types lexer/lexer_shandler lexer/lexer_dhandler lexer/lexer_reader lexer/lexer_filler main utils/free utils/utils utils/utils_1 parser/parser_alpha parser/parser_alpha2 parser/parser_redirection execution/exec execution/exec_handler execution/exec_helper execution/builtins/cd execution/builtins/cd2 execution/builtins/env execution/builtins/env1 execution/builtins/env_helper execution/builtins/pwd execution/builtins/unset expansion/expansion expansion/expansion_utils expansion/expansion_helpers execution/builtins/echo execution/builtins/export execution/builtins/export_2 execution/builtins/exit execution/signals execution/signals_extra execution/heredoc execution/execute_cmd
 
 SRC = $(addprefix src/, $(addsuffix .c, $(SRCS)))
 

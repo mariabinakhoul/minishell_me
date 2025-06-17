@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 18:36:28 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/12 21:16:03 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 17:22:51 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ int	match_and_cleanup(t_env *node, char **new_arr)
 int	args_found(t_env *head, char **args)
 {
 	t_env	*temp;
-	char	**value;
 	char	**new;
 
 	new = ft_split(args[1], '=');

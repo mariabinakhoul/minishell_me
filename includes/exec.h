@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/14 19:47:25 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/17 16:18:52 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,8 @@ void	print_export(char **env);
 char	*findcommandpath(char *comand, char **envp);
 char	*expand_exit_status(int exit_code, char *result);
 char	*expand_env_variable(char *arg, int *i, char **env, char *result);
-char	*expand_variable(char *arg, int *i,
-			char **env, int exit_code, char *result);
+char	*expand_variable(char *arg, t_expand *two_in_one,
+			char **env, int exit_code);
 char	*expand_home_directory(char *arg, int *i, char **env, char *result);
 int		is_valid_identifier(char *arg);
 int		args_found(t_env *head, char **args);
@@ -54,9 +54,10 @@ void	update_value(t_env *head, char **args);
 int		handle_child_exit(pid_t pid, const char *path, const char *orig_cmd);
 int		handle_fork_failure(pid_t pid, const char *path, const char *orig_cmd);
 int		handle_redirections(t_ast *cmd_node);
-int		handle_heredoc_redirection(const char *delim);
+int		handle_heredoc_redirection(t_ast *cmd_node);
 char	*try_build_and_access(const char *dir, const char *cmd);
 int		handle_exit_unset_export(t_ast *cmd, char ***envp_ptr);
-
+int		handle_input_redirection(t_ast *cmd_node, t_chain *token,
+			char *filename, char **env);
 
 #endif
