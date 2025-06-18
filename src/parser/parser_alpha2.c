@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:40:52 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 15:24:02 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:30:18 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,13 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node,
 		if (((*tokens)->type == TYPE_INDIR) || (*tokens)->type == TYPE_OUTDIR
 			|| (*tokens)->type == TYPE_APPEND
 			|| (*tokens)->type == TYPE_HEREDOC)
-			parse_redirection(tokens, cmd_node, env);
+		{	
+			if (parse_redirection(tokens, cmd_node, env) == -1)
+			{
+				cmd_node->exit = 2;
+				return ;
+			}
+		}
 		else
 		{
 			if (!(cmd_node->value))
@@ -58,6 +64,11 @@ t_ast	*parse_command(t_chain **tokens, char **env)
 	cmd_node->heredoc = 0;
 	param_count = 0;
 	process_tokens(tokens, cmd_node, &param_count, env);
+	if (!cmd_node->value)
+	{
+		free_ast(cmd_node);
+		return (NULL);
+	}
 	return (cmd_node);
 }
 

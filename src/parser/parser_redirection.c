@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 16:13:25 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/16 16:34:29 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:25:49 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	parse_redirection(t_chain **tokens, t_ast *cmd_node, char **env)
 			*tokens = next->next;
 		else
 			*tokens = NULL;
-		return (1);
+		return (-1);
 	}
 	filename = ft_strdup(next->value);
 	condition_redirection(cmd_node, token, filename, env);
