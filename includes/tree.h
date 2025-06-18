@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/17 16:43:26 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/16 18:17:00 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@ typedef struct s_ast
 	struct s_syntax_tree	*tree_link;
 	struct s_lexer			**lexer;
 	int						here_doc_in;
-	bool					heredoc_failed;
 }	t_ast;
 
 typedef struct s_ast_utils
@@ -87,6 +86,5 @@ void		expand_params_and_lexer(t_ast *cmd_node, t_chain *token,
 				int *param_count);
 int			condition_redirection(t_ast *cmd_node, t_chain *token,
 				char *filename, char **env);
-int			cmd_node_param_count(char **params);
 
 #endif

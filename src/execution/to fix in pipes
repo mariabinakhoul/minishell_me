@@ -1,0 +1,10 @@
+ echo hola > bonjour
+$> cat bonjour
+->
+this one just needs a condition in the echo
+->
+574
+559
+560 exit code
+
+minishell> export hi hi= hi=val hi="bye"^C

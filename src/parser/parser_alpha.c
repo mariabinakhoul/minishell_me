@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/17 17:31:35 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/16 16:36:50 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ t_ast	*parse_pipeline(t_chain **tokens, char **env)
 		pipe_node->type = PIPE;
 		pipe_node->left = left;
 		pipe_node->right = right;
-		pipe_node->value = ft_strdup("|");
+		pipe_node->value = strdup("|");
 		left = pipe_node;
 	}
 	return (left);

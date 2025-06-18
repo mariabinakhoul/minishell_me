@@ -6,11 +6,16 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 21:52:47 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/17 17:33:48 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:00:26 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
+
+#include <stdio.h>
+#include <unistd.h>
+#include <string.h>
+#include <stdlib.h>
 
 void	sigint_heredoc(int signum)
 {
@@ -61,6 +66,7 @@ char	*ft_heredoc(const char *delimiter, int write_fd, char **env)
 			break ;
 		expanded = expand_argument(line, 0, env, 0);
 		write(write_fd, expanded, ft_strlen(expanded));
+		write(write_fd, "\n", 1);
 		free(expanded);
 	}
 	setup_runtime_signals();

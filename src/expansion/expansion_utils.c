@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 21:57:46 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/17 16:43:08 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/04/08 22:29:10 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,4 @@ char	*get_env_value(char *var, char **env)
 		i++;
 	}
 	return (NULL);
-}
-
-int	cmd_node_param_count(char **params)
-{
-	int	i;
-
-	i = 0;
-	while (params[i])
-		i++;
-	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/17 16:18:52 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:21:41 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,5 @@ int		handle_redirections(t_ast *cmd_node);
 int		handle_heredoc_redirection(t_ast *cmd_node);
 char	*try_build_and_access(const char *dir, const char *cmd);
 int		handle_exit_unset_export(t_ast *cmd, char ***envp_ptr);
-int		handle_input_redirection(t_ast *cmd_node, t_chain *token,
-			char *filename, char **env);
 
 #endif

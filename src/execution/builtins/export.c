@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/09 16:28:07 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 14:47:36 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	print_env_value(char *env_var)
 
 	j = 0;
 	printf("=\"");
-	j++;
+	j += 2;
 	while (env_var[j])
 	{
 		printf("%c", env_var[j]);

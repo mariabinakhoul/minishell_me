@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:40:52 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/17 17:20:42 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:24:02 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ t_ast	*parse_command(t_chain **tokens, char **env)
 	cmd_node->exit = 0;
 	cmd_node->lexer = NULL;
 	cmd_node->heredoc = 0;
-	cmd_node->here_doc_in = -1;
 	param_count = 0;
 	process_tokens(tokens, cmd_node, &param_count, env);
 	return (cmd_node);
@@ -80,14 +79,6 @@ void	heredoc_handler(t_ast *cmd_node, t_chain *token, char **env)
 		exit(0);
 	}
 	waitpid(pid, &status, 0);
-	if (WIFSIGNALED(status) && WTERMSIG(status) == SIGINT)
-	{
-		close(pipefd[1]);
-		g_exit_code = 130;
-		cmd_node->here_doc_in = -1;
-		cmd_node->heredoc = false;
-		return ;
-	}
 	close(pipefd[1]);
 	cmd_node->here_doc_in = pipefd[0];
 }
@@ -109,5 +100,27 @@ int	handle_input_redirection(t_ast *cmd_node, t_chain *token, char *filename,
 		cmd_node->heredoc_delim = filename;
 		heredoc_handler(cmd_node, token, env);
 	}
+	return (0);
+}
+
+int	condition_redirection(t_ast *cmd_node, t_chain *token,
+	char *filename, char **env)
+{
+	if (token->type == TYPE_OUTDIR)
+	{
+		if (cmd_node->out_file)
+			free(cmd_node->out_file);
+		cmd_node->out_file = filename;
+		cmd_node->append = 0;
+	}
+	else if (token->type == TYPE_APPEND)
+	{
+		if (cmd_node->out_file)
+			free(cmd_node->out_file);
+		cmd_node->out_file = filename;
+		cmd_node->append = 1;
+	}
+	else
+		handle_input_redirection(cmd_node, token, filename, env);
 	return (0);
 }

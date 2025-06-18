@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/17 17:26:27 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 15:21:26 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,14 @@
 
 # include "../libft/libft.h"
 # include <unistd.h>
-# include <errno.h>
 # include <stdio.h>
 # include <stdbool.h>
 # include <stdlib.h>
-# include <string.h>
 # include <sys/wait.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <errno.h>
 # include "lexer.h"
 # include "tree.h"
 # include "exec.h"
@@ -39,7 +38,6 @@ void	reset_sig(int signo);
 void	set_signals(void);
 void	def_signals(void);
 void	ignore_signals(void);
-void	setup_runtime_signals(void);
 void	ft_pwd(char **args);
 void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count);
 void	ft_swap(char **a, char **b);
@@ -49,7 +47,7 @@ void	free_2d(char **str);
 int		costum_atoi(const char *str, long long *out);
 void	free_ast(t_ast *ast);
 void	free_list(t_env *head);
-void	handle_signal(int sig);
 void	setup_runtime_signals(void);
+void	handle_signal(int sig);
 
 #endif

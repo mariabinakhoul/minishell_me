@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 19:41:00 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/17 16:14:17 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/14 22:45:53 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	handle_redirections(t_ast *cmd_node)
 {
 	int	fd;
 
-	if (cmd_node->heredoc && cmd_node->here_doc_in != -1)
+	if (cmd_node->heredoc)
 	{
 		dup2(cmd_node->here_doc_in, STDIN_FILENO);
 		close(cmd_node->here_doc_in);
