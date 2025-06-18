@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 15:21:26 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:13:15 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,5 +49,6 @@ void	free_ast(t_ast *ast);
 void	free_list(t_env *head);
 void	setup_runtime_signals(void);
 void	handle_signal(int sig);
+void	increment_shlvl(t_env *env_list);
 
 #endif

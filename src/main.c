@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 17:07:59 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:31:01 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_chain	*read_and_tokenize(char **input)
 
 	*input = readline("minishell> ");
 	if (!*input)
-		return (NULL);
+		exit(0);
 	if (**input)
 		add_history(*input);
 	tokens = lexer_filler(*input);
