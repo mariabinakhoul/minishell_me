@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/09 15:40:52 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 16:30:18 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:41:46 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,8 @@ void	process_tokens(t_chain **tokens, t_ast *cmd_node,
 	}
 }
 
-t_ast	*parse_command(t_chain **tokens, char **env)
+void	init_cmd_node(t_ast *cmd_node, int *param_count)
 {
-	t_ast	*cmd_node;
-	int		param_count;
-
-	if ((!(*tokens)) || (*tokens)->type == TYPE_PIPE)
-		return (NULL);
-	cmd_node = malloc(sizeof(t_ast));
-	if (!cmd_node)
-		return (NULL);
 	cmd_node->type = CMD;
 	cmd_node->params = NULL;
 	cmd_node->value = NULL;
@@ -62,7 +54,20 @@ t_ast	*parse_command(t_chain **tokens, char **env)
 	cmd_node->exit = 0;
 	cmd_node->lexer = NULL;
 	cmd_node->heredoc = 0;
-	param_count = 0;
+	*param_count = 0;
+}
+
+t_ast	*parse_command(t_chain **tokens, char **env)
+{
+	t_ast	*cmd_node;
+	int		param_count;
+
+	if ((!(*tokens)) || (*tokens)->type == TYPE_PIPE)
+		return (NULL);
+	cmd_node = malloc(sizeof(t_ast));
+	if (!cmd_node)
+		return (NULL);
+	init_cmd_node(cmd_node, &param_count);
 	process_tokens(tokens, cmd_node, &param_count, env);
 	if (!cmd_node->value)
 	{
@@ -111,27 +116,5 @@ int	handle_input_redirection(t_ast *cmd_node, t_chain *token, char *filename,
 		cmd_node->heredoc_delim = filename;
 		heredoc_handler(cmd_node, token, env);
 	}
-	return (0);
-}
-
-int	condition_redirection(t_ast *cmd_node, t_chain *token,
-	char *filename, char **env)
-{
-	if (token->type == TYPE_OUTDIR)
-	{
-		if (cmd_node->out_file)
-			free(cmd_node->out_file);
-		cmd_node->out_file = filename;
-		cmd_node->append = 0;
-	}
-	else if (token->type == TYPE_APPEND)
-	{
-		if (cmd_node->out_file)
-			free(cmd_node->out_file);
-		cmd_node->out_file = filename;
-		cmd_node->append = 1;
-	}
-	else
-		handle_input_redirection(cmd_node, token, filename, env);
 	return (0);
 }

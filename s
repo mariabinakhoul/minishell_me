@@ -1,2 +1,0 @@
-%UDRT
-mabi-nak

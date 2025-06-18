@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/16 18:17:00 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 16:55:16 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,8 @@ void		expand_params_and_lexer(t_ast *cmd_node, t_chain *token,
 				int *param_count);
 int			condition_redirection(t_ast *cmd_node, t_chain *token,
 				char *filename, char **env);
+int			handle_input_redirection(t_ast *cmd_node, t_chain *token,
+				char *filename, char **env);
+int			cmd_node_param_count(char **params);
 
 #endif
