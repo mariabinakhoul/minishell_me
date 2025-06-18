@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 22:37:15 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 15:25:53 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:22:27 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,14 @@ int	ft_exit(char **args)
 		exit(0);
 	if (!is_numeric(arg) || !costum_atoi(arg, &status))
 	{
-		fprintf(stderr, "bash: exit: %s: numeric argument required\n", arg);
+		ft_putstr_fd("bash: exit: ", 2);
+		ft_putstr_fd(arg, 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
 		exit(2);
 	}
 	if (args[2])
 	{
-		fprintf(stderr, "bash: exit: too many arguments\n");
+		ft_putstr_fd("bash: exit: too many arguments\n", 2);
 		return (1);
 	}
 	exit((unsigned char)status);

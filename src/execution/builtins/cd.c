@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 15:24:57 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:13:39 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,11 +65,13 @@ void	ft_setenv(t_ast *cmd_path)
 		old_pwd = getenv("PWD");
 		if (!old_pwd)
 			return ;
-		new_size = strlen(old_pwd) + 1 + strlen(cmd_path->params[1]) + 1;
+		new_size = ft_strlen(old_pwd) + 1 + ft_strlen(cmd_path->params[1]) + 1;
 		new_path = malloc(new_size);
 		if (!new_path)
 			return ;
-		snprintf(new_path, new_size, "%s/%s", old_pwd, cmd_path->params[1]);
+		ft_putstr_fd(old_pwd, 2);
+		ft_putstr_fd("/", 2);
+		ft_putstr_fd(cmd_path->params[1], 2);
 		setenv("PWD", new_path, 1);
 		free(new_path);
 	}

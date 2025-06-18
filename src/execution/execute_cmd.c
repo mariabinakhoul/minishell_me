@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/10 20:41:22 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 15:26:01 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 17:22:50 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	handle_command_errors_and_pipeline(t_ast *cmd, char ***envp,
 {
 	if (!cmd)
 	{
-		fprintf(stderr, "Error: Null command\n");
+		ft_putstr_fd("Error: Null command\n", 2);
 		*exit_code = 1;
 		return (1);
 	}
@@ -107,7 +107,7 @@ int	handle_command_errors_and_pipeline(t_ast *cmd, char ***envp,
 	}
 	if (!cmd->value)
 	{
-		fprintf(stderr, "Error: command is null\n");
+		ft_putstr_fd("Error: command is null\n", 2);
 		*exit_code = 1;
 		return (1);
 	}

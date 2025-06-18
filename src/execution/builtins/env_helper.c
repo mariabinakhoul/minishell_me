@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 21:15:43 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/12 21:16:12 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:07:20 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,18 @@ void	update_value(t_env *head, char **args)
 		return ;
 	}
 	replace_env_node_value(temp, value, new);
+}
+
+char	*ft_strjoin_free(char *s1, char *s2, int free_s1, int free_s2)
+{
+	char	*joined;
+
+	if (!s1 || !s2)
+		return (NULL);
+	joined = ft_strjoin(s1, s2);
+	if (free_s1)
+		free(s1);
+	if (free_s2)
+		free(s2);
+	return (joined);
 }

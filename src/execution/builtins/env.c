@@ -6,25 +6,11 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 21:26:34 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/16 16:23:55 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/18 18:07:03 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
-
-char	*ft_strjoin_free(char *s1, char *s2, int free_s1, int free_s2)
-{
-	char	*joined;
-
-	if (!s1 || !s2)
-		return (NULL);
-	joined = ft_strjoin(s1, s2);
-	if (free_s1)
-		free(s1);
-	if (free_s2)
-		free(s2);
-	return (joined);
-}
 
 t_env	*create_node(t_env *head, char **args)
 {
@@ -50,12 +36,59 @@ t_env	*create_node(t_env *head, char **args)
 	return (head);
 }
 
+int	update_shlvl_if_match(t_env *node)
+{
+	char	**split;
+	int		shlvl;
+	char	*new_value;
+	char	*new_entry;
+
+	if (ft_strncmp(node->data, "SHLVL=", 6) != 0)
+		return (0);
+	split = ft_split(node->data, '=');
+	if (!split || !split[1])
+		return (0);
+	shlvl = ft_atoi(split[1]);
+	new_value = ft_itoa(shlvl + 1);
+	new_entry = ft_strjoin("SHLVL=", new_value);
+	free(node->data);
+	node->data = new_entry;
+	free_2d(split);
+	free(new_value);
+	return (1);
+}
+
+void	increment_shlvl(t_env *env_list)
+{
+	t_env	*temp;
+	t_env	*new_node;
+
+	temp = env_list;
+	while (temp)
+	{
+		if (update_shlvl_if_match(temp))
+			return ;
+		temp = temp->next;
+	}
+	temp = env_list;
+	while (temp && temp->next)
+		temp = temp->next;
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return ;
+	new_node->data = ft_strdup("SHLVL=1");
+	new_node->next = NULL;
+	if (temp)
+		temp->next = new_node;
+}
+
 char	**set_env(char **envp)
 {
 	t_env	*env_list;
 	char	**new_env;
 
 	env_list = convert_to_list(envp);
+	increment_shlvl(env_list);
 	new_env = convert_to_2d(env_list);
 	free_list(env_list);
 	return (new_env);
