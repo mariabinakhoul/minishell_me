@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 08:45:16 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 16:55:16 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/19 10:59:44 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct s_expand
 	char	*result;
 }	t_expand;
 
-t_ast		*parse_input(t_chain **tokens, char **env);
+t_ast		*parse_input(t_chain **tokens, char **env, int *exit_code);
 t_ast		*parse_pipeline(t_chain **tokens, char **env);
 t_ast		*parse_command(t_chain **tokens, char **env);
 int			parse_redirection(t_chain **tokens, t_ast *cmd_node, char **env);

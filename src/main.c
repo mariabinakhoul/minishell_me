@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 09:36:47 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 18:31:01 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/19 10:59:26 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	process_input_loop(char ***env, int exit_code)
 	tokens_head = tokens;
 	if (!tokens)
 		return (exit_code);
-	ast = parse_input(&tokens, *env);
+	ast = parse_input(&tokens, *env, &exit_code);
 	if (!ast)
 	{
 		free(input);

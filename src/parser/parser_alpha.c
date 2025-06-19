@@ -6,13 +6,13 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/11 18:46:34 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 17:17:05 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/19 11:01:18 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	check_pipe_syntax(t_chain *curr)
+int	check_pipe_syntax(t_chain *curr, int *exit_code)
 {
 	if (curr->type == TYPE_PIPE)
 	{
@@ -20,19 +20,21 @@ int	check_pipe_syntax(t_chain *curr)
 		{
 			ft_putstr_fd("minishell: syntax error near "
 				"unexpected token `|'\n", 2);
-			return (1);
+			*exit_code = 2;
+			return (2);
 		}
 		if (curr->next->type == TYPE_PIPE)
 		{
 			ft_putstr_fd("minishell: syntax error near "
 				"unexpected token `|'\n", 2);
-			return (1);
+			*exit_code = 2;
+			return (2);
 		}
 	}
 	return (0);
 }
 
-int	validate_pipeline_syntax(t_chain *tokens)
+int	validate_pipeline_syntax(t_chain *tokens, int *exit_code)
 {
 	t_chain	*curr;
 	int		result;
@@ -43,11 +45,12 @@ int	validate_pipeline_syntax(t_chain *tokens)
 	if (curr->type == TYPE_PIPE)
 	{
 		ft_putstr_fd("minishell: syntax error near unexpected token `|'\n", 2);
+		*exit_code = 2;
 		return (1);
 	}
 	while (curr)
 	{
-		result = check_pipe_syntax(curr);
+		result = check_pipe_syntax(curr, exit_code);
 		if (result == 1)
 			return (1);
 		curr = curr->next;
@@ -55,11 +58,11 @@ int	validate_pipeline_syntax(t_chain *tokens)
 	return (0);
 }
 
-t_ast	*parse_input(t_chain **tokens, char **env)
+t_ast	*parse_input(t_chain **tokens, char **env, int *exit_code)
 {
 	if (!tokens || !*tokens)
 		return (NULL);
-	if (validate_pipeline_syntax(*tokens))
+	if (validate_pipeline_syntax(*tokens, exit_code))
 		return (NULL);
 	return (parse_pipeline(tokens, env));
 }
