@@ -3,38 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/28 21:26:34 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/19 10:55:21 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:15:52 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-t_env	*create_node(t_env *head, char **args)
+t_env	*add_new_node(t_env *head, char *arg)
 {
 	t_env	*new_node;
 	t_env	*tmp;
 
-	if (args_found(head, args) == 0)
-	{
-		new_node = malloc(sizeof(t_env));
-		if (!new_node)
-			return (head);
-		new_node->data = ft_strdup(args[1]);
-		new_node->next = NULL;
-		if (!head)
-			return (new_node);
-		tmp = head;
-		while (tmp->next)
-			tmp = tmp->next;
-		tmp->next = new_node;
-	}
-	else
-		update_value(head, args);
+	new_node = malloc(sizeof(t_env));
+	if (!new_node)
+		return (head);
+	new_node->data = ft_strdup(arg);
+	new_node->next = NULL;
+	if (!head)
+		return (new_node);
+	tmp = head;
+	while (tmp->next)
+		tmp = tmp->next;
+	tmp->next = new_node;
 	return (head);
 }
+
+t_env	*create_node(t_env *head, char **args)
+{
+	int	i;
+
+	i = 1;
+	while (args[i])
+	{
+		if (!args_found(head, args[i]))
+			head = add_new_node(head, args[i]);
+		else
+			update_value(head, args[i]);
+		i++;
+	}
+	return (head);
+}
+
+
 
 int	update_shlvl_if_match(t_env *node)
 {

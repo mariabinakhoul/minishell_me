@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 15:21:41 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:12:07 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ char	*expand_variable(char *arg, t_expand *two_in_one,
 			char **env, int exit_code);
 char	*expand_home_directory(char *arg, int *i, char **env, char *result);
 int		is_valid_identifier(char *arg);
-int		args_found(t_env *head, char **args);
-void	update_value(t_env *head, char **args);
+int	args_found(t_env *head, char *args);
+void	update_value(t_env *head, char *args);
 char	*get_home_or_oldpwd(t_ast *cmd, char **envp);
 void	export_no_params(char **envp);
 char	**export_params(char **args, char **env);
@@ -50,7 +50,7 @@ int		execute_external(t_ast *cmd, char **envp);
 bool	is_builtin(char *cmd);
 int		execute_builtin(t_ast *cmd, char ***envp_ptr);
 void	replace_env_node_value(t_env *node, char **old_kv, char **new_kv);
-void	update_value(t_env *head, char **args);
+// void	update_value(t_env *head, char **args);
 int		handle_child_exit(pid_t pid, const char *path, const char *orig_cmd);
 int		handle_fork_failure(pid_t pid, const char *path, const char *orig_cmd);
 int		handle_redirections(t_ast *cmd_node);

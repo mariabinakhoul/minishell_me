@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env1.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 18:36:28 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 15:25:03 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:12:59 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,12 @@ int	match_and_cleanup(t_env *node, char **new_arr)
 	return (0);
 }
 
-int	args_found(t_env *head, char **args)
+int	args_found(t_env *head, char *args)
 {
 	t_env	*temp;
 	char	**new;
 
-	new = ft_split(args[1], '=');
+	new = ft_split(args, '=');
 	if (!new)
 		return (0);
 	temp = head;

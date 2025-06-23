@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_helper.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 21:15:43 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 18:07:20 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:13:21 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	replace_env_node_value(t_env *node, char **old_kv, char **new_kv)
 	free_2d(new_kv);
 }
 
-void	update_value(t_env *head, char **args)
+void	update_value(t_env *head, char *args)
 {
 	t_env	*temp;
 	char	**value;
@@ -34,7 +34,7 @@ void	update_value(t_env *head, char **args)
 
 	temp = head;
 	value = ft_split(temp->data, '=');
-	new = ft_split(args[1], '=');
+	new = ft_split(args, '=');
 	while (temp && ft_strncmp(value[0], new[0], ft_strlen(value[0])) != 0)
 	{
 		free_2d(value);
