@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_helpers.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/12 04:37:14 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/16 18:54:35 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:03:43 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,18 +63,18 @@ char	*expand_variable(char *arg, t_expand *two_in_one,
 	return (result);
 }
 
-char	*expand_home_directory(char *arg, int *i, char **env, char *result)
+char	*expand_home_directory(char *arg, int *i, char **env)
 {
 	char	*home;
 
 	if (*i == 0 && arg[*i] == '~')
 	{
+		(*i)++;
 		home = get_env_value("HOME", env);
 		if (home)
-			result = join_and_free(result, home);
+			return (ft_strdup(home));
 		else
-			result = join_and_free(result, "");
-		(*i)++;
+			return (ft_strdup(""));
 	}
-	return (result);
+	return (NULL);
 }

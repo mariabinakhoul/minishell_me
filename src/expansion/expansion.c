@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 16:54:57 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/25 17:04:00 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,21 @@ int	handle_escaped_dollar(const char *arg, int *i, char **result)
 		return (1);
 	}
 	return (0);
+}
+
+char	*expand_non_dollar(char *arg, char **env, int *i, char *result)
+{
+	char	*home;
+	char	*tmp;
+
+	home = expand_home_directory(arg, i, env);
+	if (home)
+	{
+		tmp = join_and_free(result, home);
+		free(home);
+		return (tmp);
+	}
+	return (join_and_free_char(result, arg[(*i)++]));
 }
 
 char	*expand_argument(char *arg, int quoted, char **env, int last_status)
@@ -43,11 +58,7 @@ char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 			result = expand_variable(arg, &two_in_one, env, last_status);
 		}
 		else
-		{
-			result = expand_home_directory(arg, &i, env, result);
-			if (arg[i] != '~')
-				result = join_and_free_char(result, arg[i++]);
-		}
+			result = expand_non_dollar(arg, env, &i, result);
 	}
 	return (result);
 }
@@ -86,14 +97,4 @@ void	expand_command_node(t_ast *cmd, char **env, int last_status)
 	}
 	expand_file_argument(&cmd->in_file, env, last_status);
 	expand_file_argument(&cmd->out_file, env, last_status);
-}
-
-void	expand_tree(t_ast *node, char **env, int exit_code)
-{
-	if (!node)
-		return ;
-	if (node->type == CMD)
-		expand_command_node(node, env, exit_code);
-	expand_tree(node->left, env, exit_code);
-	expand_tree(node->right, env, exit_code);
 }

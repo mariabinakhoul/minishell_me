@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 17:59:06 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/25 16:26:26 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/25 16:53:38 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ int	ft_cd(t_ast *cmd, char ***envp)
 	if (!old_pwd)
 		return (perror("cd: getcwd"), 1);
 	if (path == NULL)
-		return(free(old_pwd),1);
+		return (free(old_pwd), 1);
 	if (chdir(path) != 0)
 	{
 		perror("cd");
