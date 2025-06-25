@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/23 11:12:07 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/25 11:14:49 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ char	*expand_variable(char *arg, t_expand *two_in_one,
 char	*expand_home_directory(char *arg, int *i, char **env, char *result);
 int		is_valid_identifier(char *arg);
 int	args_found(t_env *head, char *args);
+t_env	*add_new_node(t_env *head, char *arg);
 void	update_value(t_env *head, char *args);
 char	*get_home_or_oldpwd(t_ast *cmd, char **envp);
 void	export_no_params(char **envp);

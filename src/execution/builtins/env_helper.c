@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 21:15:43 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/23 11:13:21 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/25 11:11:13 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,30 +26,27 @@ void	replace_env_node_value(t_env *node, char **old_kv, char **new_kv)
 	free_2d(new_kv);
 }
 
-void	update_value(t_env *head, char *args)
+void	update_value(t_env *head, char *arg)
 {
-	t_env	*temp;
-	char	**value;
-	char	**new;
+	t_env	*tmp;
+	int		len;
 
-	temp = head;
-	value = ft_split(temp->data, '=');
-	new = ft_split(args, '=');
-	while (temp && ft_strncmp(value[0], new[0], ft_strlen(value[0])) != 0)
+	len = 0;
+	while (arg[len] && arg[len] != '=')
+		len++;
+	tmp = head;
+	while (tmp)
 	{
-		free_2d(value);
-		temp = temp->next;
-		if (temp)
-			value = ft_split(temp->data, '=');
+		if (ft_strncmp(tmp->data, arg, len) == 0 && tmp->data[len] == '=')
+		{
+			free(tmp->data);
+			tmp->data = ft_strdup(arg);
+			return;
+		}
+		tmp = tmp->next;
 	}
-	if (!new[1])
-	{
-		free_2d(value);
-		free_2d(new);
-		return ;
-	}
-	replace_env_node_value(temp, value, new);
 }
+
 
 char	*ft_strjoin_free(char *s1, char *s2, int free_s1, int free_s2)
 {

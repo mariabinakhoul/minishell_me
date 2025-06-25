@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 18:36:28 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/23 11:12:59 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/25 11:11:01 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,21 +94,21 @@ int	match_and_cleanup(t_env *node, char **new_arr)
 	return (0);
 }
 
-int	args_found(t_env *head, char *args)
+int	args_found(t_env *head, char *arg)
 {
-	t_env	*temp;
-	char	**new;
+	t_env	*tmp;
+	int		len;
 
-	new = ft_split(args, '=');
-	if (!new)
-		return (0);
-	temp = head;
-	while (temp)
+	len = 0;
+	while (arg[len] && arg[len] != '=')
+		len++;
+	tmp = head;
+	while (tmp)
 	{
-		if (match_and_cleanup(temp, new))
-			return (1);
-		temp = temp->next;
+		if (ft_strncmp(tmp->data, arg, len) == 0 && tmp->data[len] == '=')
+			return (1); // Match found
+		tmp = tmp->next;
 	}
-	free_2d(new);
-	return (0);
+	return (0); // Not found
 }
+
