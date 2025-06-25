@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:50:03 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/25 11:14:49 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/25 15:49:38 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ typedef struct s_env
 
 int		execute_command(t_ast *cmd, char ***envp, int *exit_code);
 void	freearray(char **array);
-int		ft_cd(t_ast *cmd, char **envp_ptr);
+int		ft_cd(t_ast *cmd, char ***envp);
 int		ft_echo(char **args, char **envp);
 int		ft_unset(char **args, char ***envp);
 void	ft_env(char **envp);
@@ -41,7 +41,7 @@ char	*expand_variable(char *arg, t_expand *two_in_one,
 			char **env, int exit_code);
 char	*expand_home_directory(char *arg, int *i, char **env, char *result);
 int		is_valid_identifier(char *arg);
-int	args_found(t_env *head, char *args);
+int		args_found(t_env *head, char *args);
 t_env	*add_new_node(t_env *head, char *arg);
 void	update_value(t_env *head, char *args);
 char	*get_home_or_oldpwd(t_ast *cmd, char **envp);
@@ -51,7 +51,6 @@ int		execute_external(t_ast *cmd, char **envp);
 bool	is_builtin(char *cmd);
 int		execute_builtin(t_ast *cmd, char ***envp_ptr);
 void	replace_env_node_value(t_env *node, char **old_kv, char **new_kv);
-// void	update_value(t_env *head, char **args);
 int		handle_child_exit(pid_t pid, const char *path, const char *orig_cmd);
 int		handle_fork_failure(pid_t pid, const char *path, const char *orig_cmd);
 int		handle_redirections(t_ast *cmd_node);

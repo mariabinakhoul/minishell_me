@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/04 18:36:28 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/25 11:11:01 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/25 15:53:48 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,9 +106,8 @@ int	args_found(t_env *head, char *arg)
 	while (tmp)
 	{
 		if (ft_strncmp(tmp->data, arg, len) == 0 && tmp->data[len] == '=')
-			return (1); // Match found
+			return (1);
 		tmp = tmp->next;
 	}
-	return (0); // Not found
+	return (0);
 }
-

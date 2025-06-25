@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/12 21:15:43 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/25 11:11:13 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/25 15:50:46 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,12 +41,11 @@ void	update_value(t_env *head, char *arg)
 		{
 			free(tmp->data);
 			tmp->data = ft_strdup(arg);
-			return;
+			return ;
 		}
 		tmp = tmp->next;
 	}
 }
-
 
 char	*ft_strjoin_free(char *s1, char *s2, int free_s1, int free_s2)
 {

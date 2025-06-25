@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/18 22:23:13 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 15:24:39 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:32:59 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ int	execute_builtin_command(t_ast *cmd, char ***envp_ptr)
 	if (handle_redirections(cmd) != 0)
 		ret = 1;
 	else if (ft_strcmp(cmd->value, "cd") == 0)
-		ret = ft_cd(cmd, *envp_ptr);
+		ret = ft_cd(cmd, envp_ptr);
 	else if (ft_strcmp(cmd->value, "env") == 0)
 	{
 		ft_env(*envp_ptr);

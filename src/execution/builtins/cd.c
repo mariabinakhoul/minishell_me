@@ -3,55 +3,62 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/19 19:35:53 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 17:13:39 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/25 16:00:29 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../includes/minishell.h"
 
-static char	*retrieve_env_path(t_ast *cmd, char **envp, char *key)
+static int	update_existing_env_var(char **envp, char *key, char *new_var)
 {
-	char	*path;
+	int		len;
 	int		i;
 
+	len = ft_strlen(key);
 	i = 0;
-	if (!cmd || !envp || !key)
-		return (NULL);
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], key, ft_strlen(key)) == 0
-			&& envp[i][ft_strlen(key)] == '=')
+		if (ft_strncmp(envp[i], key, len) == 0 && envp[i][len] == '=')
 		{
-			path = &envp[i][ft_strlen(key) + 1];
-			return (path);
+			free(envp[i]);
+			envp[i] = new_var;
+			return (1);
 		}
 		i++;
 	}
-	return (NULL);
+	return (0);
 }
 
-char	*get_home_or_oldpwd(t_ast *cmd, char **envp)
+char	**update_env_var_array(char **envp, char *key, char *value)
 {
-	char	*path;
+	int		i;
+	int		len;
+	char	*new_var;
+	char	**new_envp;
 
-	if (!cmd->params[1])
-	{
-		path = retrieve_env_path(cmd, envp, "HOME");
-		if (!path)
-			ft_putstr_fd("cd: HOME not set\n", 2);
-		return (path);
-	}
-	if (ft_strcmp(cmd->params[1], "-") == 0)
-	{
-		path = retrieve_env_path(cmd, envp, "OLDPWD");
-		if (!path)
-			ft_putstr_fd("cd: OLDPWD not set\n", 2);
-		return (path);
-	}
-	return ((char *)cmd->params[1]);
+	len = ft_strlen(key);
+	new_var = malloc(len + ft_strlen(value) + 2);
+	if (!new_var)
+		return (envp);
+	ft_strcpy(new_var, key);
+	ft_strcat(new_var, "=");
+	ft_strcat(new_var, value);
+	if (update_existing_env_var(envp, key, new_var))
+		return (envp);
+	i = 0;
+	while (envp[i])
+		i++;
+	new_envp = malloc(sizeof(char *) * (i + 2));
+	if (!new_envp)
+		return (free(new_var), envp);
+	new_envp[i + 1] = NULL;
+	new_envp[i] = new_var;
+	while (--i >= 0)
+		new_envp[i] = envp[i];
+	return (free(envp), new_envp);
 }
 
 void	ft_setenv(t_ast *cmd_path)

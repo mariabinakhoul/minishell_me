@@ -6,7 +6,7 @@
 /*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/04 07:32:55 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/25 11:08:16 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/25 15:53:00 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,16 @@ void	export_no_params(char **envp)
 
 void	print_env_value(char *env_var)
 {
-	int	i = 0;
+	int	i;
 
+	i = 0;
 	while (env_var[i] && env_var[i] != '=')
 		i++;
-	if (env_var[i] == '=') // Only print if '=' is present
+	if (env_var[i] == '=')
 	{
 		printf("=\"%s\"", &env_var[i + 1]);
 	}
 }
-
 
 void	print_export(char **env)
 {

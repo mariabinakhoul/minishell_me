@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
+/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/10 13:04:58 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/18 18:13:15 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/25 15:50:07 by nhaber           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ void	set_signals(void);
 void	def_signals(void);
 void	ignore_signals(void);
 void	ft_pwd(char **args);
+char	**update_env_var_array(char **envp, char *key, char *value);
 void	**safe_expand_array(void **ptr, size_t old_count, size_t new_count);
 void	ft_swap(char **a, char **b);
 char	*ft_heredoc(const char *delimiter, int write_fd, char **env);
