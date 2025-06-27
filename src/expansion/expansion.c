@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/26 20:08:17 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/25 17:04:00 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/27 13:29:30 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ char	*expand_argument(char *arg, int quoted, char **env, int last_status)
 	int			i;
 	t_expand	two_in_one;
 
-	(void)quoted;
+	if (quoted == 1)
+		return (ft_strdup(arg));
 	result = ft_strdup("");
 	i = 0;
 	while (arg[i])

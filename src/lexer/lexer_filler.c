@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/06 15:43:39 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/06/11 20:07:45 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:29:43 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_chain	*create_new_node(t_token type, char *value)
 	new_node->type = type;
 	new_node->value = value;
 	new_node->next = NULL;
+	new_node->quote = 0;
 	return (new_node);
 }
 

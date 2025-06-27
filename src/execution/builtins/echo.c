@@ -6,7 +6,7 @@
 /*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/31 19:06:04 by mabi-nak          #+#    #+#             */
-/*   Updated: 2025/05/20 19:31:40 by mabi-nak         ###   ########.fr       */
+/*   Updated: 2025/06/27 13:27:52 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,8 @@ int	ft_echo(char **args, char **env)
 {
 	int		i;
 	int		newline;
-	char	*expanded_argument;
 
+	(void)env;
 	i = 1;
 	newline = 1;
 	while (args[i] && is_n_flag(args[i]))
@@ -42,17 +42,7 @@ int	ft_echo(char **args, char **env)
 		newline = 0;
 		i++;
 	}
-	while (args[i])
-	{
-		expanded_argument = expand_argument(args[i], 0, env, 0);
-		printf("%s", expanded_argument);
-		free(expanded_argument);
-		if (args[i + 1])
-		{
-			printf(" ");
-		}
-		i++;
-	}
+	printf("%s", args[i]);
 	if (newline)
 		printf("\n");
 	return (0);
