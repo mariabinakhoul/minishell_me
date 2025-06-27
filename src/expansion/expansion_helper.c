@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expansion_helper.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nhaber <nhaber@student.42.fr>              +#+  +:+       +#+        */
+/*   By: mabi-nak <mabi-nak@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/25 17:04:13 by nhaber            #+#    #+#             */
-/*   Updated: 2025/06/25 17:04:27 by nhaber           ###   ########.fr       */
+/*   Updated: 2025/06/27 13:26:38 by mabi-nak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,4 +21,3 @@ void	expand_tree(t_ast *node, char **env, int exit_code)
 	expand_tree(node->left, env, exit_code);
 	expand_tree(node->right, env, exit_code);
 }
-
